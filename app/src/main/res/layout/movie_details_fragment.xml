@@ -220,6 +220,7 @@
                       android:background="@drawable/divider"/>
 
                 <TextView
+                    android:id="@+id/movieDetailsFragRateTitle"
                     style="@style/MovieDetailsSubTitleStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -6,4 +6,5 @@
     <string name="movie_details_frag_go_to_imdb"><u>Go to iMDB</u></string>
     <string name="movie_details_frag_rate">Rate!</string>
     <string name="movie_details_frag_rate_this_movie">Rate this Movie</string>
+    <string name="movie_details_frag_you_rated_movie">You Rated this Movie</string>
 </resources>

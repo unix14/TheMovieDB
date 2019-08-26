@@ -64,7 +64,7 @@ class MovieDetailsViewModel(private val apiService: ApiService, private val apiS
             override fun onResponse(call: Call<MovieRatingResponse>, response: Response<MovieRatingResponse>) {
                 progressData.endProgress()
 
-                if(response.isSuccessful && response.body()){
+                if(response.isSuccessful){
                     ratingMovieEvent.postValue(RatingEvent.RATED)
                 }else{
                     ratingMovieEvent.postValue(RatingEvent.RATING_ERROR)

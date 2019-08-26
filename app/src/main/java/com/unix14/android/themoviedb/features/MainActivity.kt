@@ -13,6 +13,7 @@ import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.features.movie_details.MovieDetailsFragment
 import com.unix14.android.themoviedb.features.movie_list.MovieListFragment
 import com.unix14.android.themoviedb.features.sign_in.SignInFragment
+import com.unix14.android.themoviedb.models.Movie
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,12 +30,10 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     }
 
     private fun setupViewModel() {
-        viewModel.progressData.observe(this, Observer {
-            isLoading -> handleProgressBar(isLoading) })
-        viewModel.navigationEvent.observe(this, Observer {
-            navigationEvent -> handleNavigationEvent(navigationEvent) })
-        viewModel.errorEvent.observe(this, Observer {
-            errorEvent -> handleErrorEvent(errorEvent)
+        viewModel.progressData.observe(this, Observer { isLoading -> handleProgressBar(isLoading) })
+        viewModel.navigationEvent.observe(this, Observer { navigationEvent -> handleNavigationEvent(navigationEvent) })
+        viewModel.errorEvent.observe(this, Observer { errorEvent ->
+            handleErrorEvent(errorEvent)
         })
     }
 
@@ -87,8 +86,8 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
         showFragment(SignInFragment.newInstance(),Constants.SIGN_IN_FRAGMENT)
     }
 
-    private fun showMovieDetails(movieId: String) {
-        MovieDetailsFragment.newInstance(movieId).show(supportFragmentManager,Constants.SIGN_IN_FRAGMENT)
+    private fun showMovieDetails(movie: Movie) {
+        MovieDetailsFragment.newInstance(movie,viewModel.getMovieRating(movie.id)).show(supportFragmentManager,Constants.SIGN_IN_FRAGMENT)
     }
 
     private fun showFragment(fragment: Fragment, tag: String) {
@@ -99,13 +98,17 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
             .commit()
     }
 
-    override fun onMovieIdClick(movieId: Int) {
-        showMovieDetails(movieId.toString())
+    override fun onMovieClick(movie: Movie) {
+        showMovieDetails(movie)
     }
 
     override fun openIMDBWebsite(imdbId: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.IMDB_BASE_URL + imdbId))
         startActivity(browserIntent)
+    }
+
+    override fun addRatedMovieToLocalList(movie: Movie) {
+        viewModel.addLocalRatedMovie(movie)
     }
 
 }

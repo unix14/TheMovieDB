@@ -1,28 +1,30 @@
 package com.unix14.android.themoviedb.models
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 import java.util.*
-import kotlin.collections.ArrayList
 
-class Movie(
-    @SerializedName("id") var id: Int,
+class Movie : Serializable{
 
-    @SerializedName("poster_path") val image: String,
-    @SerializedName("overview") val overview: String,
-    @SerializedName("release_date") val realeseDate: Date,
-    @SerializedName("genre_ids") var genreIds: ArrayList<Int>,
+    @SerializedName("id") var id: Int = 0
 
-    @SerializedName("original_title") val originalTitle: String,
-    @SerializedName("original_language") val originalLang: String,
-    @SerializedName("title") val name: String,
-    @SerializedName("backdrop_path") val backdropPath: String,
-    @SerializedName("imdb_id") val imdbId: String,
-    @SerializedName("popularity") var popularity: Float,
-    @SerializedName("vote_count") var voteCount: Int,
-    @SerializedName("vote_average") var voteAvg: Float,
-    @SerializedName("adult") val adult: Boolean
+    @SerializedName("poster_path") val image: String = ""
+    @SerializedName("overview") val overview: String = ""
+    @SerializedName("release_date") val realeseDate: Date? = null
+    @SerializedName("genre_ids")  lateinit var genreIds: ArrayList<Int>
 
-)
+    @SerializedName("original_title") val originalTitle: String = ""
+    @SerializedName("original_language") val originalLang: String = ""
+    @SerializedName("title") val name: String = ""
+    @SerializedName("backdrop_path") val backdropPath: String = ""
+    @SerializedName("imdb_id") val imdbId: String = ""
+    @SerializedName("popularity") var popularity: Float = 0.0f
+    @SerializedName("vote_count") var voteCount: Int = 0
+    @SerializedName("vote_average") var voteAvg: Float = 0.0f
+    @SerializedName("adult") val adult: Boolean = false
+    @SerializedName("rating") var rating: Float = 0.0f
+}
 
 class MovieListResponse(
     var page: Int,

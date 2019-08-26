@@ -1,10 +1,10 @@
 package com.unix14.android.themoviedb.features
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.unix14.android.themoviedb.common.ProgressData
 import com.unix14.android.themoviedb.common.SingleLiveEvent
-import com.unix14.android.themoviedb.models.AuthResponse
-import com.unix14.android.themoviedb.models.GuestAuthResponse
+import com.unix14.android.themoviedb.models.*
 import com.unix14.android.themoviedb.network.ApiService
 import com.unix14.android.themoviedb.network.ApiSettings
 import retrofit2.Call
@@ -21,14 +21,17 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
     enum class ErrorEvent{
         NO_ERROR,
         AUTH_FAILED_ERROR,
+        FETCH_RATED_MOVIE_LIST_ERROR,
         CONNECTION_FAILED_ERROR
     }
 
     val progressData = ProgressData()
     val navigationEvent = SingleLiveEvent<NavigationEvent>()
     val errorEvent = SingleLiveEvent<ErrorEvent>()
+    val localRatedMovieList : ArrayList<Movie> =  arrayListOf()
 
-    private fun createGuestSession() {
+    //Step1
+    private fun createGuestSession() {      //TODO:: Move to SplashActivity
         progressData.startProgress()
 
         apiService.createGuestSession(apiSettings.API_KEY).enqueue(object : Callback<GuestAuthResponse>{
@@ -42,8 +45,8 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
 
                         apiSettings.requestToken = guestSessionId
                         apiSettings.lastExpirationDate = authResponse.expiresAt
-                        navigationEvent.postValue(NavigationEvent.SHOW_MOVIE_LIST_SCREEN)
-                        errorEvent.postValue(ErrorEvent.NO_ERROR)
+
+                        getRatedMoviesList()
                     }else{
                         errorEvent.postValue(ErrorEvent.AUTH_FAILED_ERROR)
                     }
@@ -58,13 +61,72 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
 
     }
 
+    //Step2
+    fun getRatedMoviesList() {
+        progressData.startProgress()
+
+        if(apiSettings.requestToken == null){
+            createGuestSession()
+            errorEvent.postValue(ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR)
+
+            return
+        }
+
+        apiService.getRatedMoviesForGuest(apiSettings.requestToken!!,apiSettings.API_KEY).enqueue(object : Callback<MovieListResponse>{
+            override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
+                progressData.endProgress()
+
+                if(response.isSuccessful){
+                    val ratedMoviesList = response.body()
+                    ratedMoviesList?.let{
+
+
+                        localRatedMovieList.addAll(it.results)
+                    }
+
+                    navigationEvent.postValue(NavigationEvent.SHOW_MOVIE_LIST_SCREEN)
+                    errorEvent.postValue(ErrorEvent.NO_ERROR)
+                }else{
+                    errorEvent.postValue(ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR)
+                }
+            }
+
+            override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
+                progressData.endProgress()
+                errorEvent.postValue(ErrorEvent.CONNECTION_FAILED_ERROR)
+            }
+        })
+    }
+
     fun startMainActivity() {
         if(apiSettings.isValidUser()){
-            navigationEvent.postValue(NavigationEvent.SHOW_MOVIE_LIST_SCREEN)
-            errorEvent.postValue(ErrorEvent.NO_ERROR)
+            getRatedMoviesList()
         }else{
             createGuestSession()
         }
     }
 
+//    fun isMovieRated(desiredMovieId: Int) : Boolean {
+//        localRatedMovieList?.let{
+//            for (movie in it){
+//                if(movie.id == desiredMovieId)
+//                    return true
+//            }
+//        }
+//        return false
+//    }
+
+    fun getMovieRating(desiredMovieId : Int) : Float {
+        localRatedMovieList.let {
+            for (movie in it) {
+                if (movie.id == desiredMovieId)
+                    return movie.rating
+            }
+        }
+        return 0f
+    }
+
+    fun addLocalRatedMovie(movie: Movie) {
+        localRatedMovieList.add(movie)
+    }
 }
