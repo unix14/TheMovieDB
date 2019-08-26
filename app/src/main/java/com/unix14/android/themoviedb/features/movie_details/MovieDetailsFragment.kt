@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RatingBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -79,6 +79,24 @@ class MovieDetailsFragment : DialogFragment() {
             movieDetails -> handleMovieDetails(movieDetails) })
         viewModel.errorEvent.observe(this, Observer {
             errorEvent -> handleErrorEvent(errorEvent) })
+        viewModel.ratingMovieEvent.observe(this, Observer {
+            ratingEvent -> handleRatingEvent(ratingEvent) })
+    }
+
+    private fun handleRatingEvent(ratingEvent: MovieDetailsViewModel.RatingEvent?) {
+        ratingEvent?.let {
+            when (it) {
+                MovieDetailsViewModel.RatingEvent.RATING_ERROR -> {
+                    Toast.makeText(context, "Rating failed, Please try again later", Toast.LENGTH_LONG).show()
+                }
+                MovieDetailsViewModel.RatingEvent.RATED -> {
+                    Toast.makeText(context, "Rating Sent!", Toast.LENGTH_LONG).show()
+                    //disable more rating clicks
+                    movieDetailsFragRateBtn.visibility = View.GONE
+                    movieDetailsFragRatingBar.setIsIndicator(true)
+                }
+            }
+        }
     }
 
     private fun handleErrorEvent(errorEvent: MovieDetailsViewModel.ErrorEvent?) {
@@ -157,6 +175,13 @@ class MovieDetailsFragment : DialogFragment() {
     private fun initUi() {
         movieId?.let{
             viewModel.getMovieDetails(it)
+        }
+        movieDetailsFragRatingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            movieDetailsFragRateBtn.visibility = View.VISIBLE
+        }
+
+        movieDetailsFragRateBtn.setOnClickListener {
+            viewModel.sendRating(movieId!!,movieDetailsFragRatingBar.rating)
         }
 
     }

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@drawable/background_gradient"
     android:background="@color/almost_transparent"
+    tools:background="@drawable/background_gradient"
     tools:context=".features.movie_details.MovieDetailsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -35,7 +36,7 @@
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
-                tools:background="@color/colorPrimary" />
+                tools:background="@color/colorPrimary"/>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/main.toolbar"
@@ -43,7 +44,7 @@
                 android:layout_height="0dp"
                 android:layout_gravity="bottom"
                 android:background="@color/dark_blue"
-                app:layout_collapseMode="parallax" />
+                app:layout_collapseMode="parallax"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -85,7 +86,7 @@
                         android:minWidth="105dp"
                         android:minHeight="150dp"
                         android:scaleType="centerCrop"
-                        tools:background="@color/colorPrimary" />
+                        tools:background="@color/colorPrimary"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -101,7 +102,7 @@
                             style="@style/MovieTitleStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="Rocky 4" />
+                            tools:text="Rocky 4"/>
 
                         <TextView
                             android:id="@+id/movieDetailsFragYear"
@@ -109,7 +110,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
-                            tools:text="1994" />
+                            tools:text="1994"/>
                     </LinearLayout>
 
 
@@ -122,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:visibility="gone"
-                    tools:text="Adult Film" />
+                    tools:text="Adult Film"/>
 
                 <TextView
                     android:id="@+id/movieDetailsFragDescription"
@@ -130,7 +131,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
-                    tools:text="44444" />
+                    tools:text="44444"/>
 
 
                 <View
@@ -138,7 +139,7 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/divider" />
+                    android:background="@drawable/divider"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -151,7 +152,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
-                        android:text="Language:" />
+                        android:text="Language:"/>
 
                     <TextView
                         android:id="@+id/movieDetailsFragLanguage"
@@ -161,7 +162,7 @@
                         android:drawableEnd="@drawable/ic_language"
                         android:drawablePadding="3dp"
                         android:gravity="center"
-                        tools:text="Value" />
+                        tools:text="Value"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -175,7 +176,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
-                        android:text="Total Votes:" />
+                        android:text="Total Votes:"/>
 
                     <TextView
                         android:id="@+id/movieDetailsFragVotes"
@@ -185,7 +186,7 @@
                         android:drawableEnd="@drawable/ic_stars"
                         android:drawablePadding="3dp"
                         android:gravity="center"
-                        tools:text="Value" />
+                        tools:text="Value"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -199,7 +200,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
-                        android:text="Popularity:" />
+                        android:text="Popularity:"/>
 
                     <TextView
                         android:id="@+id/movieDetailsFragPopularity"
@@ -209,13 +210,46 @@
                         android:drawableEnd="@drawable/ic_favorite"
                         android:drawablePadding="3dp"
                         android:gravity="center"
-                        tools:text="Value" />
+                        tools:text="Value"/>
                 </LinearLayout>
 
+                <View android:layout_width="match_parent"
+                      android:layout_height="1dp"
+                      android:layout_marginTop="25dp"
+                      android:layout_marginBottom="10dp"
+                      android:background="@drawable/divider"/>
+
+                <TextView
+                    style="@style/MovieDetailsSubTitleStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:text="@string/movie_details_frag_rate_this_movie"/>
+
+                <RatingBar
+                    android:id="@+id/movieDetailsFragRatingBar"
+                    style="@style/RatingBarStyle"/>
+
+                <Button
+                    android:id="@+id/movieDetailsFragRateBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="25dp"
+                    android:padding="15dp"
+                    android:text="@string/movie_details_frag_rate"
+                    android:textColor="@color/dark_red"
+                    android:visibility="gone"/>
+
+                <View android:layout_width="match_parent"
+                      android:layout_height="1dp"
+                      android:layout_marginBottom="10dp"
+                      android:background="@drawable/divider"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/movieDetailsFragWebsiteLink"
@@ -226,7 +260,7 @@
                     android:drawableStart="@drawable/ic_internet_movie_database"
                     android:drawablePadding="9dp"
                     android:gravity="center"
-                    android:text="@string/movie_details_frag_go_to_imdb" />
+                    android:text="@string/movie_details_frag_go_to_imdb"/>
 
             </LinearLayout>
         </LinearLayout>
@@ -234,5 +268,5 @@
 
     <ProgressBar
         android:id="@+id/movieDetailsFragPb"
-        style="@style/ProgressBarStyle" />
+        style="@style/ProgressBarStyle"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -30,3 +30,7 @@ class MovieListResponse(
     var total_results: Int,
     var total_pages: Int
 )
+
+class MovieRate(
+    @SerializedName("value") var rating: Float
+)
