@@ -45,7 +45,9 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
                 if(response.isSuccessful){
                     val movieListResponse = response.body()
                     movieListResponse?.let{
-                        ratedMovieList.addAll(it.results)
+                        val movieList = it.results
+                        ratedMovieList.addAll(movieList)
+                        apiSettings.setRatedMovieList(movieList)
                     }
 
                     navigationEvent.postValue(NavigationEvent.SHOW_MOVIE_LIST_SCREEN)
@@ -63,11 +65,13 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
     }
 
     fun startMainActivity() {
-        if(apiSettings.isValidUser()){
+        if(apiSettings.isValidUser() || ratedMovieList.isEmpty()){
             getRatedMoviesList()
         }else{
-            navigationEvent.postValue(NavigationEvent.SHOW_SPLASH_SCREEN)
+            navigationEvent.postValue(NavigationEvent.SHOW_MOVIE_LIST_SCREEN)
             errorEvent.postValue(ErrorEvent.AUTH_FAILED_ERROR)
+
+            ratedMovieList.addAll(apiSettings.getRatedMovieList())
         }
     }
 

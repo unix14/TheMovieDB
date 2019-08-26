@@ -1,16 +1,22 @@
 package com.unix14.android.themoviedb.network
 
+import android.content.Context
 import android.content.SharedPreferences
 import com.unix14.android.themoviedb.common.DateUtils
-import com.unix14.android.themoviedb.models.MovieListResponse
 import java.util.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.unix14.android.themoviedb.models.Movie
+
 
 class ApiSettings(private val sharedPreferences: SharedPreferences) {
 
     private val TOKEN_KEY = "token_key"
     private val SESSION_ID = "session_id"
     private val NEXT_EXPIRATION_DATE = "next_expiration_date"
+    private val RATED_MOVIE_LIST = "rated_movie_list"
     val API_KEY = "b56640566d2644075c08a4adc089b927"
+    val gson = Gson()
 
     var requestToken: String?
         get() = sharedPreferences.getString(TOKEN_KEY, null)
@@ -30,5 +36,24 @@ class ApiSettings(private val sharedPreferences: SharedPreferences) {
             return it.after(Date())
         }
         return false
+    }
+
+
+    fun <T> setRatedMovieList(list: List<T>) {
+        val json = gson.toJson(list)
+        val editor = sharedPreferences.edit()
+
+        editor.putString(RATED_MOVIE_LIST, json)
+        editor.apply()
+    }
+
+    fun getRatedMovieList(): ArrayList<Movie> {
+        val jsonPreferences = sharedPreferences.getString(RATED_MOVIE_LIST, "")
+        var movieList: ArrayList<Movie> = ArrayList()
+
+        val type = object : TypeToken<List<Movie>>() {}.type
+        movieList.addAll(gson.fromJson<List<Movie>>(jsonPreferences, type))
+
+        return movieList
     }
 }
