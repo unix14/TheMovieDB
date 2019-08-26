@@ -26,7 +26,7 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
     val navigationEvent = SingleLiveEvent<NavigationEvent>()
     val errorEvent = SingleLiveEvent<ErrorEvent>()
 
-    fun createGuestSession() {
+    private fun createGuestSession() {
         progressData.startProgress()
 
         apiService.createGuestSession(apiSettings.API_KEY).enqueue(object : Callback<GuestAuthResponse>{
@@ -54,6 +54,15 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
             }
         })
 
+    }
+
+    fun startSplashActivity() {
+        if(apiSettings.isValidUser()){
+            navigationEvent.postValue(NavigationEvent.GO_TO_MAIN_ACTIVITY)
+            errorEvent.postValue(ErrorEvent.NO_ERROR)
+        }else{
+            createGuestSession()
+        }
     }
 
 }

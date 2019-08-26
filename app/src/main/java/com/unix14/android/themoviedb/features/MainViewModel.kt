@@ -1,6 +1,7 @@
 package com.unix14.android.themoviedb.features
 
 import androidx.lifecycle.ViewModel
+import com.unix14.android.themoviedb.common.ProgressData
 import com.unix14.android.themoviedb.common.SingleLiveEvent
 import com.unix14.android.themoviedb.models.Movie
 import com.unix14.android.themoviedb.models.MovieListResponse
@@ -25,11 +26,13 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
         CONNECTION_FAILED_ERROR
     }
 
+    val progressData = ProgressData()
     val navigationEvent = SingleLiveEvent<NavigationEvent>()
     val errorEvent = SingleLiveEvent<ErrorEvent>()
-    val localRatedMovieList : ArrayList<Movie> =  arrayListOf()
+    val ratedMovieList : ArrayList<Movie> =  arrayListOf()
 
-    fun getRatedMoviesList() {
+    private fun getRatedMoviesList() {
+        progressData.startProgress()
         if(apiSettings.requestToken == null){
             navigationEvent.postValue(NavigationEvent.SHOW_SPLASH_SCREEN)
             errorEvent.postValue(ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR)
@@ -38,11 +41,13 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
 
         apiService.getRatedMoviesForGuest(apiSettings.requestToken!!,apiSettings.API_KEY).enqueue(object : Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
-
+                progressData.endProgress()
                 if(response.isSuccessful){
-                    val ratedMoviesList = response.body()
-                    ratedMoviesList?.let{
-                        localRatedMovieList.addAll(it.results)
+                    val movieListResponse = response.body()
+                    movieListResponse?.let{
+                        val movieList = it.results
+                        ratedMovieList.addAll(movieList)
+                        apiSettings.setRatedMovieList(movieList)
                     }
 
                     navigationEvent.postValue(NavigationEvent.SHOW_MOVIE_LIST_SCREEN)
@@ -54,30 +59,31 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
 
             override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
                 errorEvent.postValue(ErrorEvent.CONNECTION_FAILED_ERROR)
+                progressData.endProgress()
             }
         })
     }
 
     fun startMainActivity() {
-        if(apiSettings.isValidUser()){
+        if(apiSettings.isValidUser() && ratedMovieList.isEmpty()){
             getRatedMoviesList()
         }else{
-            navigationEvent.postValue(NavigationEvent.SHOW_SPLASH_SCREEN)
+            navigationEvent.postValue(NavigationEvent.SHOW_MOVIE_LIST_SCREEN)
             errorEvent.postValue(ErrorEvent.AUTH_FAILED_ERROR)
+
+            ratedMovieList.addAll(apiSettings.getRatedMovieList())
         }
     }
 
     fun getMovieRating(desiredMovieId : Int) : Float {
-        localRatedMovieList.let {
-            for (movie in it) {
-                if (movie.id == desiredMovieId)
-                    return movie.rating
-            }
+        for (movie in ratedMovieList) {
+            if (movie.id == desiredMovieId)
+                return movie.rating
         }
         return 0f
     }
 
     fun addLocalRatedMovie(movie: Movie) {
-        localRatedMovieList.add(movie)
+        ratedMovieList.add(movie)
     }
 }
