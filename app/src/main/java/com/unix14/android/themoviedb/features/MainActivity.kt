@@ -1,5 +1,7 @@
 package com.unix14.android.themoviedb.features
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,12 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
+import com.unix14.android.themoviedb.features.movie_details.MovieDetailsFragment
 import com.unix14.android.themoviedb.features.movie_list.MovieListFragment
 import com.unix14.android.themoviedb.features.sign_in.SignInFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentListener , MovieDetailsFragment.MovieDetailsFragmentListener {
+
     private val viewModel by viewModel<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,10 +87,25 @@ class MainActivity : AppCompatActivity() {
         showFragment(SignInFragment.newInstance(),Constants.SIGN_IN_FRAGMENT)
     }
 
+    private fun showMovieDetails(movieId: String) {
+        showFragment(MovieDetailsFragment.newInstance(movieId),Constants.SIGN_IN_FRAGMENT)
+        Toast.makeText(this,"Clicked on $movieId",Toast.LENGTH_LONG).show()
+    }
+
     private fun showFragment(fragment: Fragment, tag: String) {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActContainer, fragment, tag)
             .commit()
     }
+
+    override fun onMovieIdClick(movieId: Int) {
+        showMovieDetails(movieId.toString())
+    }
+
+    override fun openIMDBWebsite(imdbId: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.IMDB_BASE_URL + imdbId))
+        startActivity(browserIntent)
+    }
+
 }

@@ -16,6 +16,7 @@ class Movie(
     @SerializedName("original_language") val originalLang: String,
     @SerializedName("title") val name: String,
     @SerializedName("backdrop_path") val backdropPath: String,
+    @SerializedName("imdb_id") val imdbId: String,
     @SerializedName("popularity") var popularity: Float,
     @SerializedName("vote_count") var voteCount: Int,
     @SerializedName("vote_average") var voteAvg: Float,
