@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -21,27 +20,33 @@ import com.unix14.android.themoviedb.models.Movie
 import kotlinx.android.synthetic.main.movie_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-private const val MOVIE_ID = "movie_id"
+private const val MOVIE_KEY = "movie_key"
+private const val RATING_KEY = "rating_key"
+
 class MovieDetailsFragment : DialogFragment() {
 
-    interface MovieDetailsFragmentListener{
+    interface MovieDetailsFragmentListener {
         fun openIMDBWebsite(imdbId: String)
+        fun addRatedMovieToLocalList(movie: Movie)
     }
 
+    private var rating: Float? = null
     private var listener: MovieDetailsFragmentListener? = null
-    private var movieId: String? = null
+    private lateinit var movie: Movie
 
     companion object {
         /**
          *
-         * @param movieId of the movie item clicked as a String
+         * @param movie the companion item clicked as a String
+         * @param rating the rating of the movie
          * @return A new instance of fragment MovieDetailsFragment.
          */
         @JvmStatic
-        fun newInstance(movieId: String) =
+        fun newInstance(movie: Movie, rating: Float) =
             MovieDetailsFragment().apply {
                 arguments = Bundle().apply {
-                    putString(MOVIE_ID, movieId)
+                    putSerializable(MOVIE_KEY, movie)
+                    putFloat(RATING_KEY, rating)
                 }
             }
     }
@@ -49,17 +54,18 @@ class MovieDetailsFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            movieId = it.getString(MOVIE_ID)
+            movie = it.getSerializable(MOVIE_KEY) as Movie
+            rating = it.getFloat(RATING_KEY)
         }
         setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
 
     private val viewModel by viewModel<MovieDetailsViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.movie_details_fragment, container, false)
         dialog?.window?.let {
-            it.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!,R.color.dark_43)))
+            it.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
             it.attributes?.windowAnimations = R.style.FullScreenDialogStyle
         }
         return view
@@ -73,47 +79,63 @@ class MovieDetailsFragment : DialogFragment() {
     }
 
     private fun setupViewModel() {
-        viewModel.progressData.observe(this, Observer {
-            isLoading -> handleProgressBar(isLoading) })
-        viewModel.movieDetailsData.observe(this, Observer {
-            movieDetails -> handleMovieDetails(movieDetails) })
-        viewModel.errorEvent.observe(this, Observer {
-            errorEvent -> handleErrorEvent(errorEvent) })
+        viewModel.progressData.observe(viewLifecycleOwner, Observer { isLoading -> handleProgressBar(isLoading) })
+        viewModel.movieDetailsData.observe(
+            viewLifecycleOwner,
+            Observer { movieDetails -> handleMovieDetails(movieDetails) })
+        viewModel.errorEvent.observe(viewLifecycleOwner, Observer { errorEvent -> handleErrorEvent(errorEvent) })
+        viewModel.ratingMovieEvent.observe(
+            viewLifecycleOwner,
+            Observer { ratingEvent -> handleRatingEvent(ratingEvent) })
+    }
+
+    private fun handleRatingEvent(ratingEvent: MovieDetailsViewModel.RatingEvent?) {
+        ratingEvent?.let {
+            when (it) {
+                MovieDetailsViewModel.RatingEvent.RATING_ERROR -> {
+                    Toast.makeText(context, "Rating failed, Please try again later", Toast.LENGTH_LONG).show()
+                }
+                MovieDetailsViewModel.RatingEvent.RATED -> {
+                    Toast.makeText(context, "Rating Sent!", Toast.LENGTH_LONG).show()
+                    movie.rating = movieDetailsFragRatingBar.rating
+                    listener?.addRatedMovieToLocalList(movie)
+                    setIsRatedLayout(true)
+                }
+            }
+        }
     }
 
     private fun handleErrorEvent(errorEvent: MovieDetailsViewModel.ErrorEvent?) {
-        errorEvent?.let{
-            when(it){
-                MovieDetailsViewModel.ErrorEvent.SERVER_CONNECTION_ERROR ->{
-                    Toast.makeText(context,"Connection to server failed",Toast.LENGTH_LONG).show()
+        errorEvent?.let {
+            when (it) {
+                MovieDetailsViewModel.ErrorEvent.SERVER_CONNECTION_ERROR -> {
+                    Toast.makeText(context, "Connection to server failed", Toast.LENGTH_LONG).show()
                 }
                 MovieDetailsViewModel.ErrorEvent.FETCH_DATA_ERROR -> {
-                    Toast.makeText(context,"Fetch data from server failed",Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Fetch data from server failed", Toast.LENGTH_LONG).show()
                 }
-                MovieDetailsViewModel.ErrorEvent.NO_ERROR ->{}
+                MovieDetailsViewModel.ErrorEvent.NO_ERROR -> {
+                }
             }
         }
     }
 
     private fun handleProgressBar(isLoading: Boolean?) {
-        isLoading?.let{
-            if(it){
+        isLoading?.let {
+            if (it) {
                 movieDetailsFragPb.visibility = View.VISIBLE
-            }else{
+            } else {
                 movieDetailsFragPb.visibility = View.GONE
             }
         }
     }
 
     private fun handleMovieDetails(movieDetails: Movie?) {
-        movieDetails?.let{
+        movieDetails?.let {
             movieDetailsFragName.text = it.name
             movieDetailsFragDescription.text = it.overview
-
             movieDetailsFragYear.text = DateUtils.getYear(it.realeseDate)
-
             movieDetailsFragLanguage.text = it.originalLang
-
             movieDetailsFragVotes.text = it.voteCount.toString()
             movieDetailsFragPopularity.text = it.popularity.toString()
 
@@ -121,13 +143,11 @@ class MovieDetailsFragment : DialogFragment() {
                 listener?.openIMDBWebsite(movieDetails.imdbId)
             }
 
-            if(it.adult){
+            if (it.adult) {
                 movieDetailsFragAdultFilm.visibility = View.VISIBLE
-            }else{
+            } else {
                 movieDetailsFragAdultFilm.visibility = View.GONE
             }
-
-
 
             Glide.with(context)
                 .load(Constants.BIG_POSTER_BASE_URL + it.image)
@@ -155,11 +175,36 @@ class MovieDetailsFragment : DialogFragment() {
     }
 
     private fun initUi() {
-        movieId?.let{
-            viewModel.getMovieDetails(it)
+        viewModel.getMovieDetails(movie.id.toString())
+
+        movieDetailsFragRateBtn.setOnClickListener {
+            viewModel.sendRating(movie.id.toString(), movieDetailsFragRatingBar.rating)
         }
 
+        rating?.let {
+            movieDetailsFragRatingBar.rating = it
+            movie.rating = it
+            setIsRatedLayout(it > 0)
+            movieDetailsFragRateBtn.visibility = View.GONE
+        }
+
+        movieDetailsFragRatingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            setIsRatedLayout(false)
+        }
     }
 
+    private fun setIsRatedLayout(rated: Boolean) {
+        if (rated) {
+            //disable rating bar clicks and send button
+            movieDetailsFragRateBtn.visibility = View.GONE
+            movieDetailsFragRatingBar.setIsIndicator(true)
+            movieDetailsFragRateTitle.text = getString(R.string.movie_details_frag_you_rated_movie)
+        } else {
+            // enable send button and RatingBar
+            movieDetailsFragRateBtn.visibility = View.VISIBLE
+            movieDetailsFragRatingBar.setIsIndicator(false)
+            movieDetailsFragRateTitle.text = getString(R.string.movie_details_frag_rate_this_movie)
+        }
+    }
 
 }

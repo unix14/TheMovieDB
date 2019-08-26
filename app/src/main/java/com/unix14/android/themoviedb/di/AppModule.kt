@@ -14,7 +14,7 @@ val appModule = module {
     viewModel { SplashViewModel(get(), get()) }
 
     //Main screen
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel(get(), get()) }
 
     //Movie List screen
     viewModel { MovieListViewModel(get(), get()) }

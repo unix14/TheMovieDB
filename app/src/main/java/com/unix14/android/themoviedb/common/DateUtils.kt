@@ -54,7 +54,7 @@ class DateUtils {
             return Date(date.time + TimeZone.getDefault().getOffset(localTime.time))
         }
 
-        fun getYear(date:Date) : String {
+        fun getYear(date:Date?) : String {
             val cal = Calendar.getInstance()
             cal.time = date
 

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -24,7 +23,7 @@ import java.util.*
 class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener {
 
     interface MovieListFragmentListener{
-        fun onMovieIdClick(movieId: Int)
+        fun onMovieClick(movieId: Movie)
     }
 
     companion object {
@@ -106,11 +105,11 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     }
 
     private fun setupViewModel() {
-        viewModel.progressData.observe(this, Observer {
+        viewModel.progressData.observe(viewLifecycleOwner, Observer {
             isLoading -> handleProgressBar(isLoading) })
-        viewModel.movieListData.observe(this, Observer {
+        viewModel.movieListData.observe(viewLifecycleOwner, Observer {
                 movieList -> handleFeedList(movieList) })
-        viewModel.paginationStatus.observe(this, Observer {
+        viewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
              infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
     }
 
@@ -145,7 +144,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
 
     override fun onMovieClick(movie: Movie) {
         listener?.let{
-            it.onMovieIdClick(movie.id)
+            it.onMovieClick(movie)
         }
     }
 

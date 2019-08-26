@@ -2,6 +2,7 @@ package com.unix14.android.themoviedb.network
 
 import android.content.SharedPreferences
 import com.unix14.android.themoviedb.common.DateUtils
+import com.unix14.android.themoviedb.models.MovieListResponse
 import java.util.*
 
 class ApiSettings(private val sharedPreferences: SharedPreferences) {
