@@ -65,7 +65,7 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
     }
 
     fun startMainActivity() {
-        if(apiSettings.isValidUser() || ratedMovieList.isEmpty()){
+        if(apiSettings.isValidUser() && ratedMovieList.isEmpty()){
             getRatedMoviesList()
         }else{
             navigationEvent.postValue(NavigationEvent.SHOW_MOVIE_LIST_SCREEN)
