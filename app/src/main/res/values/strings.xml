@@ -3,5 +3,7 @@
     <string name="sign_in_frag_sign_in">Sign In</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="movie_details_frag_go_to_imdb"><u>Go to iMDB</u></string>
+    <string name="movie_details_frag_go_to_imdb">
+        <u>Go to iMDB</u>
+    </string>
 </resources>

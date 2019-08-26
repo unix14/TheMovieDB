@@ -13,6 +13,7 @@ import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.features.movie_details.MovieDetailsFragment
 import com.unix14.android.themoviedb.features.movie_list.MovieListFragment
 import com.unix14.android.themoviedb.features.sign_in.SignInFragment
+import com.unix14.android.themoviedb.features.splash.SplashActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,8 +30,6 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     }
 
     private fun setupViewModel() {
-        viewModel.progressData.observe(this, Observer {
-            isLoading -> handleProgressBar(isLoading) })
         viewModel.navigationEvent.observe(this, Observer {
             navigationEvent -> handleNavigationEvent(navigationEvent) })
         viewModel.errorEvent.observe(this, Observer {
@@ -41,15 +40,18 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     private fun handleErrorEvent(errorEvent: MainViewModel.ErrorEvent?) {
         errorEvent?.let{
             when(it){
-                MainViewModel.ErrorEvent.CONNECTION_FAILED_ERROR ->{
-                    Toast.makeText(this,"Connection to server failed",Toast.LENGTH_LONG).show()
-                }
                 MainViewModel.ErrorEvent.AUTH_FAILED_ERROR -> {
-                    Toast.makeText(this,"Authentication with server failed",Toast.LENGTH_LONG).show()
+                    Toast.makeText(this,"Authentication with server failed, Please try again",Toast.LENGTH_LONG).show()
+                    showSplashAgain()
                 }
                 MainViewModel.ErrorEvent.NO_ERROR ->{}
             }
         }
+    }
+
+    private fun showSplashAgain() {
+        startActivity(Intent(this, SplashActivity::class.java))
+        finish()
     }
 
     private fun handleNavigationEvent(navigationEvent: MainViewModel.NavigationEvent?) {
@@ -61,16 +63,6 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
                 MainViewModel.NavigationEvent.SHOW_SIGN_IN_SCREEN -> {
                     showSignIn()
                 }
-            }
-        }
-    }
-
-    private fun handleProgressBar(isLoading: Boolean?) {
-        isLoading?.let{
-            if(it){
-                mainActPb.visibility = View.VISIBLE
-            }else{
-                mainActPb.visibility = View.GONE
             }
         }
     }
