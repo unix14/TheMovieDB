@@ -8,7 +8,9 @@ class Constants{
         const val AUTHENTICATION_URL = "https://www.themoviedb.org/authenticate/"
         const val SMALL_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/"
         const val BIG_POSTER_BASE_URL = "http://image.tmdb.org/t/p/original/"
+        const val IMDB_BASE_URL = "https://www.imdb.com/title/"
 
+        const val POSTER_ROUNDED_CORNERS_RADIUS = 30
 
 
 

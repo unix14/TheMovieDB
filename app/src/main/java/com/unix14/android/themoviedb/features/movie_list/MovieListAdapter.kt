@@ -14,7 +14,6 @@ import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.models.Movie
 import kotlinx.android.synthetic.main.movie_list_item.view.*
 
-const val POSTER_ROUNDED_CORNERS_RADIUS = 30
 class MovieListAdapter(private val listener: MovieListAdapterListener) : RecyclerView.Adapter<MovieListAdapter.MovieItemViewHolder>() {
 
     private var movieList:ArrayList<Movie> =  arrayListOf()
@@ -30,7 +29,7 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) : Recycle
         fun bind(movie: Movie) {
             Glide.with(itemView.context)
                 .load(Constants.SMALL_POSTER_BASE_URL + movie.image)
-                .apply(RequestOptions().transform(RoundedCorners(POSTER_ROUNDED_CORNERS_RADIUS)))
+                .apply(RequestOptions().transform(RoundedCorners(Constants.POSTER_ROUNDED_CORNERS_RADIUS)))
                 .into(image)
 
             name.text = movie.name

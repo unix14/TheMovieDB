@@ -1,5 +1,6 @@
 package com.unix14.android.themoviedb.features.movie_list
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,21 +23,22 @@ import java.util.*
 
 class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener {
 
+    interface MovieListFragmentListener{
+        fun onMovieIdClick(movieId: Int)
+    }
+
     companion object {
         fun newInstance() = MovieListFragment()
     }
 
+    private var listener: MovieListFragmentListener? = null
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: MovieListAdapter
     val viewModel by viewModel<MovieListViewModel>()
     private lateinit var infiniteRecyclerViewScrollListener: InfiniteRecyclerViewScrollListener
     private var page: Int = 1
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.movie_list_fragment, container, false)
     }
 
@@ -106,8 +108,8 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     private fun setupViewModel() {
         viewModel.progressData.observe(this, Observer {
             isLoading -> handleProgressBar(isLoading) })
-        viewModel.movieListData.observe(this, Observer { movieList ->
-            handleFeedList(movieList) })
+        viewModel.movieListData.observe(this, Observer {
+                movieList -> handleFeedList(movieList) })
         viewModel.paginationStatus.observe(this, Observer {
              infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
     }
@@ -127,8 +129,24 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MovieListFragmentListener) {
+            listener = context
+        } else {
+            throw RuntimeException("$context must implement MovieListFragmentListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
     override fun onMovieClick(movie: Movie) {
-        Toast.makeText(context, "Clicked on ${movie.name}", Toast.LENGTH_LONG).show()
+        listener?.let{
+            it.onMovieIdClick(movie.id)
+        }
     }
 
     private fun getInfiniteScrollListener(): InfiniteRecyclerViewScrollListener {
