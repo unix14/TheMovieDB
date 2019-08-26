@@ -183,7 +183,6 @@ class MovieDetailsFragment : DialogFragment() {
 
         rating?.let {
             movieDetailsFragRatingBar.rating = it
-            movie.rating = it
             setIsRatedLayout(it > 0)
             movieDetailsFragRateBtn.visibility = View.GONE
         }

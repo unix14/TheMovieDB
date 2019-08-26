@@ -3,6 +3,7 @@ package com.unix14.android.themoviedb.features
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import com.unix14.android.themoviedb.features.sign_in.SignInFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.unix14.android.themoviedb.models.Movie
 import com.unix14.android.themoviedb.features.splash.SplashActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentListener , MovieDetailsFragment.MovieDetailsFragmentListener {
 
@@ -33,6 +35,18 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
             navigationEvent -> handleNavigationEvent(navigationEvent) })
         viewModel.errorEvent.observe(this, Observer {
             errorEvent -> handleErrorEvent(errorEvent) })
+        viewModel.progressData.observe(this, Observer{
+           isLoading -> handleProgressBar(isLoading)  })
+    }
+
+    private fun handleProgressBar(isLoading: Boolean?) {
+        isLoading?.let{
+            if(it){
+                mainActPb.visibility = View.VISIBLE
+            }else{
+                mainActPb.visibility = View.GONE
+            }
+        }
     }
 
     private fun handleErrorEvent(errorEvent: MainViewModel.ErrorEvent?) {

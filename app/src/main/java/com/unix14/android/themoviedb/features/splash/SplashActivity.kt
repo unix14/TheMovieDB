@@ -32,7 +32,7 @@ class SplashActivity : AppCompatActivity() {
             .setDuration(1500)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    viewModel.createGuestSession()
+                    viewModel.startSplashActivity()
                 }
             }).start()
     }
