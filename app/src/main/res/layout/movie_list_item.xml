@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:orientation="horizontal"
-    android:padding="15dp"
-    tools:background="@drawable/background_gradient">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="200dp"
+              android:orientation="horizontal"
+              android:padding="15dp"
+              tools:background="@drawable/background_gradient">
 
     <ImageView
         android:id="@+id/movieListItemImage"
@@ -19,30 +19,28 @@
         android:minWidth="105dp"
         android:minHeight="150dp"
         android:scaleType="centerCrop"
-        tools:background="@color/colorPrimary" />
+        tools:background="@color/colorPrimary"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="15dp"
-        android:background="@drawable/rounded_white_alpha_background"
-        android:elevation="25dp">
+        android:background="@drawable/rounded_white_alpha_background">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="10dp"
+            android:layout_margin="10dp"
             android:orientation="vertical"
             android:padding="10dp">
 
-            <TextView
+            <com.unix14.android.themoviedb.common.AutoScrollableTextView
                 android:id="@+id/movieListItemName"
                 style="@style/MovieTitleStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="7dp"
-                tools:text="Rocky 4" />
+                tools:text="Rocky 4"/>
 
             <TextView
                 android:id="@+id/movieListItemDescription"
@@ -52,7 +50,7 @@
                 android:breakStrategy="high_quality"
                 android:ellipsize="end"
                 android:maxLines="4"
-                tools:text="44444" />
+                tools:text="44444"/>
 
 
         </LinearLayout>

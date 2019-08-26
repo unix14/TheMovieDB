@@ -1,6 +1,7 @@
 package com.unix14.android.themoviedb.features.movie_list
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -97,6 +98,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     }
 
     private fun initSwipeLayout() {
+        movieListFragPullToRefresh.setColorSchemeColors(Color.BLUE, Color.RED, Color.BLACK)
         movieListFragPullToRefresh.setOnRefreshListener {
             page=1
             adapter.clear()
