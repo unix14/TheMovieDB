@@ -14,9 +14,6 @@
 
     <ProgressBar
         android:id="@+id/mainActPb"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        style="@style/ProgressBarStyle" />
 
 </FrameLayout>

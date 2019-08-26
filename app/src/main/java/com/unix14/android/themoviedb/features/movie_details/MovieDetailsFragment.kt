@@ -1,11 +1,14 @@
 package com.unix14.android.themoviedb.features.movie_details
 
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -19,7 +22,7 @@ import kotlinx.android.synthetic.main.movie_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val MOVIE_ID = "movie_id"
-class MovieDetailsFragment : Fragment() {
+class MovieDetailsFragment : DialogFragment() {
 
     interface MovieDetailsFragmentListener{
         fun openIMDBWebsite(imdbId: String)
@@ -48,12 +51,18 @@ class MovieDetailsFragment : Fragment() {
         arguments?.let {
             movieId = it.getString(MOVIE_ID)
         }
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
 
     private val viewModel by viewModel<MovieDetailsViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.movie_details_fragment, container, false)
+        val view = inflater.inflate(R.layout.movie_details_fragment, container, false)
+        dialog?.window?.let {
+            it.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!,R.color.dark_43)))
+            it.attributes?.windowAnimations = R.style.FullScreenDialogStyle
+        }
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -123,7 +132,6 @@ class MovieDetailsFragment : Fragment() {
             Glide.with(context)
                 .load(Constants.BIG_POSTER_BASE_URL + it.image)
                 .apply(RequestOptions().transform(RoundedCorners(Constants.POSTER_ROUNDED_CORNERS_RADIUS)))
-
                 .into(movieDetailsFragImage)
 
             Glide.with(context)

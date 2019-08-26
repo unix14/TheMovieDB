@@ -21,10 +21,7 @@
 
     <ProgressBar
         android:id="@+id/signInFragPb"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        style="@style/ProgressBarStyle"/>
 
     <LinearLayout
         android:layout_gravity="bottom"

@@ -88,13 +88,13 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     }
 
     private fun showMovieDetails(movieId: String) {
-        showFragment(MovieDetailsFragment.newInstance(movieId),Constants.SIGN_IN_FRAGMENT)
-        Toast.makeText(this,"Clicked on $movieId",Toast.LENGTH_LONG).show()
+        MovieDetailsFragment.newInstance(movieId).show(supportFragmentManager,Constants.SIGN_IN_FRAGMENT)
     }
 
     private fun showFragment(fragment: Fragment, tag: String) {
         supportFragmentManager
             .beginTransaction()
+            .setCustomAnimations(R.anim.popup_show, 0, 0, R.anim.popup_hide)
             .replace(R.id.mainActContainer, fragment, tag)
             .commit()
     }
