@@ -56,6 +56,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="colorAccent">@color/dark_red</item>
+        <item name="android:indeterminateTintMode">src_atop</item>
+        <item name="android:indeterminateTint">@color/dark_red</item>
     </style>
 
     <style name="RatingBarStyle" parent="Widget.AppCompat.RatingBar">
