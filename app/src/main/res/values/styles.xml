@@ -56,4 +56,11 @@
         <item name="android:layout_gravity">center</item>
         <item name="colorAccent">@color/dark_red</item>
     </style>
+
+    <style name="SplashTitleStyle">
+        <item name="android:textSize">42sp</item>
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:fontStyle">italic</item>
+    </style>
 </resources>
