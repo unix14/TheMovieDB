@@ -5,6 +5,7 @@ import com.unix14.android.themoviedb.common.DateUtils
 import java.util.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.unix14.android.themoviedb.models.Genre
 import com.unix14.android.themoviedb.models.Language
 import com.unix14.android.themoviedb.models.Movie
 
@@ -16,6 +17,7 @@ class ApiSettings(private val sharedPreferences: SharedPreferences) {
     private val NEXT_EXPIRATION_DATE = "next_expiration_date"
     private val RATED_MOVIE_LIST = "rated_movie_list"
     private val LANGUAGES_LIST = "languages_list"
+    private val GENRES_LIST = "genres_list"
     val API_KEY = "b56640566d2644075c08a4adc089b927"
     val gson = Gson()
 
@@ -66,6 +68,21 @@ class ApiSettings(private val sharedPreferences: SharedPreferences) {
 
         val type = object : TypeToken<List<Language>>() {}.type
         langList.addAll(gson.fromJson<List<Language>>(jsonPreferences, type))
+
+        return langList
+    }
+
+    fun <T> setGenresList(list: List<T>) {
+        val json = gson.toJson(list)
+        sharedPreferences.edit().putString(GENRES_LIST, json).apply()
+    }
+
+    fun getGenresList(): ArrayList<Genre> {
+        val jsonPreferences = sharedPreferences.getString(GENRES_LIST, "")
+        val langList: ArrayList<Genre> = ArrayList()
+
+        val type = object : TypeToken<List<Genre>>() {}.type
+        langList.addAll(gson.fromJson<List<Genre>>(jsonPreferences, type))
 
         return langList
     }

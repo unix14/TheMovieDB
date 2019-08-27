@@ -38,6 +38,7 @@ class Movie : Serializable {
     var rating: Float = 0.0f
 
     var language: String = ""
+    var genre: String =""
 }
 
 class MovieListResponse(
@@ -71,6 +72,11 @@ class Video: Serializable {
     @SerializedName("key")
     val key: String = ""
 }
+
+class GenreRequest(
+    @SerializedName("genres")
+    var genres: ArrayList<Genre>
+)
 
 class Genre: Serializable {
     @SerializedName("id")

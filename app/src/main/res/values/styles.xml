@@ -26,7 +26,7 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
-    <style name="MovieDetailsSubTitleStyle">
+    <style name="MovieDetailsCategoryStyle">
         <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/dark_red</item>
         <item name="android:fontFamily">sans-serif-condensed-medium</item>
@@ -104,4 +104,12 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
+
+    <style name="MovieDetailsSubTitleStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:lines">1</item>
+    </style>
+
 </resources>

@@ -36,5 +36,5 @@ interface ApiService {
     fun getLanguagesList(@Query("api_key") apiKey: String): Call<ArrayList<Language>>
 
     @GET("genre/movie/list")
-    fun getGenresList(@Query("api_key") apiKey: String): Call<ArrayList<Genre>>
+    fun getGenresList(@Query("api_key") apiKey: String): Call<GenreRequest>
 }

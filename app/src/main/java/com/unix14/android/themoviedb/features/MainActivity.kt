@@ -172,6 +172,7 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     override fun onMovieClick(movie: Movie) {
         movie.rating = viewModel.getMovieRating(movie.id)
         movie.language = viewModel.getLanguageByIso(movie.originalLang)
+        movie.genre = viewModel.getGenreNameByGenreID(movie.genreIds[0].toString())
         showMovieDetails(movie)
     }
 
