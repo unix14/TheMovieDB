@@ -29,4 +29,7 @@ interface ApiService {
     @GET("guest_session/{guest_session_id}/rated/movies")
     fun getRatedMoviesForGuest(@Path("guest_session_id") guestSessionId: String, @Query("api_key") apiKey: String , @Query("page") page: Int? = 1): Call<MovieListResponse>
 
+    @GET("movie/{movie_id}/videos")
+    fun getVideosForMovieId(@Path("movie_id") movieId: String, @Query("api_key") apiKey: String): Call<MovieVideosResponse>
+
 }

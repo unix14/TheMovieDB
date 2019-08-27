@@ -4,9 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.unix14.android.themoviedb.common.ProgressData
 import com.unix14.android.themoviedb.common.SingleLiveEvent
-import com.unix14.android.themoviedb.models.Movie
-import com.unix14.android.themoviedb.models.MovieRate
-import com.unix14.android.themoviedb.models.MovieRatingResponse
+import com.unix14.android.themoviedb.models.*
 import com.unix14.android.themoviedb.network.ApiService
 import com.unix14.android.themoviedb.network.ApiSettings
 import retrofit2.Call
@@ -28,6 +26,7 @@ class MovieDetailsViewModel(private val apiService: ApiService, private val apiS
 
     val progressData = ProgressData()
     val movieDetailsData = MutableLiveData<Movie>()
+    val trailerVideosData = MutableLiveData<ArrayList<Video>>()
     val errorEvent = SingleLiveEvent<ErrorEvent>()
     val ratingMovieEvent = SingleLiveEvent<RatingEvent>()
 
@@ -59,7 +58,7 @@ class MovieDetailsViewModel(private val apiService: ApiService, private val apiS
 
     fun sendRating(movieId: String, rating: Float) {
         progressData.startProgress()
-        var movieRate = MovieRate(rating)
+        val movieRate = MovieRate(rating)
         apiService.rateMovie(movieId,apiSettings.API_KEY,apiSettings.requestToken!!,movieRate).enqueue(object : Callback<MovieRatingResponse> {
             override fun onResponse(call: Call<MovieRatingResponse>, response: Response<MovieRatingResponse>) {
                 progressData.endProgress()
@@ -75,6 +74,33 @@ class MovieDetailsViewModel(private val apiService: ApiService, private val apiS
                 progressData.endProgress()
                 errorEvent.postValue(ErrorEvent.SERVER_CONNECTION_ERROR)
                 ratingMovieEvent.postValue(RatingEvent.RATING_ERROR)
+            }
+        })
+    }
+
+    fun getVideosForMovie(id: String) {
+        progressData.startProgress()
+
+        apiService.getVideosForMovieId(id,apiSettings.API_KEY).enqueue(object : Callback<MovieVideosResponse>{
+            override fun onResponse(call: Call<MovieVideosResponse>, response: Response<MovieVideosResponse>) {
+                progressData.endProgress()
+
+                if(response.isSuccessful){
+                    errorEvent.postValue(ErrorEvent.NO_ERROR)
+                    val videos = response.body()
+
+                    videos?.let{
+                        trailerVideosData.postValue(it.results)
+                    }
+                }else{
+                    errorEvent.postValue(ErrorEvent.FETCH_DATA_ERROR)
+                }
+
+            }
+
+            override fun onFailure(call: Call<MovieVideosResponse>, t: Throwable) {
+                progressData.endProgress()
+                errorEvent.postValue(ErrorEvent.SERVER_CONNECTION_ERROR)
             }
         })
     }

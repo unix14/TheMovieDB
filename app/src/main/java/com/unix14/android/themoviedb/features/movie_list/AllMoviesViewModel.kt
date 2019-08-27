@@ -38,7 +38,7 @@ class AllMoviesViewModel(private val apiService: ApiService, private val apiSett
                         errorEvent.postValue(ErrorEvent.NO_ERROR)
                         movieListData.postValue(it.results)
 
-                        paginationStatus.postValue(it.page < it.total_pages)
+                        paginationStatus.postValue(it.page < it.totalPages)
                     }
                 }else{
                     errorEvent.postValue(ErrorEvent.FETCH_DATA_ERROR)

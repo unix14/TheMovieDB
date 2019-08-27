@@ -16,7 +16,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.common.DateUtils
+import com.unix14.android.themoviedb.features.movie_details.trailers.TrailersAdapter
 import com.unix14.android.themoviedb.models.Movie
+import com.unix14.android.themoviedb.models.Video
 import kotlinx.android.synthetic.main.movie_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -34,6 +36,7 @@ class MovieDetailsFragment : DialogFragment() {
     private var rating: Float? = null
     private var listener: MovieDetailsFragmentListener? = null
     private lateinit var movie: Movie
+    private lateinit var adapter: TrailersAdapter
 
     companion object {
         /**
@@ -88,6 +91,17 @@ class MovieDetailsFragment : DialogFragment() {
                 errorEvent -> handleErrorEvent(errorEvent) })
         viewModel.ratingMovieEvent.observe(viewLifecycleOwner,Observer {
                 ratingEvent -> handleRatingEvent(ratingEvent) })
+        viewModel.trailerVideosData.observe(this, Observer {
+            trailerVideos -> handleTrailers(trailerVideos) })
+    }
+
+    private fun handleTrailers(trailerVideos: ArrayList<Video>?) {
+        trailerVideos?.let {
+            val backdropThumbnail = Constants.BIG_POSTER_BASE_URL + movie.backdropPath
+            adapter = TrailersAdapter(childFragmentManager,it,backdropThumbnail)
+            movieDetailsFragViewPager.adapter = adapter
+            movieDetailsFragViewPager.offscreenPageLimit = it.size
+        }
     }
 
     private fun handleRatingEvent(ratingEvent: MovieDetailsViewModel.RatingEvent?) {
@@ -156,10 +170,6 @@ class MovieDetailsFragment : DialogFragment() {
                 .load(Constants.BIG_POSTER_BASE_URL + it.image)
                 .apply(RequestOptions().transform(RoundedCorners(Constants.POSTER_ROUNDED_CORNERS_RADIUS)))
                 .into(movieDetailsFragImage)
-
-            Glide.with(context)
-                .load(Constants.BIG_POSTER_BASE_URL + it.backdropPath)
-                .into(movieDetailsFragMovieImage)
         }
     }
 
@@ -178,12 +188,14 @@ class MovieDetailsFragment : DialogFragment() {
     }
 
     private fun initUi() {
-        viewModel.getMovieDetails(movie.id.toString())
+        val movieId = movie.id.toString()
+        viewModel.getMovieDetails(movieId)
+        viewModel.getVideosForMovie(movieId)
 
         movieDetailsFragRateBtn.setOnClickListener {
             val enteredRating = movieDetailsFragRatingBar.rating
             if(enteredRating > 0){
-                viewModel.sendRating(movie.id.toString(), enteredRating)
+                viewModel.sendRating(movieId, enteredRating)
             }else{
                 Toast.makeText(context,"You MUST rate at least 0.5 star", Toast.LENGTH_SHORT).show()
             }

@@ -12,6 +12,7 @@ import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.custom_views.HeaderView
 import com.unix14.android.themoviedb.features.movie_details.MovieDetailsFragment
+import com.unix14.android.themoviedb.features.movie_details.trailers.VideoThumbnailFragment
 import com.unix14.android.themoviedb.features.movie_list.MovieListFragment
 import com.unix14.android.themoviedb.features.sign_in.SignInFragment
 import com.unix14.android.themoviedb.features.splash.SplashActivity
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentListener , MovieDetailsFragment.MovieDetailsFragmentListener,
-    HeaderView.HeaderViewListener {
+    HeaderView.HeaderViewListener , VideoThumbnailFragment.VideoThumbnailFragmentListener {
 
     private val viewModel by viewModel<MainViewModel>()
 
@@ -167,8 +168,16 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
         startActivity(browserIntent)
     }
 
+    private fun openYoutubeVideo(videoUrl: String) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl)))
+    }
+
     override fun addRatedMovieToLocalList(movie: Movie) {
         viewModel.addLocalRatedMovie(movie)
+    }
+
+    override fun onVideoIdClick(videoId: String) {
+        openYoutubeVideo(Constants.YOUTUBE_VIDEO_BASE_URL + videoId)
     }
 
 }
