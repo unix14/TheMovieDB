@@ -10,17 +10,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
+import com.unix14.android.themoviedb.custom_views.HeaderView
 import com.unix14.android.themoviedb.features.movie_details.MovieDetailsFragment
 import com.unix14.android.themoviedb.features.movie_list.MovieListFragment
-import com.unix14.android.themoviedb.features.rated_movies.RatedFragment
 import com.unix14.android.themoviedb.features.sign_in.SignInFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.unix14.android.themoviedb.models.Movie
 import com.unix14.android.themoviedb.features.splash.SplashActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentListener , MovieDetailsFragment.MovieDetailsFragmentListener ,
-    RatedFragment.RatedFragmentListener {
+class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentListener , MovieDetailsFragment.MovieDetailsFragmentListener,
+    HeaderView.HeaderViewListener {
 
     private val viewModel by viewModel<MainViewModel>()
 
@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
         setContentView(R.layout.activity_main)
 
         setupViewModel()
+        initHeaderView()
         initUi()
     }
 
@@ -88,6 +89,35 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
 
     private fun initUi() {
         viewModel.startMainActivity()
+    }
+
+    private fun initHeaderView() {
+        mainActListHeaderView.listener = this
+        setHeaderViewLayout(true)
+    }
+
+    override fun onHeaderAllMoviesClick() {
+        setHeaderViewLayout(true)
+    }
+
+    override fun onHeaderRatedMoviesClick() {
+        setHeaderViewLayout(false)
+    }
+
+    private fun setHeaderViewLayout(isAllMoviesScreen: Boolean) {
+        if(isAllMoviesScreen){
+            mainActListHeaderView.setAllMoviesButtonVisibility(false)
+            mainActListHeaderView.setRatedMoviesButtonVisibility(true)
+            mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
+        }else{
+            mainActListHeaderView.setAllMoviesButtonVisibility(true)
+            mainActListHeaderView.setRatedMoviesButtonVisibility(false)
+            mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
+        }
+
+        showMovieList() // add listTWype
+        //or just get activefragment from transactionMngr
+        //and use fragment.setListType()
     }
 
     private fun showMovieList(listType: Int) {

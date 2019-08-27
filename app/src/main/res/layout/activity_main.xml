@@ -6,13 +6,18 @@
     android:background="@drawable/background_gradient"
     tools:context=".features.MainActivity">
 
-
     <FrameLayout
         android:id="@+id/mainActContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
+
+    <com.unix14.android.themoviedb.custom_views.HeaderView
+        android:id="@+id/mainActListHeaderView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <ProgressBar
         android:id="@+id/mainActPb"
-        style="@style/ProgressBarStyle" />
+        style="@style/ProgressBarStyle"/>
+
 </FrameLayout>
