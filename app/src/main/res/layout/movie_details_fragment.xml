@@ -111,20 +111,26 @@
                             android:layout_marginBottom="6dp"
                             tools:text="1994"/>
 
+                        <TextView
+                            style="@style/MovieRatingTitleStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/movie_details_frag_public_rating"/>
+
                         <RatingBar
                             android:id="@+id/movieDetailsFragPublicRatingBar"
                             style="@style/SmallRatingBarStyle"/>
+
+                        <TextView
+                            android:id="@+id/movieDetailsFragAdultFilm"
+                            style="@style/MovieSubTitleStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:visibility="gone"
+                            tools:text="@string/movie_details_frag_adult_film"/>
                     </LinearLayout>
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/movieDetailsFragAdultFilm"
-                    style="@style/MovieSubTitleStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:visibility="gone"
-                    tools:text="Adult Film"/>
 
                 <TextView
                     android:id="@+id/movieDetailsFragDescription"

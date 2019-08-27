@@ -35,7 +35,6 @@ class MovieDetailsFragment : DialogFragment() {
     private var listener: MovieDetailsFragmentListener? = null
     private lateinit var adapter: TrailersAdapter
 
-    //Passed params
     private lateinit var movie: Movie
 
     companion object {

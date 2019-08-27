@@ -25,7 +25,7 @@ const val LIST_TYPE_KEY = "list_type_key"
 class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener {
 
     interface MovieListFragmentListener{
-        fun onMovieClick(movieId: Movie)
+        fun onMovieClick(movie: Movie)
     }
 
     companion object {

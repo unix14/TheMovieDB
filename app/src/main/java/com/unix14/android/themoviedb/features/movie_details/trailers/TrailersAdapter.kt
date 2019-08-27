@@ -23,7 +23,7 @@ class TrailersAdapter(fm: FragmentManager, private val thumbnail: String) :
         }
     }
 
-    override fun getCount(): Int = videos.size - 1
+    override fun getCount(): Int = videos.size +1
 
     override fun getPageTitle(position: Int): CharSequence? = videos[position - 1].type
 

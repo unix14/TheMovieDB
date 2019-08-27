@@ -51,8 +51,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         initClicks()
     }
 
-    fun setAllMoviesButtonVisibility(showBackBtn: Boolean) {
-        if (showBackBtn) {
+    fun setAllMoviesButtonVisibility(showBtn: Boolean) {
+        if (showBtn) {
             headerViewAllMoviesBtn.visibility = View.VISIBLE
         } else {
             headerViewAllMoviesBtn.visibility = View.GONE
@@ -67,12 +67,28 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun setRatedMoviesButtonVisibility(showCloseBtn: Boolean) {
-        if (showCloseBtn) {
+    fun setRatedMoviesButtonVisibility(showBtn: Boolean) {
+        if (showBtn) {
             headerViewRatedMoviesBtn.visibility = View.VISIBLE
         } else {
             headerViewRatedMoviesBtn.visibility = View.GONE
         }
+    }
+
+    fun setRatedMoviesButtonActivated(activated: Boolean) {
+        headerViewRatedMoviesBtn.isActivated = activated
+    }
+
+    fun setAllMoviesButtonActivated(activated: Boolean) {
+        headerViewAllMoviesBtn.isActivated = activated
+    }
+
+    fun setRatedMoviesButtonClickable(clickable: Boolean) {
+        headerViewRatedMoviesBtn.isClickable = clickable
+    }
+
+    fun setAllMoviesButtonClickable(clickable: Boolean) {
+        headerViewAllMoviesBtn.isClickable = clickable
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
