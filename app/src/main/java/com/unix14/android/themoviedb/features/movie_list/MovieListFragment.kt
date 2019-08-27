@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.common.InfiniteRecyclerViewScrollListener
-import com.unix14.android.themoviedb.features.rated_movies.RatedViewModel
 import com.unix14.android.themoviedb.models.Movie
 import kotlinx.android.synthetic.main.movie_list_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -48,8 +47,8 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     private var listener: MovieListFragmentListener? = null
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: MovieListAdapter
-    val viewModel by viewModel<MovieListViewModel>()
-    val ratedViewModel by viewModel<RatedViewModel>()
+    val viewModel by viewModel<AllMoviesViewModel>()
+    val ratedViewModel by viewModel<RatedMoviesViewModel>()
 
     private var listType: Int = Constants.MOVIE_LIST_ALL_MOVIES_TYPE
     private lateinit var infiniteRecyclerViewScrollListener: InfiniteRecyclerViewScrollListener
@@ -105,10 +104,10 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
         adapter.clear()
         when (listType) {
             Constants.MOVIE_LIST_ALL_MOVIES_TYPE -> {
-                viewModel.getMovieList(page)    //TODO: REMOVE PAGE
+                viewModel.getMovieList()
             }
             Constants.MOVIE_LIST_RATED_MOVIES_TYPE -> {
-                ratedViewModel.getRatedMovieList()
+                ratedViewModel.getRatedMoviesList()
             }
         }
     }
@@ -205,5 +204,10 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
                 }
             }
         }
+    }
+
+    fun setListType(listType: Int) {
+        this.listType = listType
+        initListByType(listType)
     }
 }

@@ -12,11 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RatedMoviesListViewModel(private val apiService: ApiService, private val apiSettings: ApiSettings) : ViewModel() {
-
-//    enum class NavigationEvent{
-//        SHOW_MOVIE_LIST_SCREEN
-//    }
+class RatedMoviesViewModel(private val apiService: ApiService, private val apiSettings: ApiSettings) : ViewModel() {
 
     enum class ErrorEvent{
         NO_ERROR,
@@ -25,14 +21,13 @@ class RatedMoviesListViewModel(private val apiService: ApiService, private val a
     }
 
     val progressData = ProgressData()
-//    val navigationEvent = SingleLiveEvent<NavigationEvent>()
     val movieListData = MutableLiveData<ArrayList<Movie>>()
     val paginationStatus = SingleLiveEvent<Boolean>()
     val errorEvent = SingleLiveEvent<ErrorEvent>()
 
-    fun getMovieList(page: Int) {
+    fun getRatedMoviesList() {
         progressData.startProgress()
-        apiService.getTopRatedMovies(apiSettings.API_KEY,page).enqueue(object :Callback<MovieListResponse>{
+        apiService.getRatedMoviesForGuest(apiSettings.requestToken!!,apiSettings.API_KEY).enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
 
@@ -59,7 +54,7 @@ class RatedMoviesListViewModel(private val apiService: ApiService, private val a
 
     fun getAdditionalMovies(page: Int) {
         progressData.startProgress()
-        apiService.getTopRatedMovies(apiSettings.API_KEY,page).enqueue(object :Callback<MovieListResponse>{
+        apiService.getRatedMoviesForGuest(apiSettings.requestToken!!,apiSettings.API_KEY,page).enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
 

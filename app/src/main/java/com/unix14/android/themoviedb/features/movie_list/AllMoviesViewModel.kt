@@ -12,7 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MovieListViewModel(private val apiService: ApiService,private val apiSettings: ApiSettings) : ViewModel() {
+class AllMoviesViewModel(private val apiService: ApiService, private val apiSettings: ApiSettings) : ViewModel() {
 
     enum class ErrorEvent{
         NO_ERROR,
