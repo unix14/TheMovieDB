@@ -36,6 +36,8 @@ class Movie : Serializable {
     val adult: Boolean = false
     @SerializedName("rating")
     var rating: Float = 0.0f
+
+    var language: String = ""
 }
 
 class MovieListResponse(

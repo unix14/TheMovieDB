@@ -12,15 +12,18 @@
         android:scaleType="center"/>
 
     <TextView
-    android:id="@+id/videoItemType"
-    style="@style/MovieTitleStyle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="start|bottom"
-    android:layout_marginStart="10dp"
-    android:layout_marginBottom="25dp"
-    tools:text="text"/>
-
-
+        android:id="@+id/videoItemType"
+        style="@style/MovieTitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="20dp"
+        android:drawableStart="@drawable/ic_youtube_logo"
+        android:drawablePadding="5dp"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:text="text"
+        tools:visibility="visible"/>
 
 </FrameLayout>

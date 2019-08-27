@@ -24,7 +24,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 private const val MOVIE_KEY = "movie_key"
-private const val RATING_KEY = "rating_key"
 
 class MovieDetailsFragment : DialogFragment() {
 
@@ -33,24 +32,22 @@ class MovieDetailsFragment : DialogFragment() {
         fun addRatedMovieToLocalList(movie: Movie)
     }
 
-    private var rating: Float? = null
     private var listener: MovieDetailsFragmentListener? = null
-    private lateinit var movie: Movie
     private lateinit var adapter: TrailersAdapter
+
+    private lateinit var movie: Movie
 
     companion object {
         /**
          *
          * @param movie the companion item clicked as a String
-         * @param rating the rating of the movie
          * @return A new instance of fragment MovieDetailsFragment.
          */
         @JvmStatic
-        fun newInstance(movie: Movie, rating: Float) =
+        fun newInstance(movie: Movie) =
             MovieDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(MOVIE_KEY, movie)
-                    putFloat(RATING_KEY, rating)
                 }
             }
     }
@@ -59,7 +56,6 @@ class MovieDetailsFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             movie = it.getSerializable(MOVIE_KEY) as Movie
-            rating = it.getFloat(RATING_KEY)
         }
         setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
@@ -79,7 +75,46 @@ class MovieDetailsFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupViewModel()
+        initTrailersList()
+        initClicks()
         initUi()
+    }
+
+    private fun initUi() {
+        val movieId = movie.id.toString()
+        viewModel.getMovieDetails(movieId)
+        viewModel.getVideosForMovie(movieId)
+
+        movie.rating.let {
+            movieDetailsFragRatingBar.rating = it
+            setIsRatedLayout(it > 0)
+            movieDetailsFragRateBtn.visibility = View.GONE
+        }
+
+        movie.language.let{
+            movieDetailsFragLanguage.text = it
+        }
+    }
+
+    private fun initTrailersList() {
+        val backdropThumbnail = Constants.BIG_POSTER_BASE_URL + movie.backdropPath
+        adapter = TrailersAdapter(childFragmentManager,backdropThumbnail)
+        movieDetailsFragViewPager.adapter = adapter
+    }
+
+    private fun initClicks() {
+        movieDetailsFragRateBtn.setOnClickListener {
+            val enteredRating = movieDetailsFragRatingBar.rating
+            if(enteredRating > 0){
+                viewModel.sendRating(movie.id.toString(), enteredRating)
+            }else{
+                Toast.makeText(context,"You MUST rate at least 0.5 star", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        movieDetailsFragRatingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            setIsRatedLayout(false)
+        }
     }
 
     private fun setupViewModel() {
@@ -97,10 +132,7 @@ class MovieDetailsFragment : DialogFragment() {
 
     private fun handleTrailers(trailerVideos: ArrayList<Video>?) {
         trailerVideos?.let {
-            val backdropThumbnail = Constants.BIG_POSTER_BASE_URL + movie.backdropPath
-            adapter = TrailersAdapter(childFragmentManager,it,backdropThumbnail)
-            movieDetailsFragViewPager.adapter = adapter
-            movieDetailsFragViewPager.offscreenPageLimit = it.size
+            adapter.updateList(it)
         }
     }
 
@@ -129,8 +161,7 @@ class MovieDetailsFragment : DialogFragment() {
                 MovieDetailsViewModel.ErrorEvent.FETCH_DATA_ERROR -> {
                     Toast.makeText(context, "Fetch data from server failed", Toast.LENGTH_LONG).show()
                 }
-                MovieDetailsViewModel.ErrorEvent.NO_ERROR -> {
-                }
+                MovieDetailsViewModel.ErrorEvent.NO_ERROR -> { }
             }
         }
     }
@@ -147,18 +178,19 @@ class MovieDetailsFragment : DialogFragment() {
 
     private fun handleMovieDetails(movieDetails: Movie?) {
         movieDetails?.let {
+
+            //Set Movie Details
             movieDetailsFragName.text = it.name
             movieDetailsFragDescription.text = it.overview
             movieDetailsFragYear.text = DateUtils.getYear(it.realeseDate)
-            movieDetailsFragLanguage.text = it.originalLang
             movieDetailsFragVotes.text = it.voteCount.toString()
-            movieDetailsFragPopularity.text = "${Math.round(Math.ceil(it.popularity.toDouble()))}%"
+            movieDetailsFragPopularity.text = Math.round(Math.ceil(it.popularity.toDouble())).toString() + "%"
+            movieDetailsFragPublicRatingBar.rating = it.voteAvg % 5
 
+            //setClicks
             movieDetailsFragWebsiteLink.setOnClickListener {
                 listener?.openIMDBWebsite(movieDetails.imdbId)
             }
-
-            movieDetailsFragPublicRatingBar.rating = it.voteAvg % 5
 
             if (it.adult) {
                 movieDetailsFragAdultFilm.visibility = View.VISIBLE
@@ -187,31 +219,6 @@ class MovieDetailsFragment : DialogFragment() {
         listener = null
     }
 
-    private fun initUi() {
-        val movieId = movie.id.toString()
-        viewModel.getMovieDetails(movieId)
-        viewModel.getVideosForMovie(movieId)
-
-        movieDetailsFragRateBtn.setOnClickListener {
-            val enteredRating = movieDetailsFragRatingBar.rating
-            if(enteredRating > 0){
-                viewModel.sendRating(movieId, enteredRating)
-            }else{
-                Toast.makeText(context,"You MUST rate at least 0.5 star", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        rating?.let {
-            movieDetailsFragRatingBar.rating = it
-            setIsRatedLayout(it > 0)
-            movieDetailsFragRateBtn.visibility = View.GONE
-        }
-
-        movieDetailsFragRatingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-            setIsRatedLayout(false)
-        }
-    }
-
     private fun setIsRatedLayout(rated: Boolean) {
         if (rated) {
             //disable rating bar clicks and send button
@@ -225,5 +232,4 @@ class MovieDetailsFragment : DialogFragment() {
             movieDetailsFragRateTitle.text = getString(R.string.movie_details_frag_rate_this_movie)
         }
     }
-
 }

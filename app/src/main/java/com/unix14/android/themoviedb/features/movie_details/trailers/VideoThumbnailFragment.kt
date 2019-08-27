@@ -1,26 +1,22 @@
 package com.unix14.android.themoviedb.features.movie_details.trailers
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-
 import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
-import kotlinx.android.synthetic.main.video_item.*
-import android.content.Intent
 import com.unix14.android.themoviedb.models.Video
+import kotlinx.android.synthetic.main.video_item.*
 
 
 private const val VIDEO_KEY = "video_key"
 private const val THUMBNAIL_KEY = "thumbnail_key"
 
 class VideoThumbnailFragment : Fragment() {
-
 
     interface VideoThumbnailFragmentListener {
         fun onVideoIdClick(videoId: String)
@@ -45,22 +41,24 @@ class VideoThumbnailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initVideo()
+        initThumbnail()
     }
 
-    private fun initVideo() {
+    private fun initThumbnail() {
         video?.let { vid ->
             val videoThumbnailUrl = Constants.YOUTUBE_IMAGE_BASE_URL + vid.key + Constants.YOUTUBE_IMAGE_BASE_URL_SFFIX
             Glide.with(context).load(videoThumbnailUrl).into(videoItemThumbnail)
 
+            videoItemType.visibility = View.VISIBLE
             videoItemType.text = vid.type
 
             view?.setOnClickListener {
                 listener?.onVideoIdClick(vid.key)
             }
         }
-        thumbnail?.let{
+        thumbnail?.let {
             Glide.with(context).load(it).into(videoItemThumbnail)
+            videoItemType.visibility = View.GONE
         }
     }
 
@@ -91,6 +89,7 @@ class VideoThumbnailFragment : Fragment() {
                     putSerializable(VIDEO_KEY, video)
                 }
             }
+
         /**
          * @param thumbnail is the first image which is also the backdrop image we get from response
          * @return A new instance of fragment VideoThumbnailFragment.

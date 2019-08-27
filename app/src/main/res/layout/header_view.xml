@@ -16,11 +16,12 @@
             android:layout_height="wrap_content"/>
 
 
-    <ImageButton
+    <ImageView
             android:id="@+id/headerViewAllMoviesBtn"
             android:visibility="gone"
             tools:visibility="visible"
             android:src="@drawable/ic_movies"
+            android:tint="@drawable/tint_selector"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:layout_gravity="left|center"
@@ -33,6 +34,7 @@
             android:visibility="gone"
             android:src="@drawable/ic_rated_movies"
             tools:visibility="visible"
+            android:tint="@drawable/tint_selector"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:layout_gravity="right|center"

@@ -13,7 +13,7 @@
     <string name="movie_details_frag_language">Language:</string>
     <string name="header_view_all_movies_title">Now in Cinema</string>
     <string name="header_view_rated_movies_title">Rated by You</string>
+    <string name="movie_details_frag_public_rating">Public Rating:</string>
+    <string name="movie_details_frag_adult_film">Adult Film</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

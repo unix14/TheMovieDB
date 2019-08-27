@@ -13,14 +13,14 @@ import retrofit2.Response
 
 class MainViewModel(private val apiService: ApiService, private val apiSettings: ApiSettings) : ViewModel() {
 
-    enum class NavigationEvent{
+    enum class NavigationEvent {
         SHOW_MOVIE_LIST_SCREEN,
         SHOW_RATED_MOVIE_SCREEN,
         SHOW_SPLASH_SCREEN,
         SHOW_SIGN_IN_SCREEN
     }
 
-    enum class ErrorEvent{
+    enum class ErrorEvent {
         NO_ERROR,
         AUTH_FAILED_ERROR,
         FETCH_RATED_MOVIE_LIST_ERROR,
@@ -30,45 +30,46 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
     val progressData = ProgressData()
     val navigationEvent = SingleLiveEvent<NavigationEvent>()
     val errorEvent = SingleLiveEvent<ErrorEvent>()
-    val ratedMovieList : ArrayList<Movie> =  arrayListOf()
+    val ratedMovieList: ArrayList<Movie> = arrayListOf()
 
     private fun getRatedMoviesList() {
         progressData.startProgress()
-        if(apiSettings.requestToken == null){
+        if (apiSettings.requestToken == null) {
             navigationEvent.postValue(NavigationEvent.SHOW_SPLASH_SCREEN)
             errorEvent.postValue(ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR)
             return
         }
 
-        apiService.getRatedMoviesForGuest(apiSettings.requestToken!!,apiSettings.API_KEY).enqueue(object : Callback<MovieListResponse>{
-            override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
-                progressData.endProgress()
-                if(response.isSuccessful){
-                    val movieListResponse = response.body()
-                    movieListResponse?.let{
-                        val movieList = it.results
-                        ratedMovieList.addAll(movieList)
-                        apiSettings.setRatedMovieList(movieList)
+        apiService.getRatedMoviesForGuest(apiSettings.requestToken!!, apiSettings.API_KEY)
+            .enqueue(object : Callback<MovieListResponse> {
+                override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
+                    progressData.endProgress()
+                    if (response.isSuccessful) {
+                        val movieListResponse = response.body()
+                        movieListResponse?.let {
+                            val movieList = it.results
+                            ratedMovieList.addAll(movieList)
+                            apiSettings.setRatedMovieList(movieList)
+                        }
+
+                        navigationEvent.postValue(NavigationEvent.SHOW_MOVIE_LIST_SCREEN)
+                        errorEvent.postValue(ErrorEvent.NO_ERROR)
+                    } else {
+                        errorEvent.postValue(ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR)
                     }
-
-                    navigationEvent.postValue(NavigationEvent.SHOW_MOVIE_LIST_SCREEN)
-                    errorEvent.postValue(ErrorEvent.NO_ERROR)
-                }else{
-                    errorEvent.postValue(ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR)
                 }
-            }
 
-            override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
-                errorEvent.postValue(ErrorEvent.CONNECTION_FAILED_ERROR)
-                progressData.endProgress()
-            }
-        })
+                override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
+                    errorEvent.postValue(ErrorEvent.CONNECTION_FAILED_ERROR)
+                    progressData.endProgress()
+                }
+            })
     }
 
     fun startMainActivity() {
-        if(apiSettings.isValidUser() && ratedMovieList.isEmpty()){
+        if (apiSettings.isValidUser() && ratedMovieList.isEmpty()) {
             getRatedMoviesList()
-        }else{
+        } else {
             navigationEvent.postValue(NavigationEvent.SHOW_MOVIE_LIST_SCREEN)
             errorEvent.postValue(ErrorEvent.AUTH_FAILED_ERROR)
 
@@ -76,7 +77,7 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
         }
     }
 
-    fun getMovieRating(desiredMovieId : Int) : Float {
+    fun getMovieRating(desiredMovieId: Int): Float {
         for (movie in ratedMovieList) {
             if (movie.id == desiredMovieId)
                 return movie.rating
@@ -86,5 +87,17 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
 
     fun addLocalRatedMovie(movie: Movie) {
         ratedMovieList.add(movie)
+    }
+
+    fun getLanguageByIso(iso: String): String {
+        val langList = apiSettings.getLanguageList()
+        for (lang in langList) {
+            if (lang.iso == iso)
+                return lang.englishName
+        }
+        // to handle missing iso from list - Although should NOT happen
+        // in this case we return the iso for eg. return "en"
+        //we can also simply return ""
+        return iso
     }
 }
