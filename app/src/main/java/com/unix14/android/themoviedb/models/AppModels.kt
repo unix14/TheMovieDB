@@ -69,3 +69,10 @@ class Video: Serializable {
     @SerializedName("key")
     val key: String = ""
 }
+
+class Genre: Serializable {
+    @SerializedName("id")
+    var id: String = ""
+    @SerializedName("name")
+    val name: String = ""
+}

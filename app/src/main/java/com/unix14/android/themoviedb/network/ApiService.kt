@@ -32,4 +32,11 @@ interface ApiService {
     @GET("movie/{movie_id}/videos")
     fun getVideosForMovieId(@Path("movie_id") movieId: String, @Query("api_key") apiKey: String): Call<MovieVideosResponse>
 
+
+
+
+
+    @GET("genre/movie/list")
+    fun getGenresList(@Query("api_key") apiKey: String): Call<ArrayList<Genre>>
+
 }
