@@ -52,7 +52,6 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
 
     private var listType: Int = Constants.MOVIE_LIST_ALL_MOVIES_TYPE
     private lateinit var infiniteRecyclerViewScrollListener: InfiniteRecyclerViewScrollListener
-    private var page: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

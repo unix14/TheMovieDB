@@ -59,6 +59,12 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
                 MainViewModel.ErrorEvent.AUTH_FAILED_ERROR -> {
                     Toast.makeText(this,"Authentication with server failed, Please try again",Toast.LENGTH_LONG).show()
                 }
+                MainViewModel.ErrorEvent.CONNECTION_FAILED_ERROR -> {
+                    Toast.makeText(this,"Connection with server failed, Please try again",Toast.LENGTH_LONG).show()
+                }
+                MainViewModel.ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR -> {
+                    Toast.makeText(this,"Fetchin rated movies list from server has failed, Please try again",Toast.LENGTH_LONG).show()
+                }
                 MainViewModel.ErrorEvent.NO_ERROR ->{}
             }
         }
@@ -138,9 +144,9 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     }
 
     private fun showMovieDetails(movie: Movie) {
-        var movieRating = viewModel.getMovieRating(movie.id)
-        val language = viewModel.getLanguageByIso(movie.originalLang)
-        MovieDetailsFragment.newInstance(movie,movieRating,language).show(supportFragmentManager,Constants.SIGN_IN_FRAGMENT)
+        movie.rating = viewModel.getMovieRating(movie.id)
+        movie.language = viewModel.getLanguageByIso(movie.originalLang)
+        MovieDetailsFragment.newInstance(movie).show(supportFragmentManager,Constants.SIGN_IN_FRAGMENT)
     }
 
     private fun showFragment(fragment: Fragment, tag: String) {
@@ -170,8 +176,8 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
         startActivity(browserIntent)
     }
 
-    private fun openYoutubeVideo(videoUrl: String) {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl)))
+    private fun openYoutubeVideo(videoId: String) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.YOUTUBE_VIDEO_BASE_URL + videoId)))
     }
 
     override fun addRatedMovieToLocalList(movie: Movie) {
@@ -179,7 +185,6 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     }
 
     override fun onVideoIdClick(videoId: String) {
-        openYoutubeVideo(Constants.YOUTUBE_VIDEO_BASE_URL + videoId)
+        openYoutubeVideo(videoId)
     }
-
 }

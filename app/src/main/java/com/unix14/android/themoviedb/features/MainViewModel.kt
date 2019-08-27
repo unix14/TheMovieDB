@@ -94,7 +94,8 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
             if (lang.iso == iso)
                 return lang.englishName
         }
-        return "English"        // to handle missing iso from list - Although should NOT happen
-        //we can also simply return ""
+        return iso       // to handle missing iso from list - Although should NOT happen
+                         // in this case we return the iso for eg. return "en"
+                         //we can also simply return ""
     }
 }
