@@ -6,8 +6,10 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import com.unix14.android.themoviedb.models.Video
 
-class TrailersAdapter(fm: FragmentManager, private val videos: ArrayList<Video>, private val thumbnail: String) :
+class TrailersAdapter(fm: FragmentManager, private val thumbnail: String) :
     FragmentPagerAdapter(fm) {
+
+    private var videos: ArrayList<Video> = arrayListOf()
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
@@ -21,16 +23,14 @@ class TrailersAdapter(fm: FragmentManager, private val videos: ArrayList<Video>,
         }
     }
 
-    override fun getCount(): Int {
-        return videos.size + 1
-    }
+    override fun getCount(): Int = videos.size +1
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        return videos[position - 1].type
-    }
+    override fun getPageTitle(position: Int): CharSequence? = videos[position - 1].type
 
-    override fun getItemPosition(`object`: Any): Int {
-        return PagerAdapter.POSITION_NONE
-    }
+    override fun getItemPosition(`object`: Any): Int  = PagerAdapter.POSITION_NONE
 
+    fun updateList(videos: ArrayList<Video>) {
+        this.videos = videos
+        notifyDataSetChanged()
+    }
 }

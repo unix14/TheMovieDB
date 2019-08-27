@@ -55,6 +55,9 @@ class SplashActivity : AppCompatActivity() {
                 SplashViewModel.ErrorEvent.AUTH_FAILED_ERROR -> {
                     Toast.makeText(this, "Authentication with server failed", Toast.LENGTH_LONG).show()
                 }
+                SplashViewModel.ErrorEvent.FETCH_LANGUAGES_ERROR ->{
+                    Toast.makeText(this, "Couldn't load languages from server", Toast.LENGTH_LONG).show()
+                }
                 SplashViewModel.ErrorEvent.NO_ERROR -> {}
             }
         }

@@ -25,7 +25,7 @@ const val LIST_TYPE_KEY = "list_type_key"
 class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener {
 
     interface MovieListFragmentListener{
-        fun onMovieClick(movieId: Movie)
+        fun onMovieClick(movie: Movie)
     }
 
     companion object {
@@ -52,7 +52,6 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
 
     private var listType: Int = Constants.MOVIE_LIST_ALL_MOVIES_TYPE
     private lateinit var infiniteRecyclerViewScrollListener: InfiniteRecyclerViewScrollListener
-    private var page: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -59,6 +59,12 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
                 MainViewModel.ErrorEvent.AUTH_FAILED_ERROR -> {
                     Toast.makeText(this,"Authentication with server failed, Please try again",Toast.LENGTH_LONG).show()
                 }
+                MainViewModel.ErrorEvent.CONNECTION_FAILED_ERROR -> {
+                    Toast.makeText(this,"Connection with server failed, Please try again",Toast.LENGTH_LONG).show()
+                }
+                MainViewModel.ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR -> {
+                    Toast.makeText(this,"Fetching rated movies list from server has failed, Please try again",Toast.LENGTH_LONG).show()
+                }
                 MainViewModel.ErrorEvent.NO_ERROR ->{}
             }
         }
@@ -119,12 +125,16 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
 
     private fun setHeaderViewLayout(isAllMoviesScreen: Boolean) {
         if(isAllMoviesScreen){
-            mainActListHeaderView.setAllMoviesButtonVisibility(false)
-            mainActListHeaderView.setRatedMoviesButtonVisibility(true)
+            mainActListHeaderView.setRatedMoviesButtonClickable(true)
+            mainActListHeaderView.setAllMoviesButtonClickable(false)
+            mainActListHeaderView.setRatedMoviesButtonActivated(false)
+            mainActListHeaderView.setAllMoviesButtonActivated(true)
             mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
         }else{
-            mainActListHeaderView.setAllMoviesButtonVisibility(true)
-            mainActListHeaderView.setRatedMoviesButtonVisibility(false)
+            mainActListHeaderView.setRatedMoviesButtonClickable(false)
+            mainActListHeaderView.setAllMoviesButtonClickable(true)
+            mainActListHeaderView.setRatedMoviesButtonActivated(true)
+            mainActListHeaderView.setAllMoviesButtonActivated(false)
             mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
         }
     }
@@ -138,7 +148,7 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     }
 
     private fun showMovieDetails(movie: Movie) {
-        MovieDetailsFragment.newInstance(movie,viewModel.getMovieRating(movie.id)).show(supportFragmentManager,Constants.SIGN_IN_FRAGMENT)
+        MovieDetailsFragment.newInstance(movie).show(supportFragmentManager,Constants.SIGN_IN_FRAGMENT)
     }
 
     private fun showFragment(fragment: Fragment, tag: String) {
@@ -160,16 +170,17 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     }
 
     override fun onMovieClick(movie: Movie) {
+        movie.rating = viewModel.getMovieRating(movie.id)
+        movie.language = viewModel.getLanguageByIso(movie.originalLang)
         showMovieDetails(movie)
     }
 
     override fun openIMDBWebsite(imdbId: String) {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.IMDB_BASE_URL + imdbId))
-        startActivity(browserIntent)
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.IMDB_BASE_URL + imdbId)))
     }
 
-    private fun openYoutubeVideo(videoUrl: String) {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl)))
+    private fun openYoutubeVideo(videoId: String) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.YOUTUBE_VIDEO_BASE_URL + videoId)))
     }
 
     override fun addRatedMovieToLocalList(movie: Movie) {
@@ -177,7 +188,6 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     }
 
     override fun onVideoIdClick(videoId: String) {
-        openYoutubeVideo(Constants.YOUTUBE_VIDEO_BASE_URL + videoId)
+        openYoutubeVideo(videoId)
     }
-
 }
