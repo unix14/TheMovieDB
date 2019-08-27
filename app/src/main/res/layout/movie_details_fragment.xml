@@ -51,6 +51,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/movieDetailsFragScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -104,16 +105,19 @@
                             android:layout_height="wrap_content"
                             tools:text="Rocky 4"/>
 
+
                         <TextView
                             android:id="@+id/movieDetailsFragYear"
                             style="@style/MovieSubTitleStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
+                            android:layout_marginBottom="6dp"
                             tools:text="1994"/>
+
+                        <RatingBar
+                            android:id="@+id/movieDetailsFragPublicRatingBar"
+                            style="@style/SmallRatingBarStyle"/>
                     </LinearLayout>
-
-
                 </LinearLayout>
 
                 <TextView

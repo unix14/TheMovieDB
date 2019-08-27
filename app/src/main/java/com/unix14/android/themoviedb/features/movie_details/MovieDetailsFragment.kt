@@ -20,6 +20,7 @@ import com.unix14.android.themoviedb.models.Movie
 import kotlinx.android.synthetic.main.movie_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+
 private const val MOVIE_KEY = "movie_key"
 private const val RATING_KEY = "rating_key"
 
@@ -79,14 +80,14 @@ class MovieDetailsFragment : DialogFragment() {
     }
 
     private fun setupViewModel() {
-        viewModel.progressData.observe(viewLifecycleOwner, Observer { isLoading -> handleProgressBar(isLoading) })
-        viewModel.movieDetailsData.observe(
-            viewLifecycleOwner,
-            Observer { movieDetails -> handleMovieDetails(movieDetails) })
-        viewModel.errorEvent.observe(viewLifecycleOwner, Observer { errorEvent -> handleErrorEvent(errorEvent) })
-        viewModel.ratingMovieEvent.observe(
-            viewLifecycleOwner,
-            Observer { ratingEvent -> handleRatingEvent(ratingEvent) })
+        viewModel.progressData.observe(viewLifecycleOwner, Observer {
+                isLoading -> handleProgressBar(isLoading) })
+        viewModel.movieDetailsData.observe(viewLifecycleOwner,Observer {
+                movieDetails -> handleMovieDetails(movieDetails) })
+        viewModel.errorEvent.observe(viewLifecycleOwner, Observer {
+                errorEvent -> handleErrorEvent(errorEvent) })
+        viewModel.ratingMovieEvent.observe(viewLifecycleOwner,Observer {
+                ratingEvent -> handleRatingEvent(ratingEvent) })
     }
 
     private fun handleRatingEvent(ratingEvent: MovieDetailsViewModel.RatingEvent?) {
@@ -143,6 +144,8 @@ class MovieDetailsFragment : DialogFragment() {
                 listener?.openIMDBWebsite(movieDetails.imdbId)
             }
 
+            movieDetailsFragPublicRatingBar.rating = it.voteAvg % 5
+
             if (it.adult) {
                 movieDetailsFragAdultFilm.visibility = View.VISIBLE
             } else {
@@ -178,7 +181,12 @@ class MovieDetailsFragment : DialogFragment() {
         viewModel.getMovieDetails(movie.id.toString())
 
         movieDetailsFragRateBtn.setOnClickListener {
-            viewModel.sendRating(movie.id.toString(), movieDetailsFragRatingBar.rating)
+            val enteredRating = movieDetailsFragRatingBar.rating
+            if(enteredRating > 0){
+                viewModel.sendRating(movie.id.toString(), enteredRating)
+            }else{
+                Toast.makeText(context,"You MUST rate at least 0.5 star", Toast.LENGTH_SHORT).show()
+            }
         }
 
         rating?.let {
