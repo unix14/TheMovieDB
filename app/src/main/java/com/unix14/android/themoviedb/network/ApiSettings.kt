@@ -41,10 +41,7 @@ class ApiSettings(private val sharedPreferences: SharedPreferences) {
 
     fun <T> setRatedMovieList(list: List<T>) {
         val json = gson.toJson(list)
-        val editor = sharedPreferences.edit()
-
-        editor.putString(RATED_MOVIE_LIST, json)
-        editor.apply()
+        sharedPreferences.edit().putString(RATED_MOVIE_LIST, json).apply()
     }
 
     fun getRatedMovieList(): ArrayList<Movie> {
