@@ -14,10 +14,10 @@ import com.unix14.android.themoviedb.custom_views.HeaderView
 import com.unix14.android.themoviedb.features.movie_details.MovieDetailsFragment
 import com.unix14.android.themoviedb.features.movie_list.MovieListFragment
 import com.unix14.android.themoviedb.features.sign_in.SignInFragment
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import com.unix14.android.themoviedb.models.Movie
 import com.unix14.android.themoviedb.features.splash.SplashActivity
+import com.unix14.android.themoviedb.models.Movie
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentListener , MovieDetailsFragment.MovieDetailsFragmentListener,
     HeaderView.HeaderViewListener {
@@ -72,7 +72,10 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
         navigationEvent?.let{
             when(navigationEvent){
                 MainViewModel.NavigationEvent.SHOW_MOVIE_LIST_SCREEN -> {
-                    showMovieList()
+                    showMovieList(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
+                }
+                MainViewModel.NavigationEvent.SHOW_RATED_MOVIE_SCREEN -> {
+                    showMovieList(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
                 }
                 MainViewModel.NavigationEvent.SHOW_SIGN_IN_SCREEN -> {
                     showSignIn()
@@ -95,10 +98,22 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
 
     override fun onHeaderAllMoviesClick() {
         setHeaderViewLayout(true)
+        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
+        if(movieListFrag != null){
+            movieListFrag.setListType(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
+        }else{
+            showMovieList(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
+        }
     }
 
     override fun onHeaderRatedMoviesClick() {
         setHeaderViewLayout(false)
+        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
+        if(movieListFrag != null){
+            movieListFrag.setListType(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
+        }else{
+            showMovieList(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
+        }
     }
 
     private fun setHeaderViewLayout(isAllMoviesScreen: Boolean) {
@@ -111,14 +126,10 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
             mainActListHeaderView.setRatedMoviesButtonVisibility(false)
             mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
         }
-
-        showMovieList() // add listTWype
-        //or just get activefragment from transactionMngr
-        //and use fragment.setListType()
     }
 
-    private fun showMovieList() {
-        showFragment(MovieListFragment.newInstance(),Constants.MOVIE_LIST_FRAGMENT)
+    private fun showMovieList(listType: Int) {
+        showFragment(MovieListFragment.newInstance(listType),Constants.MOVIE_LIST_FRAGMENT)
     }
 
     private fun showSignIn() {
@@ -135,6 +146,16 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
             .setCustomAnimations(R.anim.popup_show, 0, 0, R.anim.popup_hide)
             .replace(R.id.mainActContainer, fragment, tag)
             .commit()
+    }
+
+    private fun getFragmentByTag(tag: String): Fragment? {
+        val fragmentManager = this@MainActivity.supportFragmentManager
+        val fragments = fragmentManager.fragments
+        for (fragment in fragments) {
+            if (fragment.tag == tag)
+                return fragment
+        }
+        return null
     }
 
     override fun onMovieClick(movie: Movie) {

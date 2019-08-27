@@ -8,7 +8,7 @@ import android.widget.FrameLayout
 import com.unix14.android.themoviedb.R
 import kotlinx.android.synthetic.main.header_view.view.*
 
-private const val LAYOUT_HEIGHT_SIZE_IN_DP = 40
+private const val LAYOUT_HEIGHT_SIZE_IN_DP = 50
 class HeaderView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {

@@ -12,11 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MovieListViewModel(private val apiService: ApiService,private val apiSettings: ApiSettings) : ViewModel() {
-
-//    enum class NavigationEvent{
-//        SHOW_MOVIE_LIST_SCREEN
-//    }
+class AllMoviesViewModel(private val apiService: ApiService, private val apiSettings: ApiSettings) : ViewModel() {
 
     enum class ErrorEvent{
         NO_ERROR,
@@ -25,14 +21,13 @@ class MovieListViewModel(private val apiService: ApiService,private val apiSetti
     }
 
     val progressData = ProgressData()
-//    val navigationEvent = SingleLiveEvent<NavigationEvent>()
     val movieListData = MutableLiveData<ArrayList<Movie>>()
     val paginationStatus = SingleLiveEvent<Boolean>()
     val errorEvent = SingleLiveEvent<ErrorEvent>()
 
-    fun getMovieList(page: Int) {
+    fun getMovieList() {
         progressData.startProgress()
-        apiService.getTopRatedMovies(apiSettings.API_KEY,page).enqueue(object :Callback<MovieListResponse>{
+        apiService.getTopRatedMovies(apiSettings.API_KEY).enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
 

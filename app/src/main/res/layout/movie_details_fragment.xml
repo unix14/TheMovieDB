@@ -176,12 +176,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
-                        android:drawableStart="@drawable/ic_stars"
+                        android:drawableStart="@drawable/ic_favorite"
                         android:drawablePadding="7dp"
-                        android:text="@string/movie_details_frag_total_votes"/>
+                        android:text="@string/movie_details_frag_popularity"/>
 
                     <TextView
-                        android:id="@+id/movieDetailsFragVotes"
+                        android:id="@+id/movieDetailsFragPopularity"
                         style="@style/MovieDescriptionStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -200,12 +200,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
-                        android:drawableStart="@drawable/ic_favorite"
+                        android:drawableStart="@drawable/ic_stars"
                         android:drawablePadding="7dp"
-                        android:text="@string/movie_details_frag_popularity"/>
+                        android:text="@string/movie_details_frag_total_votes"/>
 
                     <TextView
-                        android:id="@+id/movieDetailsFragPopularity"
+                        android:id="@+id/movieDetailsFragVotes"
                         style="@style/MovieDescriptionStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

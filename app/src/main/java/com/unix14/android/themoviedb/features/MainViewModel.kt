@@ -15,6 +15,7 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
 
     enum class NavigationEvent{
         SHOW_MOVIE_LIST_SCREEN,
+        SHOW_RATED_MOVIE_SCREEN,
         SHOW_SPLASH_SCREEN,
         SHOW_SIGN_IN_SCREEN
     }
