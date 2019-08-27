@@ -9,7 +9,7 @@
 
 
     <style name="MovieTitleStyle">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">19sp</item>
         <item name="android:textColor">@color/dark_red</item>
         <item name="android:fontFamily">sans-serif-black</item>
     </style>
@@ -21,7 +21,7 @@
     </style>
 
     <style name="MovieDescriptionStyle">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
@@ -29,7 +29,7 @@
     <style name="MovieDetailsSubTitleStyle">
         <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/dark_red</item>
-        <item name="android:fontFamily">sans-serif-condensed-light</item>
+        <item name="android:fontFamily">sans-serif-condensed-medium</item>
     </style>
 
     <style name="HyperLinkStyle">
