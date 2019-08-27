@@ -13,29 +13,29 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/movieListFragRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="40dp"
             android:fadingEdge="vertical"
             android:fadingEdgeLength="15dp"
-            android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
-            android:scrollbars="vertical"
-            android:scrollbarSize="9dp"
             android:fillViewport="false"
             android:overScrollMode="never"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:scrollbarSize="9dp"
+            android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
+            android:scrollbars="vertical"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/movieListFragScrollToTopButton"
-            app:fabSize="normal"
-            app:rippleColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="20dp"
             android:src="@drawable/ic_vertical_align_top"
             android:tint="@color/dark_blue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            app:fabSize="normal"
+            app:rippleColor="@color/black"/>
 
     </FrameLayout>
-
 
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
