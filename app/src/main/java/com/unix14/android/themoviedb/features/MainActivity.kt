@@ -12,13 +12,15 @@ import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.features.movie_details.MovieDetailsFragment
 import com.unix14.android.themoviedb.features.movie_list.MovieListFragment
+import com.unix14.android.themoviedb.features.rated_movies.RatedFragment
 import com.unix14.android.themoviedb.features.sign_in.SignInFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.unix14.android.themoviedb.models.Movie
 import com.unix14.android.themoviedb.features.splash.SplashActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentListener , MovieDetailsFragment.MovieDetailsFragmentListener {
+class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentListener , MovieDetailsFragment.MovieDetailsFragmentListener ,
+    RatedFragment.RatedFragmentListener {
 
     private val viewModel by viewModel<MainViewModel>()
 
@@ -69,7 +71,10 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
         navigationEvent?.let{
             when(navigationEvent){
                 MainViewModel.NavigationEvent.SHOW_MOVIE_LIST_SCREEN -> {
-                    showMovieList()
+//                    showMovieList(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
+                    showMovieList(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
+
+                    //TODO:: setListType for Fragment
                 }
                 MainViewModel.NavigationEvent.SHOW_SIGN_IN_SCREEN -> {
                     showSignIn()
@@ -85,8 +90,8 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
         viewModel.startMainActivity()
     }
 
-    private fun showMovieList() {
-        showFragment(MovieListFragment.newInstance(),Constants.MOVIE_LIST_FRAGMENT)
+    private fun showMovieList(listType: Int) {
+        showFragment(MovieListFragment.newInstance(listType),Constants.MOVIE_LIST_FRAGMENT)
     }
 
     private fun showSignIn() {

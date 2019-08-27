@@ -12,7 +12,8 @@ class Constants{
 
         const val POSTER_ROUNDED_CORNERS_RADIUS = 30
 
-
+        const val MOVIE_LIST_ALL_MOVIES_TYPE = 1
+        const val MOVIE_LIST_RATED_MOVIES_TYPE = 2
 
     }
 }

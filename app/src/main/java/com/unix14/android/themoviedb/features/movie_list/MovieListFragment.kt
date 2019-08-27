@@ -14,13 +14,15 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.unix14.android.themoviedb.R
+import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.common.InfiniteRecyclerViewScrollListener
+import com.unix14.android.themoviedb.features.rated_movies.RatedViewModel
 import com.unix14.android.themoviedb.models.Movie
 import kotlinx.android.synthetic.main.movie_list_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-
+const val LIST_TYPE_KEY = "list_type_key"
 class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener {
 
     interface MovieListFragmentListener{
@@ -28,15 +30,37 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     }
 
     companion object {
-        fun newInstance() = MovieListFragment()
+        /**
+         *
+         * @param listType the type of data to show in the list
+         * @return A new instance of fragment MovieDetailsFragment.
+         */
+        @JvmStatic
+        fun newInstance(listType: Int) =
+            MovieListFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(LIST_TYPE_KEY, listType)
+                }
+            }
     }
+
 
     private var listener: MovieListFragmentListener? = null
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: MovieListAdapter
     val viewModel by viewModel<MovieListViewModel>()
+    val ratedViewModel by viewModel<RatedViewModel>()
+
+    private var listType: Int = Constants.MOVIE_LIST_ALL_MOVIES_TYPE
     private lateinit var infiniteRecyclerViewScrollListener: InfiniteRecyclerViewScrollListener
     private var page: Int = 1
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            listType = it.getInt(LIST_TYPE_KEY)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.movie_list_fragment, container, false)
@@ -73,7 +97,20 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
         initSwipeLayout()
         initFloatingActionButton()
 
-        viewModel.getMovieList(page)
+        initListByType(listType)
+    }
+
+    private fun initListByType(listType: Int) {
+        page = 1
+        adapter.clear()
+        when (listType) {
+            Constants.MOVIE_LIST_ALL_MOVIES_TYPE -> {
+                viewModel.getMovieList(page)    //TODO: REMOVE PAGE
+            }
+            Constants.MOVIE_LIST_RATED_MOVIES_TYPE -> {
+                ratedViewModel.getRatedMovieList()
+            }
+        }
     }
 
     private fun initFloatingActionButton() {
@@ -100,9 +137,8 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     private fun initSwipeLayout() {
         movieListFragPullToRefresh.setColorSchemeColors(Color.BLUE, Color.RED, Color.BLACK)
         movieListFragPullToRefresh.setOnRefreshListener {
-            page=1
-            adapter.clear()
-            viewModel.getMovieList(page)
+
+            initListByType(listType)
         }
     }
 
@@ -113,6 +149,12 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
                 movieList -> handleFeedList(movieList) })
         viewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
              infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
+        ratedViewModel.progressData.observe(viewLifecycleOwner, Observer {
+                isLoading -> handleProgressBar(isLoading) })
+        ratedViewModel.movieListData.observe(viewLifecycleOwner, Observer {
+                movieList -> handleFeedList(movieList) })
+        ratedViewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
+            infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
     }
 
     private fun handleProgressBar(isLoading: Boolean?) {
@@ -145,9 +187,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     }
 
     override fun onMovieClick(movie: Movie) {
-        listener?.let{
-            it.onMovieClick(movie)
-        }
+        listener?.onMovieClick(movie)
     }
 
     private fun getInfiniteScrollListener(): InfiniteRecyclerViewScrollListener {
@@ -155,7 +195,14 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
             override fun onDataHunger() {}
 
             override fun requestData(page: Int) {
-                viewModel.getAdditionalMovies(page)
+                when (listType) {
+                    Constants.MOVIE_LIST_ALL_MOVIES_TYPE -> {
+                        viewModel.getAdditionalMovies(page)
+                    }
+                    Constants.MOVIE_LIST_RATED_MOVIES_TYPE -> {
+                        ratedViewModel.getAdditionalMovies(page)
+                    }
+                }
             }
         }
     }

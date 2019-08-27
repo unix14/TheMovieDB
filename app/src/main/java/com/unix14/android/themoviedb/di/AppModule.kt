@@ -3,6 +3,7 @@ package com.unix14.android.themoviedb.di
 import com.unix14.android.themoviedb.features.MainViewModel
 import com.unix14.android.themoviedb.features.movie_details.MovieDetailsViewModel
 import com.unix14.android.themoviedb.features.movie_list.MovieListViewModel
+import com.unix14.android.themoviedb.features.rated_movies.RatedViewModel
 import com.unix14.android.themoviedb.features.sign_in.SignInViewModel
 import com.unix14.android.themoviedb.features.splash.SplashViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -24,5 +25,8 @@ val appModule = module {
 
     //Movie Details screen
     viewModel { MovieDetailsViewModel(get(), get()) }
+
+    //Rated Movies screen
+    viewModel { RatedViewModel(get(), get()) }
 
 }
