@@ -25,6 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val MOVIE_KEY = "movie_key"
 private const val RATING_KEY = "rating_key"
+private const val LANGUAGE_KEY = "lang_key"
 
 class MovieDetailsFragment : DialogFragment() {
 
@@ -33,10 +34,13 @@ class MovieDetailsFragment : DialogFragment() {
         fun addRatedMovieToLocalList(movie: Movie)
     }
 
-    private var rating: Float? = null
     private var listener: MovieDetailsFragmentListener? = null
-    private lateinit var movie: Movie
     private lateinit var adapter: TrailersAdapter
+
+    //Passed params
+    private lateinit var movie: Movie
+    private var rating: Float? = null
+    private var language: String? = null
 
     companion object {
         /**
@@ -46,11 +50,12 @@ class MovieDetailsFragment : DialogFragment() {
          * @return A new instance of fragment MovieDetailsFragment.
          */
         @JvmStatic
-        fun newInstance(movie: Movie, rating: Float) =
+        fun newInstance(movie: Movie, rating: Float, language: String) =
             MovieDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(MOVIE_KEY, movie)
                     putFloat(RATING_KEY, rating)
+                    putString(LANGUAGE_KEY, language)
                 }
             }
     }
@@ -60,6 +65,7 @@ class MovieDetailsFragment : DialogFragment() {
         arguments?.let {
             movie = it.getSerializable(MOVIE_KEY) as Movie
             rating = it.getFloat(RATING_KEY)
+            language = it.getString(LANGUAGE_KEY)
         }
         setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
@@ -129,8 +135,7 @@ class MovieDetailsFragment : DialogFragment() {
                 MovieDetailsViewModel.ErrorEvent.FETCH_DATA_ERROR -> {
                     Toast.makeText(context, "Fetch data from server failed", Toast.LENGTH_LONG).show()
                 }
-                MovieDetailsViewModel.ErrorEvent.NO_ERROR -> {
-                }
+                MovieDetailsViewModel.ErrorEvent.NO_ERROR -> { }
             }
         }
     }
@@ -147,18 +152,20 @@ class MovieDetailsFragment : DialogFragment() {
 
     private fun handleMovieDetails(movieDetails: Movie?) {
         movieDetails?.let {
+
+            //Set Movie Details
             movieDetailsFragName.text = it.name
             movieDetailsFragDescription.text = it.overview
             movieDetailsFragYear.text = DateUtils.getYear(it.realeseDate)
-            movieDetailsFragLanguage.text = it.originalLang
+            movieDetailsFragLanguage.text = language
             movieDetailsFragVotes.text = it.voteCount.toString()
             movieDetailsFragPopularity.text = "${Math.round(Math.ceil(it.popularity.toDouble()))}%"
+            movieDetailsFragPublicRatingBar.rating = it.voteAvg % 5
 
+            //setClicks
             movieDetailsFragWebsiteLink.setOnClickListener {
                 listener?.openIMDBWebsite(movieDetails.imdbId)
             }
-
-            movieDetailsFragPublicRatingBar.rating = it.voteAvg % 5
 
             if (it.adult) {
                 movieDetailsFragAdultFilm.visibility = View.VISIBLE

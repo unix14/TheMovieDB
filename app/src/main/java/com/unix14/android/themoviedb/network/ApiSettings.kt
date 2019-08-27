@@ -1,11 +1,11 @@
 package com.unix14.android.themoviedb.network
 
-import android.content.Context
 import android.content.SharedPreferences
 import com.unix14.android.themoviedb.common.DateUtils
 import java.util.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.unix14.android.themoviedb.models.Language
 import com.unix14.android.themoviedb.models.Movie
 
 
@@ -15,6 +15,7 @@ class ApiSettings(private val sharedPreferences: SharedPreferences) {
     private val SESSION_ID = "session_id"
     private val NEXT_EXPIRATION_DATE = "next_expiration_date"
     private val RATED_MOVIE_LIST = "rated_movie_list"
+    private val LANGUAGES_LIST = "languages_list"
     val API_KEY = "b56640566d2644075c08a4adc089b927"
     val gson = Gson()
 
@@ -46,11 +47,26 @@ class ApiSettings(private val sharedPreferences: SharedPreferences) {
 
     fun getRatedMovieList(): ArrayList<Movie> {
         val jsonPreferences = sharedPreferences.getString(RATED_MOVIE_LIST, "")
-        var movieList: ArrayList<Movie> = ArrayList()
+        val movieList: ArrayList<Movie> = ArrayList()
 
         val type = object : TypeToken<List<Movie>>() {}.type
         movieList.addAll(gson.fromJson<List<Movie>>(jsonPreferences, type))
 
         return movieList
+    }
+
+    fun <T> setLanguageList(list: List<T>) {
+        val json = gson.toJson(list)
+        sharedPreferences.edit().putString(LANGUAGES_LIST, json).apply()
+    }
+
+    fun getLanguageList(): ArrayList<Language> {
+        val jsonPreferences = sharedPreferences.getString(LANGUAGES_LIST, "")
+        val langList: ArrayList<Language> = ArrayList()
+
+        val type = object : TypeToken<List<Language>>() {}.type
+        langList.addAll(gson.fromJson<List<Language>>(jsonPreferences, type))
+
+        return langList
     }
 }

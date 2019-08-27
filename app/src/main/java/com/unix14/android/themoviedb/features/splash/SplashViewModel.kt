@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.unix14.android.themoviedb.common.ProgressData
 import com.unix14.android.themoviedb.common.SingleLiveEvent
 import com.unix14.android.themoviedb.models.GuestAuthResponse
+import com.unix14.android.themoviedb.models.Language
 import com.unix14.android.themoviedb.network.ApiService
 import com.unix14.android.themoviedb.network.ApiSettings
 import retrofit2.Call
@@ -19,6 +20,7 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
     enum class ErrorEvent{
         NO_ERROR,
         AUTH_FAILED_ERROR,
+        FETCH_LANGUAGES_ERROR,
         CONNECTION_FAILED_ERROR
     }
 
@@ -40,8 +42,7 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
 
                         apiSettings.requestToken = guestSessionId
                         apiSettings.lastExpirationDate = authResponse.expiresAt
-                        navigationEvent.postValue(NavigationEvent.GO_TO_MAIN_ACTIVITY)
-                        errorEvent.postValue(ErrorEvent.NO_ERROR)
+                        getLanguagesList()
                     }else{
                         errorEvent.postValue(ErrorEvent.AUTH_FAILED_ERROR)
                     }
@@ -56,10 +57,37 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
 
     }
 
+    fun getLanguagesList() {
+        progressData.startProgress()
+
+        apiService.getLanguagesList(apiSettings.API_KEY).enqueue(object : Callback<ArrayList<Language>>{
+            override fun onResponse(call: Call<ArrayList<Language>>, response: Response<ArrayList<Language>>) {
+                progressData.endProgress()
+
+                if(response.isSuccessful){
+                    val langList = response.body()
+                    langList?.let{
+                        apiSettings.setLanguageList(it)
+                        navigationEvent.postValue(NavigationEvent.GO_TO_MAIN_ACTIVITY)
+                        errorEvent.postValue(ErrorEvent.NO_ERROR)
+                    }
+                }else{
+                    errorEvent.postValue(ErrorEvent.AUTH_FAILED_ERROR)
+
+                }
+            }
+
+            override fun onFailure(call: Call<ArrayList<Language>>, t: Throwable) {
+                progressData.endProgress()
+                errorEvent.postValue(ErrorEvent.CONNECTION_FAILED_ERROR)
+            }
+
+        })
+    }
+
     fun startSplashActivity() {
         if(apiSettings.isValidUser()){
-            navigationEvent.postValue(NavigationEvent.GO_TO_MAIN_ACTIVITY)
-            errorEvent.postValue(ErrorEvent.NO_ERROR)
+            getLanguagesList()
         }else{
             createGuestSession()
         }

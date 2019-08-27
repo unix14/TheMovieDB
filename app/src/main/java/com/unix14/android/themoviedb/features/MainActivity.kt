@@ -138,7 +138,9 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     }
 
     private fun showMovieDetails(movie: Movie) {
-        MovieDetailsFragment.newInstance(movie,viewModel.getMovieRating(movie.id)).show(supportFragmentManager,Constants.SIGN_IN_FRAGMENT)
+        var movieRating = viewModel.getMovieRating(movie.id)
+        val language = viewModel.getLanguageByIso(movie.originalLang)
+        MovieDetailsFragment.newInstance(movie,movieRating,language).show(supportFragmentManager,Constants.SIGN_IN_FRAGMENT)
     }
 
     private fun showFragment(fragment: Fragment, tag: String) {

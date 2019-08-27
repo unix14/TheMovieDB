@@ -1,19 +1,16 @@
 package com.unix14.android.themoviedb.features.movie_details.trailers
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-
 import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
-import kotlinx.android.synthetic.main.video_item.*
-import android.content.Intent
 import com.unix14.android.themoviedb.models.Video
+import kotlinx.android.synthetic.main.video_item.*
 
 
 private const val VIDEO_KEY = "video_key"
@@ -59,7 +56,7 @@ class VideoThumbnailFragment : Fragment() {
                 listener?.onVideoIdClick(vid.key)
             }
         }
-        thumbnail?.let{
+        thumbnail?.let {
             Glide.with(context).load(it).into(videoItemThumbnail)
         }
     }
@@ -91,6 +88,7 @@ class VideoThumbnailFragment : Fragment() {
                     putSerializable(VIDEO_KEY, video)
                 }
             }
+
         /**
          * @param thumbnail is the first image which is also the backdrop image we get from response
          * @return A new instance of fragment VideoThumbnailFragment.

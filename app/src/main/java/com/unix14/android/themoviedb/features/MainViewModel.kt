@@ -87,4 +87,14 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
     fun addLocalRatedMovie(movie: Movie) {
         ratedMovieList.add(movie)
     }
+
+    fun getLanguageByIso(iso: String) : String{
+        val langList = apiSettings.getLanguageList()
+        for (lang in langList) {
+            if (lang.iso == iso)
+                return lang.englishName
+        }
+        return "English"        // to handle missing iso from list - Although should NOT happen
+        //we can also simply return ""
+    }
 }
