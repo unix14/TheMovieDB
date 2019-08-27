@@ -31,7 +31,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     companion object {
         /**
          *
-         * @param listType the type of data to show in the list
+         * @param listType the type of data to show in the list at start of this fragment
          * @return A new instance of fragment MovieDetailsFragment.
          */
         @JvmStatic
@@ -100,8 +100,6 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     }
 
     private fun initListByType(listType: Int) {
-        page = 1
-        adapter.clear()
         when (listType) {
             Constants.MOVIE_LIST_ALL_MOVIES_TYPE -> {
                 viewModel.getMovieList()
@@ -165,7 +163,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     private fun handleFeedList(movieList: ArrayList<Movie>?) {
         movieList?.let{
             if(it.isNotEmpty()){
-                adapter.updateList(it)
+                adapter.submitList(it)
                 infiniteRecyclerViewScrollListener.notifyDataLoaded()
             }
         }
