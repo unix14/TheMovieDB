@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -26,6 +27,7 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) : ListAda
         var image: ImageView = view.movieListItemImage
         var name: TextView = view.movieListItemName
         var description: TextView = view.movieListItemDescription
+        var stars: RatingBar = view.movieListItemRatingBar
 
         fun bind(movie: Movie) {
             Glide.with(itemView.context)
@@ -35,6 +37,8 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) : ListAda
 
             name.text = movie.name
             description.text = movie.overview
+
+            stars.rating = movie.voteAvg % 5
         }
     }
 
