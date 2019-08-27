@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HeaderView">
+        <attr name="title" format="string"/>
+        <attr name="showTitle" format="boolean"/>
+        <attr name="showAllMoviesButton" format="boolean"/>
+        <attr name="showRatedMoviesButton" format="boolean"/>
+    </declare-styleable>
+
+
+</resources>
