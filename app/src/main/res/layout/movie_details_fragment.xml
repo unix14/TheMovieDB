@@ -151,16 +151,16 @@
                         style="@style/MovieDetailsSubTitleStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_language"
+                        android:drawablePadding="7dp"
                         android:layout_marginEnd="5dp"
-                        android:text="Language:"/>
+                        android:text="@string/movie_details_frag_language"/>
 
                     <TextView
                         android:id="@+id/movieDetailsFragLanguage"
                         style="@style/MovieDescriptionStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/ic_language"
-                        android:drawablePadding="3dp"
                         android:gravity="center"
                         tools:text="Value"/>
                 </LinearLayout>
@@ -176,15 +176,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
-                        android:text="Total Votes:"/>
+                        android:drawableStart="@drawable/ic_stars"
+                        android:drawablePadding="7dp"
+                        android:text="@string/movie_details_frag_total_votes"/>
 
                     <TextView
                         android:id="@+id/movieDetailsFragVotes"
                         style="@style/MovieDescriptionStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/ic_stars"
-                        android:drawablePadding="3dp"
                         android:gravity="center"
                         tools:text="Value"/>
                 </LinearLayout>
@@ -200,15 +200,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
-                        android:text="Popularity:"/>
+                        android:drawableStart="@drawable/ic_favorite"
+                        android:drawablePadding="7dp"
+                        android:text="@string/movie_details_frag_popularity"/>
 
                     <TextView
                         android:id="@+id/movieDetailsFragPopularity"
                         style="@style/MovieDescriptionStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/ic_favorite"
-                        android:drawablePadding="3dp"
                         android:gravity="center"
                         tools:text="Value"/>
                 </LinearLayout>

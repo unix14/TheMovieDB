@@ -137,7 +137,7 @@ class MovieDetailsFragment : DialogFragment() {
             movieDetailsFragYear.text = DateUtils.getYear(it.realeseDate)
             movieDetailsFragLanguage.text = it.originalLang
             movieDetailsFragVotes.text = it.voteCount.toString()
-            movieDetailsFragPopularity.text = it.popularity.toString()
+            movieDetailsFragPopularity.text = "${Math.round(Math.ceil(it.popularity.toDouble()))}%"
 
             movieDetailsFragWebsiteLink.setOnClickListener {
                 listener?.openIMDBWebsite(movieDetails.imdbId)
