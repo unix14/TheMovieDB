@@ -261,18 +261,20 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         //if swiped first element
         if (position > 0) {
-            movieDetailsFragNextPage.alpha = 1f
-            //Animate fade out
-            movieDetailsFragNextPage.animate()
-                .alpha(0f)
-                .setStartDelay(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
-                .setDuration(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        movieDetailsFragNextPage.visibility = View.GONE
-                    }
-                })
-                .start()
+            movieDetailsFragNextPage?.let{
+                it.alpha = 1f
+                //Animate fade out
+                it.animate()
+                    .alpha(0f)
+                    .setStartDelay(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
+                    .setDuration(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
+                    .setListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator) {
+                            it.visibility = View.GONE
+                        }
+                    })
+                    .start()
+            }
         }
     }
 }

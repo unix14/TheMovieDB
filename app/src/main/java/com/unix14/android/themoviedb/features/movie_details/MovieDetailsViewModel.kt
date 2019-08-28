@@ -2,6 +2,7 @@ package com.unix14.android.themoviedb.features.movie_details
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.common.ProgressData
 import com.unix14.android.themoviedb.common.SingleLiveEvent
 import com.unix14.android.themoviedb.models.*
@@ -11,15 +12,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MovieDetailsViewModel(private val apiService: ApiService, private val apiSettings:ApiSettings) : ViewModel() {
+class MovieDetailsViewModel(private val apiService: ApiService, private val apiSettings: ApiSettings) : ViewModel() {
 
-    enum class ErrorEvent{
+    enum class ErrorEvent {
         NO_ERROR,
         FETCH_DATA_ERROR,
         SERVER_CONNECTION_ERROR
     }
 
-    enum class RatingEvent{
+    enum class RatingEvent {
         RATED,
         RATING_ERROR
     }
@@ -32,19 +33,18 @@ class MovieDetailsViewModel(private val apiService: ApiService, private val apiS
 
     fun getMovieDetails(movieId: String) {
         progressData.startProgress()
-        apiService.getMovieDetails(movieId,apiSettings.API_KEY).enqueue(object : Callback<Movie> {
+        apiService.getMovieDetails(movieId, apiSettings.API_KEY).enqueue(object : Callback<Movie> {
             override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
                 progressData.endProgress()
 
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     errorEvent.postValue(ErrorEvent.NO_ERROR)
-                    var movie = response.body()
+                    val movie = response.body()
 
-                    movie?.let{
+                    movie?.let {
                         movieDetailsData.postValue(it)
                     }
-
-                }else{
+                } else {
                     errorEvent.postValue(ErrorEvent.FETCH_DATA_ERROR)
                 }
             }
@@ -59,43 +59,51 @@ class MovieDetailsViewModel(private val apiService: ApiService, private val apiS
     fun sendRating(movieId: String, rating: Float) {
         progressData.startProgress()
         val movieRate = MovieRate(rating)
-        apiService.rateMovie(movieId,apiSettings.API_KEY,apiSettings.requestToken!!,movieRate).enqueue(object : Callback<MovieRatingResponse> {
-            override fun onResponse(call: Call<MovieRatingResponse>, response: Response<MovieRatingResponse>) {
-                progressData.endProgress()
+        apiService.rateMovie(movieId, apiSettings.API_KEY, apiSettings.requestToken!!, movieRate)
+            .enqueue(object : Callback<MovieRatingResponse> {
+                override fun onResponse(call: Call<MovieRatingResponse>, response: Response<MovieRatingResponse>) {
+                    progressData.endProgress()
 
-                if(response.isSuccessful){
-                    ratingMovieEvent.postValue(RatingEvent.RATED)
-                }else{
+                    if (response.isSuccessful) {
+                        ratingMovieEvent.postValue(RatingEvent.RATED)
+                    } else {
+                        ratingMovieEvent.postValue(RatingEvent.RATING_ERROR)
+                    }
+                }
+
+                override fun onFailure(call: Call<MovieRatingResponse>, t: Throwable) {
+                    progressData.endProgress()
+                    errorEvent.postValue(ErrorEvent.SERVER_CONNECTION_ERROR)
                     ratingMovieEvent.postValue(RatingEvent.RATING_ERROR)
                 }
-            }
-
-            override fun onFailure(call: Call<MovieRatingResponse>, t: Throwable) {
-                progressData.endProgress()
-                errorEvent.postValue(ErrorEvent.SERVER_CONNECTION_ERROR)
-                ratingMovieEvent.postValue(RatingEvent.RATING_ERROR)
-            }
-        })
+            })
     }
 
     fun getVideosForMovie(id: String) {
         progressData.startProgress()
 
-        apiService.getVideosForMovieId(id,apiSettings.API_KEY).enqueue(object : Callback<MovieVideosResponse>{
+        apiService.getVideosForMovieId(id, apiSettings.API_KEY).enqueue(object : Callback<MovieVideosResponse> {
             override fun onResponse(call: Call<MovieVideosResponse>, response: Response<MovieVideosResponse>) {
                 progressData.endProgress()
 
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     errorEvent.postValue(ErrorEvent.NO_ERROR)
                     val videos = response.body()
 
-                    videos?.let{
-                        trailerVideosData.postValue(it.results)
+
+                    videos?.let {
+                        val results: java.util.ArrayList<Video> = arrayListOf()
+                        for (video in it.results) {
+                            if (video.site == Constants.YOUTUBE_TAG) {
+                                //we want to filter youtube videos ONLY
+                                results.add(video)
+                            }
+                        }
+                        trailerVideosData.postValue(results)
                     }
-                }else{
+                } else {
                     errorEvent.postValue(ErrorEvent.FETCH_DATA_ERROR)
                 }
-
             }
 
             override fun onFailure(call: Call<MovieVideosResponse>, t: Throwable) {
