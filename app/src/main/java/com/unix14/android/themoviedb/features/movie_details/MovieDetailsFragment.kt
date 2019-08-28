@@ -24,6 +24,9 @@ import com.unix14.android.themoviedb.models.Movie
 import com.unix14.android.themoviedb.models.Video
 import kotlinx.android.synthetic.main.movie_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import android.widget.ScrollView
+
+
 
 private const val MOVIE_KEY = "movie_key"
 
@@ -120,7 +123,15 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         }
 
         movieDetailsFragRatingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-            setIsRatedLayout(false)
+            movieDetailsFragRateBtn.alpha = 0f
+            movieDetailsFragRateBtn.visibility = View.VISIBLE
+            movieDetailsFragRateBtn.animate()
+                .alpha(1f)
+                .setDuration(Constants.FASR_ALPHA_DURATION_IN_MS)
+                .start()
+
+            //Scroll to end of fragment
+            movieDetailsFragScrollView.post { movieDetailsFragScrollView.fullScroll(ScrollView.FOCUS_DOWN) }
         }
     }
 
@@ -150,7 +161,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
                 movieDetailsFragNextPage.animate()
                     .alpha(1f)
                     .setStartDelay(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
-                    .setDuration(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
+                    .setDuration(Constants.FASR_ALPHA_DURATION_IN_MS)
                     .start()
             }else{
                 movieDetailsFragNextPage.visibility = View.GONE
@@ -261,18 +272,20 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         //if swiped first element
         if (position > 0) {
-            movieDetailsFragNextPage.alpha = 1f
-            //Animate fade out
-            movieDetailsFragNextPage.animate()
-                .alpha(0f)
-                .setStartDelay(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
-                .setDuration(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        movieDetailsFragNextPage.visibility = View.GONE
-                    }
-                })
-                .start()
+            movieDetailsFragNextPage?.let{
+                it.alpha = 1f
+                //Animate fade out
+                it.animate()
+                    .alpha(0f)
+                    .setStartDelay(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
+                    .setDuration(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
+                    .setListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator) {
+                            it.visibility = View.GONE
+                        }
+                    })
+                    .start()
+            }
         }
     }
 }
