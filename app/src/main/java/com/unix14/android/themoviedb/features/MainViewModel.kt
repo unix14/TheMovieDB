@@ -100,4 +100,13 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
         //we can also simply return ""
         return iso
     }
+
+    fun getGenreNameByGenreID(genreId: String): String {
+        val genres = apiSettings.getGenresList()
+        for (genre in genres) {
+            if (genre.id  == genreId)
+                return genre.name
+        }
+        return ""
+    }
 }

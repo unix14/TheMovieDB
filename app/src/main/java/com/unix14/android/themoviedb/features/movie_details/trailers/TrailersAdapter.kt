@@ -23,11 +23,11 @@ class TrailersAdapter(fm: FragmentManager, private val thumbnail: String) :
         }
     }
 
-    override fun getCount(): Int = videos.size +1
+    override fun getCount(): Int = videos.size + 1
 
     override fun getPageTitle(position: Int): CharSequence? = videos[position - 1].type
 
-    override fun getItemPosition(`object`: Any): Int  = PagerAdapter.POSITION_NONE
+    override fun getItemPosition(`object`: Any): Int = PagerAdapter.POSITION_NONE
 
     fun updateList(videos: ArrayList<Video>) {
         this.videos = videos

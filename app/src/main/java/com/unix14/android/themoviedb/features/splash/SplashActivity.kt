@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.unix14.android.themoviedb.R
+import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.features.MainActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,7 +30,7 @@ class SplashActivity : AppCompatActivity() {
     private fun initAnimation() {
         splashActLoadingLayout.animate()
             .alpha(1f)
-            .setDuration(1500)
+            .setDuration(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     viewModel.startSplashActivity()
@@ -57,6 +58,9 @@ class SplashActivity : AppCompatActivity() {
                 }
                 SplashViewModel.ErrorEvent.FETCH_LANGUAGES_ERROR ->{
                     Toast.makeText(this, "Couldn't load languages from server", Toast.LENGTH_LONG).show()
+                }
+                SplashViewModel.ErrorEvent.FETCH_GENRES_ERROR -> {
+                    Toast.makeText(this, "Couldn't load genres from server", Toast.LENGTH_LONG).show()
                 }
                 SplashViewModel.ErrorEvent.NO_ERROR -> {}
             }

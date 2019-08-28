@@ -94,6 +94,10 @@ class MovieDetailsFragment : DialogFragment() {
         movie.language.let{
             movieDetailsFragLanguage.text = it
         }
+
+        movie.genre.let{
+            movieDetailsFragGenre.text = it
+        }
     }
 
     private fun initTrailersList() {

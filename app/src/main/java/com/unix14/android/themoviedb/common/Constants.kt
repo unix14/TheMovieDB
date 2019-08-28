@@ -19,5 +19,6 @@ class Constants{
         const val MOVIE_LIST_ALL_MOVIES_TYPE = 1
         const val MOVIE_LIST_RATED_MOVIES_TYPE = 2
 
+        const val DEFAULT_ALPHA_DURATION_IN_MS = 1500L
     }
 }

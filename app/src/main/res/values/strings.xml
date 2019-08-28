@@ -15,5 +15,6 @@
     <string name="header_view_rated_movies_title">Rated by You</string>
     <string name="movie_details_frag_public_rating">Public Rating:</string>
     <string name="movie_details_frag_adult_film">Adult Film</string>
+    <string name="video_item_swipe_for_more">Swipe for more..</string>
 
 </resources>

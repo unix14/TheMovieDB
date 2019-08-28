@@ -3,6 +3,7 @@ package com.unix14.android.themoviedb.features.splash
 import androidx.lifecycle.ViewModel
 import com.unix14.android.themoviedb.common.ProgressData
 import com.unix14.android.themoviedb.common.SingleLiveEvent
+import com.unix14.android.themoviedb.models.GenreRequest
 import com.unix14.android.themoviedb.models.GuestAuthResponse
 import com.unix14.android.themoviedb.models.Language
 import com.unix14.android.themoviedb.network.ApiService
@@ -21,6 +22,7 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
         NO_ERROR,
         AUTH_FAILED_ERROR,
         FETCH_LANGUAGES_ERROR,
+        FETCH_GENRES_ERROR,
         CONNECTION_FAILED_ERROR
     }
 
@@ -70,11 +72,10 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
                     val langList = response.body()
                     langList?.let {
                         apiSettings.setLanguageList(it)
-                        navigationEvent.postValue(NavigationEvent.GO_TO_MAIN_ACTIVITY)
-                        errorEvent.postValue(ErrorEvent.NO_ERROR)
+                        getGenresList()
                     }
                 } else {
-                    errorEvent.postValue(ErrorEvent.AUTH_FAILED_ERROR)
+                    errorEvent.postValue(ErrorEvent.FETCH_LANGUAGES_ERROR)
                 }
             }
 
@@ -83,6 +84,33 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
                 errorEvent.postValue(ErrorEvent.CONNECTION_FAILED_ERROR)
             }
 
+        })
+    }
+
+    //Step 3
+    fun getGenresList(){
+        progressData.startProgress()
+
+        apiService.getGenresList(apiSettings.API_KEY).enqueue(object : Callback<GenreRequest>{
+            override fun onResponse(call: Call<GenreRequest>, response: Response<GenreRequest>) {
+                progressData.endProgress()
+                if(response.isSuccessful){
+                    val genresResponse = response.body()
+                    genresResponse?.let {
+                        apiSettings.setGenresList(it.genres)
+
+                        navigationEvent.postValue(NavigationEvent.GO_TO_MAIN_ACTIVITY)
+                        errorEvent.postValue(ErrorEvent.NO_ERROR)
+                    }
+                }else{
+                    errorEvent.postValue(ErrorEvent.FETCH_GENRES_ERROR)
+                }
+            }
+
+            override fun onFailure(call: Call<GenreRequest>, t: Throwable) {
+                progressData.endProgress()
+                errorEvent.postValue(ErrorEvent.CONNECTION_FAILED_ERROR)
+            }
         })
     }
 
