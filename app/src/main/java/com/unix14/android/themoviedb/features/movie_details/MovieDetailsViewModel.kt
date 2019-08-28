@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.common.ProgressData
 import com.unix14.android.themoviedb.common.SingleLiveEvent
-import com.unix14.android.themoviedb.features.MainViewModel
 import com.unix14.android.themoviedb.models.*
 import com.unix14.android.themoviedb.network.ApiService
 import com.unix14.android.themoviedb.network.ApiSettings
@@ -61,7 +60,7 @@ class MovieDetailsViewModel(private val apiService: ApiService, private val apiS
         progressData.startProgress()
         val movieRate = MovieRate(rating)
 
-        apiService.rateMovie(movieId, apiSettings.guestSessionId, movieRate).enqueue(object : Callback<MovieRatingResponse> {
+        apiService.rateMovieAsGuest(movieId, apiSettings.guestSessionId, movieRate).enqueue(object : Callback<MovieRatingResponse> {
                 override fun onResponse(call: Call<MovieRatingResponse>, response: Response<MovieRatingResponse>) {
                     progressData.endProgress()
 

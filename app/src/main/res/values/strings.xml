@@ -1,10 +1,6 @@
 <resources>
     <string name="app_name">TheMovieDB</string>
-    <string name="sign_in_frag_sign_in">Sign In</string>
-
-    <string name="movie_details_frag_go_to_imdb">
-        <u>Go to iMDB</u>
-    </string>
+    <string name="movie_details_frag_go_to_imdb"><u>Go to iMDB</u></string>
     <string name="movie_details_frag_rate">Rate!</string>
     <string name="movie_details_frag_rate_this_movie">Rate this Movie</string>
     <string name="movie_details_frag_you_rated_movie">You Rated this Movie</string>
@@ -17,5 +13,4 @@
     <string name="movie_details_frag_adult_film">Adult Film</string>
     <string name="video_item_swipe_for_more">Swipe for more..</string>
     <string name="movie_list_frag_no_rated_movies_yet">No Rated Movies Yet!\nPlease go rate some movies and come back later!</string>
-
 </resources>

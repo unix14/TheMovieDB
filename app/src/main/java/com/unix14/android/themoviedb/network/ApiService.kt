@@ -4,12 +4,16 @@ import com.unix14.android.themoviedb.models.*
 import retrofit2.Call
 import retrofit2.http.*
 
-
 interface ApiService {
 
+    /**
+     *
+     * i didn't used Authentication as i initially wanted
+     * This api is very convenient even as a Guest User,
+     * so i decided to leave it As Is
+     *
+     */
     //==============Authentication===========
-    @GET("authentication/requestToken/new")
-    fun getRequestToken(): Call<AuthResponse>
 
     @GET("authentication/guest_session/new")
     fun createGuestSession(): Call<GuestAuthResponse>
@@ -24,7 +28,7 @@ interface ApiService {
     fun getMovieDetails(@Path("movie_id") movieId: String): Call<Movie>
 
     @POST("movie/{movie_id}/rating")
-    fun rateMovie(@Path("movie_id") movieId: String, @Query("guest_session_id") guestSessionId: String, @Body rating: MovieRate): Call<MovieRatingResponse>
+    fun rateMovieAsGuest(@Path("movie_id") movieId: String, @Query("guest_session_id") guestSessionId: String, @Body rating: MovieRate): Call<MovieRatingResponse>
 
     @GET("guest_session/{guest_session_id}/rated/movies")
     fun getRatedMoviesForGuest(@Path("guest_session_id") guestSessionId: String , @Query("page") page: Int? = 1): Call<MovieListResponse>
