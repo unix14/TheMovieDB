@@ -2,6 +2,7 @@ package com.unix14.android.themoviedb.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.unix14.android.themoviedb.network.ApiService
 import com.unix14.android.themoviedb.network.ApiSettings
@@ -11,9 +12,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import com.google.gson.GsonBuilder
-import com.google.gson.Gson
-
 
 
 val networkModule = module {
@@ -21,7 +19,7 @@ val networkModule = module {
     single { provideSharedPreferences(get()) }
     factory { ApiSettings(get()) }
 
-    single { provideDefaultOkHttpClient(get()) }
+    single { provideDefaultOkHttpClient() }
     single { provideRetrofit(get()) }
     single { provideApiService(get()) }
 }
@@ -32,11 +30,11 @@ fun provideSharedPreferences(context: Context): SharedPreferences {
     return context.getSharedPreferences("User", Context.MODE_PRIVATE)
 }
 
-fun provideDefaultOkHttpClient(apiSettings: ApiSettings): OkHttpClient {
+fun provideDefaultOkHttpClient(): OkHttpClient {
     val logging = HttpLoggingInterceptor()
     logging.level = HttpLoggingInterceptor.Level.BODY
 
-    val authInterceptor = AuthInterceptor(apiSettings)
+    val authInterceptor = AuthInterceptor()
 
     val httpClient = OkHttpClient.Builder().addInterceptor(logging).addInterceptor(authInterceptor)
     return httpClient.build()

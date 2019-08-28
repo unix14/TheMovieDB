@@ -1,36 +1,34 @@
 package com.unix14.android.themoviedb.network
 
 import android.content.SharedPreferences
-import com.unix14.android.themoviedb.common.DateUtils
-import java.util.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.unix14.android.themoviedb.common.DateUtils
 import com.unix14.android.themoviedb.models.Genre
 import com.unix14.android.themoviedb.models.Language
 import com.unix14.android.themoviedb.models.Movie
+import java.util.*
 
 
 class ApiSettings(private val sharedPreferences: SharedPreferences) {
 
-    private val TOKEN_KEY = "token_key"
-    private val SESSION_ID = "session_id"
-    private val NEXT_EXPIRATION_DATE = "next_expiration_date"
-    private val RATED_MOVIE_LIST = "rated_movie_list"
-    private val LANGUAGES_LIST = "languages_list"
-    private val GENRES_LIST = "genres_list"
-    val API_KEY = "b56640566d2644075c08a4adc089b927"
+    companion object {
+        private const val TOKEN_KEY = "token_key"
+        private const val NEXT_EXPIRATION_DATE = "next_expiration_date"
+        private const val RATED_MOVIE_LIST = "rated_movie_list"
+        private val LANGUAGES_LIST = "languages_list"
+        private const val GENRES_LIST = "genres_list"
+        const val API_KEY = "b56640566d2644075c08a4adc089b927"
+    }
+
     val gson = Gson()
 
-    var requestToken: String?
-        get() = sharedPreferences.getString(TOKEN_KEY, null)
+    var guestSessionId: String
+        get() = sharedPreferences.getString(TOKEN_KEY, "") as String
         set(token) = sharedPreferences.edit().putString(TOKEN_KEY, token).apply()
 
-    var sessionId: String?
-        get() = sharedPreferences.getString(SESSION_ID, null)
-        set(token) = sharedPreferences.edit().putString(SESSION_ID, token).apply()
-
     var lastExpirationDate: Date?
-        get()= DateUtils.getDateFromString(sharedPreferences.getString(NEXT_EXPIRATION_DATE, null))
+        get() = DateUtils.getDateFromString(sharedPreferences.getString(NEXT_EXPIRATION_DATE, null))
         set(date) = sharedPreferences.edit().putString(NEXT_EXPIRATION_DATE, DateUtils.formatDate(date)).apply()
 
     fun isValidUser(): Boolean {

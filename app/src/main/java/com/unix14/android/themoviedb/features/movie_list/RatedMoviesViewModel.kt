@@ -27,7 +27,12 @@ class RatedMoviesViewModel(private val apiService: ApiService, private val apiSe
 
     fun getRatedMoviesList() {
         progressData.startProgress()
-        apiService.getRatedMoviesForGuest(apiSettings.requestToken!!,apiSettings.API_KEY).enqueue(object :Callback<MovieListResponse>{
+        if(!movieListData.value.isNullOrEmpty() || apiSettings.getRatedMovieList().isNotEmpty()){
+            movieListData.postValue(apiSettings.getRatedMovieList())
+            progressData.endProgress()
+            return
+        }
+        apiService.getRatedMoviesForGuest(apiSettings.guestSessionId).enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
 
@@ -37,6 +42,8 @@ class RatedMoviesViewModel(private val apiService: ApiService, private val apiSe
                     movieListResponse?.let{
                         errorEvent.postValue(ErrorEvent.NO_ERROR)
                         movieListData.postValue(it.results)
+
+                        apiSettings.setRatedMovieList(it.results)
 
                         paginationStatus.postValue(it.page < it.totalPages)
                     }
@@ -54,7 +61,7 @@ class RatedMoviesViewModel(private val apiService: ApiService, private val apiSe
 
     fun getAdditionalMovies(page: Int) {
         progressData.startProgress()
-        apiService.getRatedMoviesForGuest(apiSettings.requestToken!!,apiSettings.API_KEY,page).enqueue(object :Callback<MovieListResponse>{
+        apiService.getRatedMoviesForGuest(apiSettings.guestSessionId,page).enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
 
@@ -65,6 +72,7 @@ class RatedMoviesViewModel(private val apiService: ApiService, private val apiSe
                         val paginatedList = movieListData.value!!.plus(it.results) as ArrayList<Movie>
                         movieListData.postValue(paginatedList)
                         errorEvent.postValue(ErrorEvent.NO_ERROR)
+                        apiSettings.setRatedMovieList(paginatedList)
                     }
                 }else{
                     errorEvent.postValue(ErrorEvent.FETCH_DATA_ERROR)

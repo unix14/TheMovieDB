@@ -127,7 +127,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
             movieDetailsFragRateBtn.visibility = View.VISIBLE
             movieDetailsFragRateBtn.animate()
                 .alpha(1f)
-                .setDuration(Constants.FASR_ALPHA_DURATION_IN_MS)
+                .setDuration(Constants.FASTER_ALPHA_DURATION_IN_MS)
                 .start()
 
             //Scroll to end of fragment
@@ -160,8 +160,8 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
                 //Animate fade in
                 movieDetailsFragNextPage.animate()
                     .alpha(1f)
-                    .setStartDelay(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
-                    .setDuration(Constants.FASR_ALPHA_DURATION_IN_MS)
+                    .setStartDelay(Constants.FASTER_ALPHA_DURATION_IN_MS)
+                    .setDuration(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
                     .start()
             }else{
                 movieDetailsFragNextPage.visibility = View.GONE

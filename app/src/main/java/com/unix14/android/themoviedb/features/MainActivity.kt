@@ -20,8 +20,9 @@ import com.unix14.android.themoviedb.models.Movie
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentListener , MovieDetailsFragment.MovieDetailsFragmentListener,
-    HeaderView.HeaderViewListener , VideoThumbnailFragment.VideoThumbnailFragmentListener {
+class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentListener,
+    MovieDetailsFragment.MovieDetailsFragmentListener,
+    HeaderView.HeaderViewListener, VideoThumbnailFragment.VideoThumbnailFragmentListener {
 
     private val viewModel by viewModel<MainViewModel>()
 
@@ -36,36 +37,36 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
 
     private fun setupViewModel() {
         viewModel.navigationEvent.observe(this, Observer {
-            navigationEvent -> handleNavigationEvent(navigationEvent) })
+                navigationEvent -> handleNavigationEvent(navigationEvent) })
         viewModel.errorEvent.observe(this, Observer {
-            errorEvent -> handleErrorEvent(errorEvent) })
-        viewModel.progressData.observe(this, Observer{
-           isLoading -> handleProgressBar(isLoading)  })
+                errorEvent -> handleErrorEvent(errorEvent) })
+        viewModel.progressData.observe(this, Observer {
+                isLoading -> handleProgressBar(isLoading) })
     }
 
     private fun handleProgressBar(isLoading: Boolean?) {
-        isLoading?.let{
-            if(it){
+        isLoading?.let {
+            if (it) {
                 mainActPb.visibility = View.VISIBLE
-            }else{
+            } else {
                 mainActPb.visibility = View.GONE
             }
         }
     }
 
     private fun handleErrorEvent(errorEvent: MainViewModel.ErrorEvent?) {
-        errorEvent?.let{
-            when(it){
+        errorEvent?.let {
+            when (it) {
                 MainViewModel.ErrorEvent.AUTH_FAILED_ERROR -> {
-                    Toast.makeText(this,"Authentication with server failed, Please try again",Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Authentication with server failed, Please try again", Toast.LENGTH_LONG).show()
                 }
                 MainViewModel.ErrorEvent.CONNECTION_FAILED_ERROR -> {
-                    Toast.makeText(this,"Connection with server failed, Please try again",Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Connection with server failed, Please try again", Toast.LENGTH_LONG).show()
                 }
                 MainViewModel.ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR -> {
                     Toast.makeText(this,"Fetching rated movies list from server has failed, Please try again",Toast.LENGTH_LONG).show()
                 }
-                MainViewModel.ErrorEvent.NO_ERROR ->{}
+                MainViewModel.ErrorEvent.NO_ERROR -> { }
             }
         }
     }
@@ -75,9 +76,15 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
         finish()
     }
 
+    /**
+     *
+     * We can control which screen to show from MainViewModel
+     * also possible to decide which list to show; All movies or rated ones
+     *
+     */
     private fun handleNavigationEvent(navigationEvent: MainViewModel.NavigationEvent?) {
-        navigationEvent?.let{
-            when(navigationEvent){
+        navigationEvent?.let {
+            when (navigationEvent) {
                 MainViewModel.NavigationEvent.SHOW_MOVIE_LIST_SCREEN -> {
                     showMovieList(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
                 }
@@ -87,7 +94,7 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
                 MainViewModel.NavigationEvent.SHOW_SIGN_IN_SCREEN -> {
                     showSignIn()
                 }
-                MainViewModel.NavigationEvent.SHOW_SPLASH_SCREEN ->{
+                MainViewModel.NavigationEvent.SHOW_SPLASH_SCREEN -> {
                     showSplash()
                 }
             }
@@ -106,9 +113,9 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     override fun onHeaderAllMoviesClick() {
         setHeaderViewLayout(true)
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
-        if(movieListFrag != null){
+        if (movieListFrag != null) {
             movieListFrag.setListType(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
-        }else{
+        } else {
             showMovieList(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
         }
     }
@@ -116,21 +123,21 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     override fun onHeaderRatedMoviesClick() {
         setHeaderViewLayout(false)
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
-        if(movieListFrag != null){
+        if (movieListFrag != null) {
             movieListFrag.setListType(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
-        }else{
+        } else {
             showMovieList(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
         }
     }
 
     private fun setHeaderViewLayout(isAllMoviesScreen: Boolean) {
-        if(isAllMoviesScreen){
+        if (isAllMoviesScreen) {
             mainActListHeaderView.setRatedMoviesButtonClickable(true)
             mainActListHeaderView.setAllMoviesButtonClickable(false)
             mainActListHeaderView.setRatedMoviesButtonActivated(false)
             mainActListHeaderView.setAllMoviesButtonActivated(true)
             mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
-        }else{
+        } else {
             mainActListHeaderView.setRatedMoviesButtonClickable(false)
             mainActListHeaderView.setAllMoviesButtonClickable(true)
             mainActListHeaderView.setRatedMoviesButtonActivated(true)
@@ -140,15 +147,15 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     }
 
     private fun showMovieList(listType: Int) {
-        showFragment(MovieListFragment.newInstance(listType),Constants.MOVIE_LIST_FRAGMENT)
+        showFragment(MovieListFragment.newInstance(listType), Constants.MOVIE_LIST_FRAGMENT)
     }
 
     private fun showSignIn() {
-        showFragment(SignInFragment.newInstance(),Constants.SIGN_IN_FRAGMENT)
+        showFragment(SignInFragment.newInstance(), Constants.SIGN_IN_FRAGMENT)
     }
 
     private fun showMovieDetails(movie: Movie) {
-        MovieDetailsFragment.newInstance(movie).show(supportFragmentManager,Constants.SIGN_IN_FRAGMENT)
+        MovieDetailsFragment.newInstance(movie).show(supportFragmentManager, Constants.SIGN_IN_FRAGMENT)
     }
 
     private fun showFragment(fragment: Fragment, tag: String) {
@@ -170,10 +177,8 @@ class MainActivity : AppCompatActivity() , MovieListFragment.MovieListFragmentLi
     }
 
     override fun onMovieClick(movie: Movie) {
-        movie.rating = viewModel.getMovieRating(movie.id)
-        movie.language = viewModel.getLanguageByIso(movie.originalLang)
-        movie.genre = viewModel.getGenreNameByGenreID(movie.genreIds[0].toString())
-        showMovieDetails(movie)
+        val movieWithData = viewModel.getMovieAdditionalData(movie)
+        showMovieDetails(movieWithData)
     }
 
     override fun openIMDBWebsite(imdbId: String) {

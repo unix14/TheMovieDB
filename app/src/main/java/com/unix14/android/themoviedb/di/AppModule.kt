@@ -18,7 +18,7 @@ val appModule = module {
     viewModel { MainViewModel(get(), get()) }
 
     //Movie List screen
-    viewModel { AllMoviesViewModel(get(), get()) }
+    viewModel { AllMoviesViewModel(get()) }
 
     //Sign in screen
     viewModel { SignInViewModel(get(), get()) }

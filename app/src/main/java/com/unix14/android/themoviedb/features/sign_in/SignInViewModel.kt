@@ -24,7 +24,7 @@ class SignInViewModel(private val apiService: ApiService, private val apiSetting
     fun generateSessionId() {
         progressData.startProgress()
 
-        apiService.getRequestToken(apiSettings.API_KEY).enqueue(object : Callback<AuthResponse> {
+        apiService.getRequestToken().enqueue(object : Callback<AuthResponse> {
             override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                 progressData.endProgress()
 
@@ -34,12 +34,12 @@ class SignInViewModel(private val apiService: ApiService, private val apiSetting
                     if (response.isSuccessful && authResponse.success) {
                         val requestToken = authResponse.requestToken
 
-                        apiSettings.requestToken
-                        navigationEvent.postValue(
-                            NavigationEvent.NavigateToConfirmScreenEvent(
-                                requestToken
-                            )
-                        )
+//                        apiSettings.requestToken
+//                        navigationEvent.postValue(
+//                            NavigationEvent.NavigateToConfirmScreenEvent(
+//                                requestToken
+//                            )
+//                        )
                     }
                 }
 

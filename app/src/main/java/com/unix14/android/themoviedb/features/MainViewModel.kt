@@ -34,14 +34,7 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
 
     private fun getRatedMoviesList() {
         progressData.startProgress()
-        if (apiSettings.requestToken == null) {
-            navigationEvent.postValue(NavigationEvent.SHOW_SPLASH_SCREEN)
-            errorEvent.postValue(ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR)
-            return
-        }
-
-        apiService.getRatedMoviesForGuest(apiSettings.requestToken!!, apiSettings.API_KEY)
-            .enqueue(object : Callback<MovieListResponse> {
+        apiService.getRatedMoviesForGuest(apiSettings.guestSessionId).enqueue(object : Callback<MovieListResponse> {
                 override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
                     progressData.endProgress()
                     if (response.isSuccessful) {
@@ -77,7 +70,25 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
         }
     }
 
-    fun getMovieRating(desiredMovieId: Int): Float {
+    /**
+    *
+     * Some of the information we get alongside Movie in Movie's list responses is
+     * missing since we need to make a different call to get it.
+     * for example when we fetch ArrayList<Movie> of all Movies we get language field is "en"
+     * so we have to make a call and get a list of all of the languages.
+     * and then later when we want to open a new MovieDetailsFragment we can know by checking this list that "en" means "English"
+     * Rating, Language and Genre
+     * should be fetched separately at startup (SplashActivity)
+    *
+     */
+    fun getMovieAdditionalData(movie: Movie): Movie {
+        movie.rating = getMovieRating(movie.id)
+        movie.language = getLanguageByIso(movie.originalLang)
+        movie.genre = getGenreNameByGenreID(movie.genreIds[0].toString())
+        return movie
+    }
+
+    private fun getMovieRating(desiredMovieId: Int): Float {
         for (movie in ratedMovieList) {
             if (movie.id == desiredMovieId)
                 return movie.rating
@@ -85,28 +96,35 @@ class MainViewModel(private val apiService: ApiService, private val apiSettings:
         return 0f
     }
 
-    fun addLocalRatedMovie(movie: Movie) {
-        ratedMovieList.add(movie)
-    }
 
-    fun getLanguageByIso(iso: String): String {
+    private fun getLanguageByIso(iso: String): String {
         val langList = apiSettings.getLanguageList()
         for (lang in langList) {
             if (lang.iso == iso)
                 return lang.englishName
         }
-        // to handle missing iso from list - Although should NOT happen
-        // in this case we return the iso for eg. return "en"
-        //we can also simply return ""
         return iso
     }
 
-    fun getGenreNameByGenreID(genreId: String): String {
+    private fun getGenreNameByGenreID(genreId: String): String {
         val genres = apiSettings.getGenresList()
         for (genre in genres) {
-            if (genre.id  == genreId)
+            if (genre.id == genreId)
                 return genre.name
         }
         return ""
+    }
+
+    /**
+     *
+     * we add the newly rated movie to a local list
+     * because we already know the list we got is updated at this point
+     * so we only need to add the newly rated movie to the list of rated movies.
+     * This list is the list we later show in 'Rated By You' list
+     *
+     */
+    fun addLocalRatedMovie(movie: Movie) {
+        ratedMovieList.add(movie)
+        apiSettings.setRatedMovieList(ratedMovieList)
     }
 }

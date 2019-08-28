@@ -34,7 +34,7 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
     private fun createGuestSession() {
         progressData.startProgress()
 
-        apiService.createGuestSession(apiSettings.API_KEY).enqueue(object : Callback<GuestAuthResponse> {
+        apiService.createGuestSession().enqueue(object : Callback<GuestAuthResponse> {
             override fun onResponse(call: Call<GuestAuthResponse>, response: Response<GuestAuthResponse>) {
                 val authResponse = response.body()
                 progressData.endProgress()
@@ -43,7 +43,7 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
                     if (response.isSuccessful && authResponse.success) {
                         val guestSessionId = authResponse.guest_session_id
 
-                        apiSettings.requestToken = guestSessionId
+                        apiSettings.guestSessionId = guestSessionId
                         apiSettings.lastExpirationDate = authResponse.expiresAt
                         getLanguagesList()
                     } else {
@@ -64,7 +64,7 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
     fun getLanguagesList() {
         progressData.startProgress()
 
-        apiService.getLanguagesList(apiSettings.API_KEY).enqueue(object : Callback<ArrayList<Language>> {
+        apiService.getLanguagesList().enqueue(object : Callback<ArrayList<Language>> {
             override fun onResponse(call: Call<ArrayList<Language>>, response: Response<ArrayList<Language>>) {
                 progressData.endProgress()
 
@@ -91,7 +91,7 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
     fun getGenresList(){
         progressData.startProgress()
 
-        apiService.getGenresList(apiSettings.API_KEY).enqueue(object : Callback<GenreRequest>{
+        apiService.getGenresList().enqueue(object : Callback<GenreRequest>{
             override fun onResponse(call: Call<GenreRequest>, response: Response<GenreRequest>) {
                 progressData.endProgress()
                 if(response.isSuccessful){
@@ -121,5 +121,4 @@ class SplashViewModel(private val apiService: ApiService, private val apiSetting
             createGuestSession()
         }
     }
-
 }
