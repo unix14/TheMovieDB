@@ -1,5 +1,7 @@
 package com.unix14.android.themoviedb.features.movie_details
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,6 +12,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
+import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -22,10 +25,9 @@ import com.unix14.android.themoviedb.models.Video
 import kotlinx.android.synthetic.main.movie_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 private const val MOVIE_KEY = "movie_key"
 
-class MovieDetailsFragment : DialogFragment() {
+class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
 
     interface MovieDetailsFragmentListener {
         fun openIMDBWebsite(imdbId: String)
@@ -104,6 +106,7 @@ class MovieDetailsFragment : DialogFragment() {
         val backdropThumbnail = Constants.BIG_POSTER_BASE_URL + movie.backdropPath
         adapter = TrailersAdapter(childFragmentManager,backdropThumbnail)
         movieDetailsFragViewPager.adapter = adapter
+        movieDetailsFragViewPager.addOnPageChangeListener(this)
     }
 
     private fun initClicks() {
@@ -137,6 +140,21 @@ class MovieDetailsFragment : DialogFragment() {
     private fun handleTrailers(trailerVideos: ArrayList<Video>?) {
         trailerVideos?.let {
             adapter.updateList(it)
+            movieDetailsFragIndicator.setViewPager(movieDetailsFragViewPager)
+
+            if(it.isNotEmpty()){
+                movieDetailsFragNextPage.alpha = 0f
+                movieDetailsFragNextPage.visibility = View.VISIBLE
+
+                //Animate fade in
+                movieDetailsFragNextPage.animate()
+                    .alpha(1f)
+                    .setStartDelay(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
+                    .setDuration(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
+                    .start()
+            }else{
+                movieDetailsFragNextPage.visibility = View.GONE
+            }
         }
     }
 
@@ -182,7 +200,6 @@ class MovieDetailsFragment : DialogFragment() {
 
     private fun handleMovieDetails(movieDetails: Movie?) {
         movieDetails?.let {
-
             //Set Movie Details
             movieDetailsFragName.text = it.name
             movieDetailsFragDescription.text = it.overview
@@ -234,6 +251,28 @@ class MovieDetailsFragment : DialogFragment() {
             movieDetailsFragRateBtn.visibility = View.VISIBLE
             movieDetailsFragRatingBar.setIsIndicator(false)
             movieDetailsFragRateTitle.text = getString(R.string.movie_details_frag_rate_this_movie)
+        }
+    }
+
+    //View Pager on Scroll Changed Listener's callbacks
+    override fun onPageScrollStateChanged(state: Int) {}
+    override fun onPageSelected(position: Int) {}
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        //if swiped first element
+        if (position > 0) {
+            movieDetailsFragNextPage.alpha = 1f
+            //Animate fade out
+            movieDetailsFragNextPage.animate()
+                .alpha(0f)
+                .setStartDelay(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
+                .setDuration(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        movieDetailsFragNextPage.visibility = View.GONE
+                    }
+                })
+                .start()
         }
     }
 }

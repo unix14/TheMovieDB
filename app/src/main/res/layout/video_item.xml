@@ -16,31 +16,13 @@
         style="@style/MovieTitleStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start|bottom"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_gravity="start|top"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="16dp"
         android:drawableStart="@drawable/ic_youtube_logo"
         android:drawablePadding="5dp"
         android:gravity="center"
         android:visibility="gone"
         tools:text="text"
         tools:visibility="visible"/>
-
-
-    <TextView
-        android:id="@+id/videoItemNextPage"
-        style="@style/MovieDescriptionStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:padding="10dp"
-        android:background="@drawable/rounded_white_alpha_background"
-        android:layout_marginBottom="15dp"
-        android:drawableEnd="@drawable/ic_arrow_forward"
-        android:drawablePadding="5dp"
-        android:gravity="center"
-        android:text="@string/video_item_swipe_for_more"
-        android:visibility="gone"
-        tools:visibility="visible"/>
-
 </FrameLayout>
