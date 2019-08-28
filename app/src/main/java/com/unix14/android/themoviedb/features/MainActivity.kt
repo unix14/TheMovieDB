@@ -14,7 +14,6 @@ import com.unix14.android.themoviedb.custom_views.HeaderView
 import com.unix14.android.themoviedb.features.movie_details.MovieDetailsFragment
 import com.unix14.android.themoviedb.features.movie_details.trailers.VideoThumbnailFragment
 import com.unix14.android.themoviedb.features.movie_list.MovieListFragment
-import com.unix14.android.themoviedb.features.sign_in.SignInFragment
 import com.unix14.android.themoviedb.features.splash.SplashActivity
 import com.unix14.android.themoviedb.models.Movie
 import kotlinx.android.synthetic.main.activity_main.*
@@ -91,9 +90,6 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
                 MainViewModel.NavigationEvent.SHOW_RATED_MOVIE_SCREEN -> {
                     showMovieList(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
                 }
-                MainViewModel.NavigationEvent.SHOW_SIGN_IN_SCREEN -> {
-                    showSignIn()
-                }
                 MainViewModel.NavigationEvent.SHOW_SPLASH_SCREEN -> {
                     showSplash()
                 }
@@ -150,12 +146,8 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         showFragment(MovieListFragment.newInstance(listType), Constants.MOVIE_LIST_FRAGMENT)
     }
 
-    private fun showSignIn() {
-        showFragment(SignInFragment.newInstance(), Constants.SIGN_IN_FRAGMENT)
-    }
-
     private fun showMovieDetails(movie: Movie) {
-        MovieDetailsFragment.newInstance(movie).show(supportFragmentManager, Constants.SIGN_IN_FRAGMENT)
+        MovieDetailsFragment.newInstance(movie).show(supportFragmentManager, Constants.MOVIE_DETAILS_FRAGMENT)
     }
 
     private fun showFragment(fragment: Fragment, tag: String) {
