@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/movieListFragPullToRefresh"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".features.movie_list.MovieListFragment">
+                                                       xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                       xmlns:tools="http://schemas.android.com/tools"
+                                                       android:id="@+id/movieListFragPullToRefresh"
+                                                       android:layout_width="match_parent"
+                                                       android:layout_height="match_parent"
+                                                       tools:context=".features.movie_list.MovieListFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -34,6 +34,18 @@
             android:tint="@color/dark_blue"
             app:fabSize="normal"
             app:rippleColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/movieListFragNoMoviesText"
+            style="@style/MovieTitleStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="145dp"
+            android:gravity="center"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:text="@string/movie_list_frag_no_rated_movies_yet"/>
 
     </FrameLayout>
 
