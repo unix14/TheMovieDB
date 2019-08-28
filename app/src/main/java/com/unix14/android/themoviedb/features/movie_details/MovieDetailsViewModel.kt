@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.common.ProgressData
 import com.unix14.android.themoviedb.common.SingleLiveEvent
+import com.unix14.android.themoviedb.features.MainViewModel
 import com.unix14.android.themoviedb.models.*
 import com.unix14.android.themoviedb.network.ApiService
 import com.unix14.android.themoviedb.network.ApiSettings
@@ -33,7 +34,7 @@ class MovieDetailsViewModel(private val apiService: ApiService, private val apiS
 
     fun getMovieDetails(movieId: String) {
         progressData.startProgress()
-        apiService.getMovieDetails(movieId, apiSettings.API_KEY).enqueue(object : Callback<Movie> {
+        apiService.getMovieDetails(movieId).enqueue(object : Callback<Movie> {
             override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
                 progressData.endProgress()
 
@@ -59,8 +60,8 @@ class MovieDetailsViewModel(private val apiService: ApiService, private val apiS
     fun sendRating(movieId: String, rating: Float) {
         progressData.startProgress()
         val movieRate = MovieRate(rating)
-        apiService.rateMovie(movieId, apiSettings.API_KEY, apiSettings.requestToken!!, movieRate)
-            .enqueue(object : Callback<MovieRatingResponse> {
+
+        apiService.rateMovie(movieId, apiSettings.guestSessionId, movieRate).enqueue(object : Callback<MovieRatingResponse> {
                 override fun onResponse(call: Call<MovieRatingResponse>, response: Response<MovieRatingResponse>) {
                     progressData.endProgress()
 
@@ -82,14 +83,13 @@ class MovieDetailsViewModel(private val apiService: ApiService, private val apiS
     fun getVideosForMovie(id: String) {
         progressData.startProgress()
 
-        apiService.getVideosForMovieId(id, apiSettings.API_KEY).enqueue(object : Callback<MovieVideosResponse> {
+        apiService.getVideosForMovieId(id).enqueue(object : Callback<MovieVideosResponse> {
             override fun onResponse(call: Call<MovieVideosResponse>, response: Response<MovieVideosResponse>) {
                 progressData.endProgress()
 
                 if (response.isSuccessful) {
                     errorEvent.postValue(ErrorEvent.NO_ERROR)
                     val videos = response.body()
-
 
                     videos?.let {
                         val results: java.util.ArrayList<Video> = arrayListOf()

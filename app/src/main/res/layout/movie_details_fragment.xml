@@ -43,7 +43,7 @@
                 android:layout_marginBottom="18dp"
                 android:layoutDirection="ltr"
                 app:ci_animator="@animator/view_pager_animator"
-                app:ci_drawable="@drawable/white_dot"
+                app:ci_drawable="@drawable/dark_red_dot"
                 app:ci_height="10dp"
                 app:ci_width="10dp" />
 
@@ -60,6 +60,7 @@
                 android:drawablePadding="5dp"
                 android:gravity="center"
                 android:padding="13dp"
+                android:drawableTint="@color/dark_red"
                 android:text="@string/video_item_swipe_for_more"
                 android:visibility="gone"
                 tools:visibility="visible"/>

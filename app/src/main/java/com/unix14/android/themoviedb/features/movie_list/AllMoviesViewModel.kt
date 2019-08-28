@@ -12,7 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AllMoviesViewModel(private val apiService: ApiService, private val apiSettings: ApiSettings) : ViewModel() {
+class AllMoviesViewModel(private val apiService: ApiService) : ViewModel() {
 
     enum class ErrorEvent{
         NO_ERROR,
@@ -27,7 +27,7 @@ class AllMoviesViewModel(private val apiService: ApiService, private val apiSett
 
     fun getMovieList() {
         progressData.startProgress()
-        apiService.getTopRatedMovies(apiSettings.API_KEY).enqueue(object :Callback<MovieListResponse>{
+        apiService.getTopRatedMovies().enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
 
@@ -54,7 +54,7 @@ class AllMoviesViewModel(private val apiService: ApiService, private val apiSett
 
     fun getAdditionalMovies(page: Int) {
         progressData.startProgress()
-        apiService.getTopRatedMovies(apiSettings.API_KEY,page).enqueue(object :Callback<MovieListResponse>{
+        apiService.getTopRatedMovies(page).enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
 

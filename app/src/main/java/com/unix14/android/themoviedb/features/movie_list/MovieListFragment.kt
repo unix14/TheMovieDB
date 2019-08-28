@@ -194,13 +194,13 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
         return object : InfiniteRecyclerViewScrollListener(this.layoutManager) {
             override fun onDataHunger() {}
 
-            override fun requestData(page: Int) {
+            override fun requestData(offset: Int) {
                 when (listType) {
                     Constants.MOVIE_LIST_ALL_MOVIES_TYPE -> {
-                        viewModel.getAdditionalMovies(page)
+                        viewModel.getAdditionalMovies(offset)
                     }
                     Constants.MOVIE_LIST_RATED_MOVIES_TYPE -> {
-                        ratedViewModel.getAdditionalMovies(page)
+                        ratedViewModel.getAdditionalMovies(offset)
                     }
                 }
             }
