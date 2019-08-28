@@ -79,6 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="35dp"
+            android:descendantFocusability="blocksDescendants"
             android:background="@drawable/rounded_white_alpha_background">
 
             <LinearLayout

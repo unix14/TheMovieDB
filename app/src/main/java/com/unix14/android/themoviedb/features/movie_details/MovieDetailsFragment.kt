@@ -24,6 +24,9 @@ import com.unix14.android.themoviedb.models.Movie
 import com.unix14.android.themoviedb.models.Video
 import kotlinx.android.synthetic.main.movie_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import android.widget.ScrollView
+
+
 
 private const val MOVIE_KEY = "movie_key"
 
@@ -126,6 +129,9 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
                 .alpha(1f)
                 .setDuration(Constants.FASR_ALPHA_DURATION_IN_MS)
                 .start()
+
+            //Scroll to end of fragment
+            movieDetailsFragScrollView.post { movieDetailsFragScrollView.fullScroll(ScrollView.FOCUS_DOWN) }
         }
     }
 
