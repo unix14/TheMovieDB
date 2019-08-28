@@ -16,5 +16,6 @@
     <string name="movie_details_frag_public_rating">Public Rating:</string>
     <string name="movie_details_frag_adult_film">Adult Film</string>
     <string name="video_item_swipe_for_more">Swipe for more..</string>
+    <string name="movie_list_frag_no_rated_movies_yet">No Rated Movies Yet!\nPlease go rate some movies and come back later!</string>
 
 </resources>

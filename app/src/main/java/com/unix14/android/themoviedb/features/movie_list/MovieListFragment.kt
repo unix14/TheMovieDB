@@ -161,9 +161,13 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
 
     private fun handleFeedList(movieList: ArrayList<Movie>?) {
         movieList?.let{
-            if(it.isNotEmpty()){
-                adapter.submitList(it)
-                infiniteRecyclerViewScrollListener.notifyDataLoaded()
+            adapter.submitList(it)
+            infiniteRecyclerViewScrollListener.notifyDataLoaded()
+
+            if(it.isEmpty()){
+                movieListFragNoMoviesText.visibility = View.VISIBLE
+            }else{
+                movieListFragNoMoviesText.visibility = View.GONE
             }
         }
     }
