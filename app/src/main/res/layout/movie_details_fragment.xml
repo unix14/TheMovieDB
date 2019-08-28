@@ -281,7 +281,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="15dp"
-                    android:layout_marginBottom="25dp"
+                    android:layout_marginBottom="20dp"
                     android:padding="15dp"
                     android:text="@string/movie_details_frag_rate"
                     android:textColor="@color/dark_red"
@@ -289,7 +289,7 @@
 
                 <View android:layout_width="match_parent"
                       android:layout_height="1dp"
-                      android:layout_marginBottom="10dp"
+                      android:layout_marginBottom="12dp"
                       android:background="@drawable/divider"/>
                 <View
                     android:layout_width="match_parent"

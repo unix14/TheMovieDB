@@ -120,7 +120,12 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         }
 
         movieDetailsFragRatingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-            setIsRatedLayout(false)
+            movieDetailsFragRateBtn.alpha = 0f
+            movieDetailsFragRateBtn.visibility = View.VISIBLE
+            movieDetailsFragRateBtn.animate()
+                .alpha(1f)
+                .setDuration(Constants.FASR_ALPHA_DURATION_IN_MS)
+                .start()
         }
     }
 
@@ -150,7 +155,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
                 movieDetailsFragNextPage.animate()
                     .alpha(1f)
                     .setStartDelay(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
-                    .setDuration(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
+                    .setDuration(Constants.FASR_ALPHA_DURATION_IN_MS)
                     .start()
             }else{
                 movieDetailsFragNextPage.visibility = View.GONE
