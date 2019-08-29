@@ -28,11 +28,25 @@ class RatedMoviesViewModel(private val apiService: ApiService, private val apiSe
     private var lastMovieListResponse : MovieListResponse? = null
 
     fun getRatedMoviesList() {
-        if(!movieListData.value.isNullOrEmpty() || apiSettings.getRatedMovieList().isNotEmpty()){
-            movieListData.postValue(apiSettings.getRatedMovieList())
+        progressData.startProgress()
+
+        //try loading list from settings
+        val savedList = apiSettings.getRatedMovieList()
+        if (savedList.isNotEmpty()){
+            movieListData.postValue(savedList)
+            paginationStatus.postValue(false)
+            progressData.endProgress()
             return
         }
-        progressData.startProgress()
+        //else try reusing last response from server
+        val lastResponse = movieListData.value
+        lastResponse?.let{
+            movieListData.postValue(it)
+            paginationStatus.postValue(it.size < Constants.API_PAGINATION_ITEMS_PER_PAGE)
+            progressData.endProgress()
+            return
+        }
+        //else do the request for this list
         apiService.getRatedMoviesForGuest(apiSettings.guestSessionId).enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
@@ -61,8 +75,9 @@ class RatedMoviesViewModel(private val apiService: ApiService, private val apiSe
     }
 
     fun getAdditionalMovies(page: Int) {
-        if(page <= 1 && page <= lastMovieListResponse!!.totalPages){
+        if(page <= 1 || page > lastMovieListResponse!!.totalPages){
             //we check to see if we still in the first page
+            // or we asking for a page that don't exist
             // and this way we don't need to make another call
             return
         }
