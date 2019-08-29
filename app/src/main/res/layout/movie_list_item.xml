@@ -24,8 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="15dp"
-        android:orientation="vertical"
         android:background="@drawable/rounded_white_alpha_background"
+        android:orientation="vertical"
         android:padding="10dp">
 
         <com.unix14.android.themoviedb.common.AutoScrollableTextView
@@ -42,14 +42,25 @@
         <TextView
             android:id="@+id/movieListItemDescription"
             style="@style/MovieDescriptionStyle"
-            android:layout_marginTop="7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
             android:breakStrategy="high_quality"
             android:ellipsize="end"
             android:maxLines="4"
             tools:text="44444"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/movieDetailsFragWebsiteLink"
+            style="@style/SmallHyperLinkStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/movie_list_frag_read_more"/>
 
     </LinearLayout>
 
