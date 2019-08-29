@@ -20,5 +20,7 @@ class Constants{
 
         const val DEFAULT_ALPHA_DURATION_IN_MS = 1500L
         const val FASTER_ALPHA_DURATION_IN_MS = 800L
+
+        const val API_PAGINATION_ITEMS_PER_PAGE = 20
     }
 }

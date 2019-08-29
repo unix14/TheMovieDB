@@ -2,6 +2,7 @@ package com.unix14.android.themoviedb.features.movie_list
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.common.ProgressData
 import com.unix14.android.themoviedb.common.SingleLiveEvent
 import com.unix14.android.themoviedb.models.Movie
@@ -24,22 +25,22 @@ class RatedMoviesViewModel(private val apiService: ApiService, private val apiSe
     val movieListData = MutableLiveData<ArrayList<Movie>>()
     val paginationStatus = SingleLiveEvent<Boolean>()
     val errorEvent = SingleLiveEvent<ErrorEvent>()
+    private var lastMovieListResponse : MovieListResponse? = null
 
     fun getRatedMoviesList() {
-        progressData.startProgress()
         if(!movieListData.value.isNullOrEmpty() || apiSettings.getRatedMovieList().isNotEmpty()){
             movieListData.postValue(apiSettings.getRatedMovieList())
-            progressData.endProgress()
             return
         }
+        progressData.startProgress()
         apiService.getRatedMoviesForGuest(apiSettings.guestSessionId).enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
 
                 if(response.isSuccessful){
-                    val movieListResponse = response.body()
+                    lastMovieListResponse = response.body()
 
-                    movieListResponse?.let{
+                    lastMovieListResponse?.let{
                         errorEvent.postValue(ErrorEvent.NO_ERROR)
                         movieListData.postValue(it.results)
 
@@ -60,17 +61,23 @@ class RatedMoviesViewModel(private val apiService: ApiService, private val apiSe
     }
 
     fun getAdditionalMovies(page: Int) {
+        if(page <= 1 && page <= lastMovieListResponse!!.totalPages){
+            //we check to see if we still in the first page
+            // and this way we don't need to make another call
+            return
+        }
         progressData.startProgress()
         apiService.getRatedMoviesForGuest(apiSettings.guestSessionId,page).enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
 
                 if(response.isSuccessful){
-                    val movieListResponse = response.body()
+                    lastMovieListResponse = response.body()
 
-                    movieListResponse?.let{
+                    lastMovieListResponse?.let{
                         val paginatedList = movieListData.value!!.plus(it.results) as ArrayList<Movie>
                         movieListData.postValue(paginatedList)
+                        paginationStatus.postValue(it.page < it.totalPages)
                         errorEvent.postValue(ErrorEvent.NO_ERROR)
                         apiSettings.setRatedMovieList(paginatedList)
                     }

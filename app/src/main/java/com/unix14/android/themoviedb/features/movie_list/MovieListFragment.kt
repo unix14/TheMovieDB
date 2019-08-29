@@ -22,9 +22,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 const val LIST_TYPE_KEY = "list_type_key"
+
 class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener {
 
-    interface MovieListFragmentListener{
+    interface MovieListFragmentListener {
         fun onMovieClick(movie: Movie)
     }
 
@@ -32,6 +33,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
         /**
          *
          * @param listType the type of data to show in the list at start of this fragment
+         * should be Constants.MOVIE_LIST_ALL_MOVIES_TYPE  or Constants.MOVIE_LIST_RATED_MOVIES_TYPE
          * @return A new instance of fragment MovieDetailsFragment.
          */
         @JvmStatic
@@ -60,12 +62,12 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.movie_list_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         setupViewModel()
         initUi()
@@ -116,9 +118,9 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
 
         movieListFragRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy<0 && !movieListFragScrollToTopButton.isShown)
+                if (dy < 0 && !movieListFragScrollToTopButton.isShown)
                     movieListFragScrollToTopButton.show()
-                else if(dy>0 && movieListFragScrollToTopButton.isShown)
+                else if (dy > 0 && movieListFragScrollToTopButton.isShown)
                     movieListFragScrollToTopButton.hide()
             }
 
@@ -133,18 +135,17 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     private fun initSwipeLayout() {
         movieListFragPullToRefresh.setColorSchemeColors(Color.BLUE, Color.RED, Color.BLACK)
         movieListFragPullToRefresh.setOnRefreshListener {
-
             initListByType(listType)
         }
     }
 
     private fun setupViewModel() {
         viewModel.progressData.observe(viewLifecycleOwner, Observer {
-            isLoading -> handleProgressBar(isLoading) })
+                isLoading -> handleProgressBar(isLoading) })
         viewModel.movieListData.observe(viewLifecycleOwner, Observer {
                 movieList -> handleFeedList(movieList) })
         viewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
-             infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
+            infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
         ratedViewModel.progressData.observe(viewLifecycleOwner, Observer {
                 isLoading -> handleProgressBar(isLoading) })
         ratedViewModel.movieListData.observe(viewLifecycleOwner, Observer {
@@ -154,19 +155,19 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     }
 
     private fun handleProgressBar(isLoading: Boolean?) {
-        isLoading?.let{
+        isLoading?.let {
             movieListFragPullToRefresh.isRefreshing = it
         }
     }
 
     private fun handleFeedList(movieList: ArrayList<Movie>?) {
-        movieList?.let{
+        movieList?.let {
             adapter.submitList(it)
             infiniteRecyclerViewScrollListener.notifyDataLoaded()
 
-            if(it.isEmpty()){
+            if (it.isEmpty()) {
                 movieListFragNoMoviesText.visibility = View.VISIBLE
-            }else{
+            } else {
                 movieListFragNoMoviesText.visibility = View.GONE
             }
         }
@@ -195,12 +196,13 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
             override fun onDataHunger() {}
 
             override fun requestData(offset: Int) {
+                val page = 1 + offset / Constants.API_PAGINATION_ITEMS_PER_PAGE
                 when (listType) {
                     Constants.MOVIE_LIST_ALL_MOVIES_TYPE -> {
-                        viewModel.getAdditionalMovies(offset)
+                        viewModel.getAdditionalMovies(page)
                     }
                     Constants.MOVIE_LIST_RATED_MOVIES_TYPE -> {
-                        ratedViewModel.getAdditionalMovies(offset)
+                        ratedViewModel.getAdditionalMovies(page)
                     }
                 }
             }
