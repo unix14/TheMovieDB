@@ -13,14 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".features.splash.SplashActivity">
+        <activity android:name=".features.splash.SplashActivity"
+        android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".features.MainActivity"/>
+        <activity android:name=".features.MainActivity"
+                  android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
