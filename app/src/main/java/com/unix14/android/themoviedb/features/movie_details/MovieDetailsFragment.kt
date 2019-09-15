@@ -184,11 +184,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         ratingEvent?.let {
             when (it) {
                 MovieDetailsViewModel.RatingEvent.RATING_ERROR -> {
-                    Toast.makeText(
-                        context,
-                        "Rating failed, Please try again later",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(context,"Rating failed, Please try again later",Toast.LENGTH_LONG).show()
                 }
                 MovieDetailsViewModel.RatingEvent.RATED -> {
                     Toast.makeText(context, "Rating Sent!", Toast.LENGTH_LONG).show()
@@ -207,8 +203,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
                     Toast.makeText(context, "Connection to server failed", Toast.LENGTH_LONG).show()
                 }
                 MovieDetailsViewModel.ErrorEvent.FETCH_DATA_ERROR -> {
-                    Toast.makeText(context, "Fetch data from server failed", Toast.LENGTH_LONG)
-                        .show()
+                    Toast.makeText(context, "Fetch data from server failed", Toast.LENGTH_LONG).show()
                 }
                 MovieDetailsViewModel.ErrorEvent.NO_ERROR -> {
                 }
