@@ -29,7 +29,7 @@ class AllMoviesViewModel(private val apiService: ApiService) : ViewModel() {
 
     fun getMovieList() {
         progressData.startProgress()
-        apiService.getTopRatedMovies().enqueue(object :Callback<MovieListResponse>{
+        apiService.getNowInCinema().enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
 
@@ -61,7 +61,7 @@ class AllMoviesViewModel(private val apiService: ApiService) : ViewModel() {
             return
         }
         progressData.startProgress()
-        apiService.getTopRatedMovies(page).enqueue(object :Callback<MovieListResponse>{
+        apiService.getNowInCinema(page).enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
 

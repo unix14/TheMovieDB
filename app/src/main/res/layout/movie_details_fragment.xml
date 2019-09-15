@@ -138,6 +138,7 @@
                                 android:layout_height="wrap_content"
                                 android:drawablePadding="7dp"
                                 android:drawableEnd="@drawable/white_dot"
+                                android:drawableTint="@color/almost_transparent2"
                                 tools:text="Comedy"/>
 
                             <TextView
@@ -200,6 +201,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
                         android:drawableStart="@drawable/ic_language"
+                        android:drawableTint="@color/dark_blue"
                         android:drawablePadding="7dp"
                         android:text="@string/movie_details_frag_language"/>
 
