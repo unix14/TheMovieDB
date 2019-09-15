@@ -304,11 +304,36 @@
                     style="@style/HyperLinkStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:drawableStart="@drawable/ic_internet_movie_database"
+                    android:layout_gravity="start"
+                    android:drawableEnd="@drawable/ic_internet_movie_database"
                     android:drawablePadding="9dp"
                     android:gravity="center"
-                    android:text="@string/movie_details_frag_go_to_imdb"/>
+                    android:text="@string/movie_details_frag_search_in"/>
+
+
+                <TextView
+                    android:id="@+id/movieDetailsFragNetflixLink"
+                    style="@style/HyperLinkStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:drawableEnd="@drawable/ic_netflix_logo"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:drawablePadding="9dp"
+                    android:gravity="center"
+                    android:text="@string/movie_details_frag_search_in"/>
+
+                <TextView
+                    android:id="@+id/movieDetailsFragGoogleLink"
+                    style="@style/HyperLinkStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:drawableEnd="@drawable/ic_google_logo"
+                    android:drawablePadding="9dp"
+                    android:gravity="center"
+                    android:text="@string/movie_details_frag_search_in"/>
 
             </LinearLayout>
         </LinearLayout>
