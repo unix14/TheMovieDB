@@ -201,4 +201,8 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
             openWebBrowser(Constants.NETFLIX_SEARCH_URL + movieName)
         }
     }
+
+    override fun searchMovieInGoogle(movieName: String) {
+        openWebBrowser(Constants.GOOGLE_SEARCH_URL + movieName)
+    }
 }

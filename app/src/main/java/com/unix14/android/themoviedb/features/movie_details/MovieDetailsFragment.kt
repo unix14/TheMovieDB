@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -24,8 +25,8 @@ import com.unix14.android.themoviedb.models.Movie
 import com.unix14.android.themoviedb.models.Video
 import kotlinx.android.synthetic.main.movie_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import android.widget.ScrollView
-
+import kotlin.math.ceil
+import kotlin.math.roundToInt
 
 
 private const val MOVIE_KEY = "movie_key"
@@ -36,6 +37,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         fun openIMDBWebsite(imdbId: String)
         fun addRatedMovieToLocalList(movie: Movie)
         fun searchMovieInNetflix(movieName: String)
+        fun searchMovieInGoogle(movieName: String)
     }
 
     private var listener: MovieDetailsFragmentListener? = null
@@ -68,10 +70,10 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
 
     private val viewModel by viewModel<MovieDetailsViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.movie_details_fragment, container, false)
         dialog?.window?.let {
-            it.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+            it.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!,R.color.dark_43)))
             it.attributes?.windowAnimations = R.style.FullScreenDialogStyle
         }
         return view
@@ -97,18 +99,18 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
             movieDetailsFragRateBtn.visibility = View.GONE
         }
 
-        movie.language.let{
+        movie.language.let {
             movieDetailsFragLanguage.text = it
         }
 
-        movie.genre.let{
+        movie.genre.let {
             movieDetailsFragGenre.text = it
         }
     }
 
     private fun initTrailersList() {
         val backdropThumbnail = Constants.BIG_POSTER_BASE_URL + movie.backdropPath
-        adapter = TrailersAdapter(childFragmentManager,backdropThumbnail)
+        adapter = TrailersAdapter(childFragmentManager, backdropThumbnail)
         movieDetailsFragViewPager.adapter = adapter
         movieDetailsFragViewPager.addOnPageChangeListener(this)
     }
@@ -116,10 +118,10 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
     private fun initClicks() {
         movieDetailsFragRateBtn.setOnClickListener {
             val enteredRating = movieDetailsFragRatingBar.rating
-            if(enteredRating > 0){
+            if (enteredRating > 0) {
                 viewModel.sendRating(movie.id.toString(), enteredRating)
-            }else{
-                Toast.makeText(context,"You MUST rate at least 0.5 star", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "You MUST rate at least 0.5 star", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -138,19 +140,23 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         movieDetailsFragNetflixLink.setOnClickListener {
             listener?.searchMovieInNetflix(movie.name)
         }
+
+        movieDetailsFragGoogleLink.setOnClickListener {
+            listener?.searchMovieInGoogle(movie.name)
+        }
     }
 
     private fun setupViewModel() {
-        viewModel.progressData.observe(viewLifecycleOwner, Observer {
+        viewModel.progressData.observe(viewLifecycleOwner,Observer {
                 isLoading -> handleProgressBar(isLoading) })
         viewModel.movieDetailsData.observe(viewLifecycleOwner,Observer {
                 movieDetails -> handleMovieDetails(movieDetails) })
-        viewModel.errorEvent.observe(viewLifecycleOwner, Observer {
+        viewModel.errorEvent.observe(viewLifecycleOwner,Observer {
                 errorEvent -> handleErrorEvent(errorEvent) })
         viewModel.ratingMovieEvent.observe(viewLifecycleOwner,Observer {
                 ratingEvent -> handleRatingEvent(ratingEvent) })
-        viewModel.trailerVideosData.observe(this, Observer {
-            trailerVideos -> handleTrailers(trailerVideos) })
+        viewModel.trailerVideosData.observe(this,Observer {
+                trailerVideos -> handleTrailers(trailerVideos) })
     }
 
     private fun handleTrailers(trailerVideos: ArrayList<Video>?) {
@@ -158,7 +164,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
             adapter.updateList(it)
             movieDetailsFragIndicator.setViewPager(movieDetailsFragViewPager)
 
-            if(it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 movieDetailsFragNextPage.alpha = 0f
                 movieDetailsFragNextPage.visibility = View.VISIBLE
 
@@ -168,7 +174,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
                     .setStartDelay(Constants.FASTER_ALPHA_DURATION_IN_MS)
                     .setDuration(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
                     .start()
-            }else{
+            } else {
                 movieDetailsFragNextPage.visibility = View.GONE
             }
         }
@@ -178,7 +184,11 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         ratingEvent?.let {
             when (it) {
                 MovieDetailsViewModel.RatingEvent.RATING_ERROR -> {
-                    Toast.makeText(context, "Rating failed, Please try again later", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        context,
+                        "Rating failed, Please try again later",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 MovieDetailsViewModel.RatingEvent.RATED -> {
                     Toast.makeText(context, "Rating Sent!", Toast.LENGTH_LONG).show()
@@ -197,9 +207,11 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
                     Toast.makeText(context, "Connection to server failed", Toast.LENGTH_LONG).show()
                 }
                 MovieDetailsViewModel.ErrorEvent.FETCH_DATA_ERROR -> {
-                    Toast.makeText(context, "Fetch data from server failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Fetch data from server failed", Toast.LENGTH_LONG)
+                        .show()
                 }
-                MovieDetailsViewModel.ErrorEvent.NO_ERROR -> { }
+                MovieDetailsViewModel.ErrorEvent.NO_ERROR -> {
+                }
             }
         }
     }
@@ -221,7 +233,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
             movieDetailsFragDescription.text = it.overview
             movieDetailsFragYear.text = DateUtils.getYear(it.realeseDate)
             movieDetailsFragVotes.text = it.voteCount.toString()
-            movieDetailsFragPopularity.text = Math.round(Math.ceil(it.popularity.toDouble())).toString() + "%"
+            movieDetailsFragPopularity.text = ceil(it.popularity.toDouble()).roundToInt().toString() + "%"
             movieDetailsFragPublicRatingBar.rating = it.voteAvg % 5
 
             //setClicks
@@ -272,12 +284,13 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
 
     //View Pager on Scroll Changed Listener's callbacks
     override fun onPageScrollStateChanged(state: Int) {}
+
     override fun onPageSelected(position: Int) {}
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         //if swiped first element
         if (position > 0) {
-            movieDetailsFragNextPage?.let{
+            movieDetailsFragNextPage?.let {
                 it.alpha = 1f
                 //Animate fade out
                 it.animate()
