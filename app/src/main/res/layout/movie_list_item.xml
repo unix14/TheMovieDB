@@ -1,43 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="200dp"
-              android:orientation="horizontal"
-              android:padding="15dp"
-              tools:background="@drawable/background_gradient">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="200dp"
+    android:orientation="horizontal"
+    android:padding="15dp"
+    tools:background="@drawable/background_gradient">
 
     <ImageView
         android:id="@+id/movieListItemImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="center|top"
         android:adjustViewBounds="true"
+        android:layout_marginTop="10dp"
         android:maxWidth="105dp"
         android:maxHeight="150dp"
         android:minWidth="105dp"
         android:minHeight="150dp"
         android:scaleType="centerCrop"
-        tools:background="@color/colorPrimary"/>
+        tools:background="@color/colorPrimary" />
 
     <LinearLayout
+        android:id="@+id/movieListItemDescriptionBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="170dp"
         android:layout_marginStart="15dp"
         android:background="@drawable/rounded_white_alpha_background"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="10dp">
 
         <com.unix14.android.themoviedb.common.AutoScrollableTextView
             android:id="@+id/movieListItemName"
             style="@style/MovieTitleStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Rocky 4"/>
+            tools:text="Rocky 4" />
 
         <RatingBar
             android:id="@+id/movieListItemRatingBar"
-            style="@style/SmallRatingBarStyle"/>
+            style="@style/SmallRatingBarStyle" />
 
         <TextView
             android:id="@+id/movieListItemDescription"
@@ -48,19 +54,25 @@
             android:breakStrategy="high_quality"
             android:ellipsize="end"
             android:maxLines="4"
-            tools:text="44444"/>
+            tools:text="44444" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
+
         <TextView
             android:id="@+id/movieDetailsFragWebsiteLink"
             style="@style/SmallHyperLinkStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="@string/movie_list_frag_read_more"/>
+            android:padding="10dp"
+            android:drawableStart="@drawable/ic_arrow_forward_small"
+            android:drawableTint="@color/dark_red"
+            android:gravity="center"
+            android:drawablePadding="4dp"
+            android:text="@string/movie_list_frag_read_more" />
 
     </LinearLayout>
 

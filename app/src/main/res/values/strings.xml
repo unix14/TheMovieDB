@@ -14,4 +14,5 @@
     <string name="video_item_swipe_for_more">Swipe for more..</string>
     <string name="movie_list_frag_no_rated_movies_yet">No Rated Movies Yet!\nPlease go rate some movies and come back later!</string>
     <string name="movie_list_frag_read_more"><u>Read More</u></string>
+    <string name="movie_list_frag_read_less"><u>Read Less</u></string>
 </resources>
