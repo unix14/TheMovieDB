@@ -22,6 +22,8 @@ import kotlinx.android.synthetic.main.movie_list_item.view.*
 class MovieListAdapter(private val listener: MovieListAdapterListener) :
     ListAdapter<Movie, MovieListAdapter.MovieItemViewHolder>(MovieListDiffCallback()) {
 
+    private var expandedMovieId: Int = -1
+
     interface MovieListAdapterListener {
         fun onMovieClick(movie: Movie)
     }
@@ -33,7 +35,7 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) :
         var stars: RatingBar = view.movieListItemRatingBar
         var readMore: TextView = view.movieDetailsFragWebsiteLink
 
-        fun bind(movie: Movie) {
+        fun bind(movie: Movie, isExpanded : Boolean) {
             Glide.with(itemView.context)
                 .load(Constants.SMALL_POSTER_BASE_URL + movie.image)
                 .apply(RequestOptions().transform(RoundedCorners(Constants.POSTER_ROUNDED_CORNERS_RADIUS)))
@@ -45,17 +47,25 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) :
 
             stars.rating = movie.voteAvg % Constants.TOTAL_RATING_STARS
 
-            readMore.setOnClickListener {
-                it.isActivated = !it.isActivated
+            if (isExpanded) {
+                description.maxLines = Int.MAX_VALUE
+                readMore.text = itemView.context.getString(R.string.movie_list_frag_read_less)
+            } else {
+                description.maxLines = Constants.MINIMUM_DESCRIPTION_LINES
+                readMore.text = itemView.context.getString(R.string.movie_list_frag_read_more)
+            }
 
-                if (!it.isActivated) {
-                    description.maxLines = Constants.MINIMUM_DESCRIPTION_LINES
-                    readMore.text = itemView.context.getString(R.string.movie_list_frag_read_more)
-
-                } else {
-                    description.maxLines = Int.MAX_VALUE
-                    readMore.text = itemView.context.getString(R.string.movie_list_frag_read_less)
+            //make read more button disappear
+            if(!isExpanded){
+                lateinit var toggleMoreButton: Runnable
+                toggleMoreButton = Runnable {
+                    if(description.layout == null) { // wait while layout become available
+                        description.post(toggleMoreButton)
+                        return@Runnable
+                    }
+                    readMore.visibility = if(description.layout.text.toString() != movie.overview) View.VISIBLE else View.GONE
                 }
+                description.post(toggleMoreButton)
             }
         }
     }
@@ -66,10 +76,18 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) :
 
     override fun onBindViewHolder(holder: MovieItemViewHolder, position: Int) {
         val movie = getItem(position)
-        holder.bind(movie)
+        holder.bind(movie, expandedMovieId == movie.id)
 
         holder.itemView.setOnClickListener {
             listener.onMovieClick(movie)
+        }
+        holder.itemView.movieDetailsFragWebsiteLink.setOnClickListener {
+            expandedMovieId = if(expandedMovieId == movie.id){
+                -1
+            }else{
+                movie.id
+            }
+            notifyItemChanged(position)
         }
     }
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TheMovieDB</string>
+    <string name="app_name">Movie Mania</string>
     <string name="movie_details_frag_search_in"><u>Search in</u></string>
     <string name="movie_details_frag_rate">Rate!</string>
     <string name="movie_details_frag_rate_this_movie">Rate this Movie</string>

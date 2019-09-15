@@ -11,6 +11,7 @@
     <color name="white_20">#32FFFFFF</color>
     <color name="dark_43">#2b252126</color>
     <color name="almost_transparent">#D9000000</color>
+    <color name="almost_transparent2">#D9FFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="light_yellow">#FFDE7E</color>
 </resources>
