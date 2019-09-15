@@ -22,5 +22,9 @@ class Constants{
         const val FASTER_ALPHA_DURATION_IN_MS = 800L
 
         const val API_PAGINATION_ITEMS_PER_PAGE = 20
+
+        const val TOTAL_RATING_STARS = 5
+        const val MINIMUM_DESCRIPTION_LINES = 4
+
     }
 }
