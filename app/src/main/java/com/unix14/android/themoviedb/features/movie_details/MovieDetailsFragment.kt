@@ -35,6 +35,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
     interface MovieDetailsFragmentListener {
         fun openIMDBWebsite(imdbId: String)
         fun addRatedMovieToLocalList(movie: Movie)
+        fun searchMovieInNetflix(movieName: String)
     }
 
     private var listener: MovieDetailsFragmentListener? = null
@@ -132,6 +133,10 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
 
             //Scroll to end of fragment
             movieDetailsFragScrollView.post { movieDetailsFragScrollView.fullScroll(ScrollView.FOCUS_DOWN) }
+        }
+
+        movieDetailsFragNetflixLink.setOnClickListener {
+            listener?.searchMovieInNetflix(movie.name)
         }
     }
 

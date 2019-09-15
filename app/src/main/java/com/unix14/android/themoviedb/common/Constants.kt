@@ -8,6 +8,7 @@ class Constants{
         const val SMALL_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/"
         const val BIG_POSTER_BASE_URL = "http://image.tmdb.org/t/p/original"
         const val IMDB_BASE_URL = "https://www.imdb.com/title/"
+        const val NETFLIX_SEARCH_URL = "https://www.netflix.com/search?q="
         const val YOUTUBE_VIDEO_BASE_URL = "https://www.youtube.com/watch?v="
         const val YOUTUBE_IMAGE_BASE_URL = "https://img.youtube.com/vi/"
         const val YOUTUBE_IMAGE_BASE_URL_SFFIX = "/0.jpg"

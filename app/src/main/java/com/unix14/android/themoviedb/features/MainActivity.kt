@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.unix14.android.themoviedb.R
@@ -174,11 +175,11 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     override fun openIMDBWebsite(imdbId: String) {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.IMDB_BASE_URL + imdbId)))
+        openWebBrowser(Constants.IMDB_BASE_URL + imdbId)
     }
 
-    private fun openYoutubeVideo(videoId: String) {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.YOUTUBE_VIDEO_BASE_URL + videoId)))
+    private fun openWebBrowser(link: String) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
     }
 
     override fun addRatedMovieToLocalList(movie: Movie) {
@@ -186,6 +187,18 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     override fun onVideoIdClick(videoId: String) {
-        openYoutubeVideo(videoId)
+        openWebBrowser(Constants.YOUTUBE_VIDEO_BASE_URL + videoId)
+    }
+
+    override fun searchMovieInNetflix(movieName: String) {
+        try {
+            val intent = Intent(Intent.ACTION_SEARCH)
+            intent.setClassName("com.netflix.mediaclient","com.netflix.mediaclient.ui.search.SearchActivity")
+            intent.putExtra("query", movieName)
+            ContextCompat.startActivity(this, intent, null)
+
+        } catch (e: Exception) {
+            openWebBrowser(Constants.NETFLIX_SEARCH_URL + movieName)
+        }
     }
 }
