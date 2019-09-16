@@ -232,4 +232,13 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     override fun searchMovieInGoogle(movieName: String) {
         openWebBrowser(Constants.GOOGLE_SEARCH_URL + movieName)
     }
+
+    override fun onBackPressed() {
+        if(mainActDrawerLayout.isDrawerOpen(mainActDrawer)){
+            mainActDrawerLayout.closeDrawers()
+        }else{
+            //TODO:: add exit dialog
+            super.onBackPressed()
+        }
+    }
 }

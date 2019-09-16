@@ -20,6 +20,10 @@
         app:showMenuButton="true"
         app:showSearchButton="true" />
 
+    <ProgressBar
+        android:id="@+id/mainActPb"
+        style="@style/ProgressBarStyle" />
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/mainActDrawer"
         android:layout_width="250dp"
@@ -32,9 +36,5 @@
         app:itemIconTint="@color/dark_red"
         app:itemTextColor="@color/white"
         app:menu="@menu/navigation_menu" />
-
-    <ProgressBar
-        android:id="@+id/mainActPb"
-        style="@style/ProgressBarStyle" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
