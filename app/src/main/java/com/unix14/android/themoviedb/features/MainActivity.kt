@@ -124,10 +124,31 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
                 R.id.popularMovies -> {
                     onPopularMoviesClick()
                 }
+                R.id.shareApp -> {
+                    shareThisApp()
+                }
             }
             mainActDrawerLayout.closeDrawers()
             false
         }
+    }
+
+    private fun shareThisApp() {
+        val sharingIntent = Intent(Intent.ACTION_SEND)
+        sharingIntent.type = "text/plain"
+        val shareBody = getString(R.string.nav_menu_share_this_app_text) + Constants.GOOGLE_STORE_BASE_URL + applicationContext.packageName
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+        startActivity(Intent.createChooser(sharingIntent, "Share via"))
+    }
+
+    override fun shareMovie(movie: Movie) {
+        val sharingIntent = Intent(Intent.ACTION_SEND)
+        sharingIntent.type = "text/plain"
+        val shareBody = getString(R.string.movie_details_frag_share_movie_text) + Constants.IMDB_BASE_URL + movie.imdbId
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, movie.name)
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+        startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
 
     override fun onHeaderMenuClick() {

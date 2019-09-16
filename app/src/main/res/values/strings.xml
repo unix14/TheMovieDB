@@ -19,4 +19,9 @@
     <string name="nav_menu_most_rated_movies">Top Rated Movies</string>
     <string name="nav_menu_upcoming_movies">Upcoming Movies</string>
     <string name="nav_menu_popular_movies">Popular Movies</string>
+    <string name="nav_menu_share_this_app">Share this App</string>
+    <string name="nav_menu_share_this_app_text">You have to try this cool movie app!\n</string>
+    <string name="movie_details_frag_share_movie">Share this movie with a friend</string>
+    <string name="movie_details_frag_share_movie_text">Let\'s go see this movie \n</string>
+
 </resources>
