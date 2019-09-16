@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         setContentView(R.layout.activity_main)
 
         setupViewModel()
-        initHeaderView()
         initUi()
     }
 
@@ -99,51 +98,79 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     private fun initUi() {
+        mainActListHeaderView.listener = this
+        initDrawerMenu()
         viewModel.startMainActivity()
     }
 
-    private fun initHeaderView() {
-        mainActListHeaderView.listener = this
-        setHeaderViewLayout(true)
+    private fun initDrawerMenu() {
+        mainActDrawer.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.searchAMovie -> {
+                    onHeaderSearchClick()
+                }
+                R.id.allMovies -> {
+                    onAllMoviesClick()
+                }
+                R.id.mostRatedMovies -> {
+                    onMostRatedMoviesClick()
+                }
+                R.id.ratedMovies -> {
+                    onRatedMoviesClick()
+                }
+            }
+            mainActDrawerLayout.closeDrawers()
+            false
+        }
     }
 
-    override fun onHeaderAllMoviesClick() {
-        setHeaderViewLayout(true)
+    override fun onHeaderMenuClick() {
+        mainActDrawerLayout.openDrawer(mainActDrawer,true)
+    }
+
+    private fun onMostRatedMoviesClick() {
+        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
+        if (movieListFrag != null) {
+            movieListFrag.setListType(Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE)
+            mainActListHeaderView.setTitle(getString(R.string.nav_menu_most_rated_movies))
+        } else {
+            showMovieList(Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE)
+        }
+    }
+
+    private fun onAllMoviesClick() {
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
             movieListFrag.setListType(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
+            mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
         } else {
             showMovieList(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
         }
     }
 
-    override fun onHeaderRatedMoviesClick() {
-        setHeaderViewLayout(false)
+    private fun onRatedMoviesClick() {
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
             movieListFrag.setListType(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
+            mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
         } else {
             showMovieList(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
         }
     }
 
-    private fun setHeaderViewLayout(isAllMoviesScreen: Boolean) {
-        if (isAllMoviesScreen) {
-            mainActListHeaderView.setRatedMoviesButtonClickable(true)
-            mainActListHeaderView.setAllMoviesButtonClickable(false)
-            mainActListHeaderView.setRatedMoviesButtonActivated(false)
-            mainActListHeaderView.setAllMoviesButtonActivated(true)
-            mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
-        } else {
-            mainActListHeaderView.setRatedMoviesButtonClickable(false)
-            mainActListHeaderView.setAllMoviesButtonClickable(true)
-            mainActListHeaderView.setRatedMoviesButtonActivated(true)
-            mainActListHeaderView.setAllMoviesButtonActivated(false)
-            mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
-        }
+    override fun onHeaderSearchClick() {
+        Toast.makeText(this, "Search", Toast.LENGTH_LONG).show()
     }
 
     private fun showMovieList(listType: Int) {
+        when(listType){
+            Constants.MOVIE_LIST_ALL_MOVIES_TYPE -> {
+                mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
+            }
+            Constants.MOVIE_LIST_RATED_MOVIES_TYPE -> {
+                mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
+            }
+        }
         showFragment(MovieListFragment.newInstance(listType), Constants.MOVIE_LIST_FRAGMENT)
     }
 

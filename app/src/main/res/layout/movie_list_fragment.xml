@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                       xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                       xmlns:tools="http://schemas.android.com/tools"
-                                                       android:id="@+id/movieListFragPullToRefresh"
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="match_parent"
-                                                       tools:context=".features.movie_list.MovieListFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movieListFragPullToRefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".features.movie_list.MovieListFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -16,13 +16,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="50dp"
+            android:fadeScrollbars="true"
             android:fadingEdge="vertical"
-            android:fadingEdgeLength="15dp"
+            android:fadingEdgeLength="35dp"
             android:fillViewport="false"
             android:overScrollMode="never"
+            android:requiresFadingEdge="vertical"
             android:scrollbarSize="9dp"
             android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/movieListFragScrollToTopButton"
@@ -33,7 +35,7 @@
             android:src="@drawable/ic_vertical_align_top"
             android:tint="@color/dark_blue"
             app:fabSize="normal"
-            app:rippleColor="@color/black"/>
+            app:rippleColor="@color/black" />
 
         <TextView
             android:id="@+id/movieListFragNoMoviesText"
@@ -43,11 +45,9 @@
             android:layout_gravity="center|top"
             android:layout_marginTop="145dp"
             android:gravity="center"
+            android:text="@string/movie_list_frag_no_rated_movies_yet"
             android:visibility="gone"
-            tools:visibility="visible"
-            android:text="@string/movie_list_frag_no_rated_movies_yet"/>
+            tools:visibility="visible" />
 
     </FrameLayout>
-
-
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

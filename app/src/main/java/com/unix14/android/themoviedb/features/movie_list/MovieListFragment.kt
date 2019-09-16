@@ -3,6 +3,7 @@ package com.unix14.android.themoviedb.features.movie_list
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,6 +52,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     private lateinit var adapter: MovieListAdapter
     val viewModel by viewModel<AllMoviesViewModel>()
     val ratedViewModel by viewModel<RatedMoviesViewModel>()
+    val mostRatedViewModel by viewModel<MostRatedMoviesViewModel>()
 
     private var listType: Int = Constants.MOVIE_LIST_ALL_MOVIES_TYPE
     private lateinit var infiniteRecyclerViewScrollListener: InfiniteRecyclerViewScrollListener
@@ -108,6 +110,9 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
             Constants.MOVIE_LIST_RATED_MOVIES_TYPE -> {
                 ratedViewModel.getRatedMoviesList()
             }
+            Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE -> {
+                mostRatedViewModel.getRatedMoviesList()
+            }
         }
     }
 
@@ -125,8 +130,11 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
             }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE)
-                    movieListFragScrollToTopButton.show()
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    Handler().postDelayed({
+                            movieListFragScrollToTopButton.show()
+                        },2000)
+                }
                 super.onScrollStateChanged(recyclerView, newState)
             }
         })
@@ -151,6 +159,12 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
         ratedViewModel.movieListData.observe(viewLifecycleOwner, Observer {
                 movieList -> handleFeedList(movieList) })
         ratedViewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
+            infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
+        mostRatedViewModel.progressData.observe(viewLifecycleOwner, Observer {
+                isLoading -> handleProgressBar(isLoading) })
+        mostRatedViewModel.movieListData.observe(viewLifecycleOwner, Observer {
+                movieList -> handleFeedList(movieList) })
+        mostRatedViewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
             infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
     }
 
@@ -203,6 +217,9 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
                     }
                     Constants.MOVIE_LIST_RATED_MOVIES_TYPE -> {
                         ratedViewModel.getAdditionalMovies(page)
+                    }
+                    Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE -> {
+                        mostRatedViewModel.getAdditionalMovies(page)
                     }
                 }
             }
