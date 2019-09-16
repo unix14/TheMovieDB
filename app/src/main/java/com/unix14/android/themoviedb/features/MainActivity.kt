@@ -110,13 +110,13 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
                     onHeaderSearchClick()
                 }
                 R.id.allMovies -> {
-                    onHeaderAllMoviesClick()
+                    onAllMoviesClick()
                 }
                 R.id.mostRatedMovies -> {
-                    Toast.makeText(this, "mostRatedMovies", Toast.LENGTH_LONG).show()
+                    onMostRatedMoviesClick()
                 }
                 R.id.ratedMovies -> {
-                    onHeaderRatedMoviesClick()
+                    onRatedMoviesClick()
                 }
             }
             mainActDrawerLayout.closeDrawers()
@@ -128,7 +128,17 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         mainActDrawerLayout.openDrawer(mainActDrawer,true)
     }
 
-    override fun onHeaderAllMoviesClick() {
+    private fun onMostRatedMoviesClick() {
+        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
+        if (movieListFrag != null) {
+            movieListFrag.setListType(Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE)
+            mainActListHeaderView.setTitle(getString(R.string.nav_menu_most_rated_movies))
+        } else {
+            showMovieList(Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE)
+        }
+    }
+
+    private fun onAllMoviesClick() {
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
             movieListFrag.setListType(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
@@ -138,7 +148,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         }
     }
 
-    override fun onHeaderRatedMoviesClick() {
+    private fun onRatedMoviesClick() {
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
             movieListFrag.setListType(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
