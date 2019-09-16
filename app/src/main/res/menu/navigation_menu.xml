@@ -30,5 +30,9 @@
             android:icon="@drawable/ic_stars"
             android:title="@string/nav_menu_most_rated_movies" />
 
+        <item
+            android:id="@+id/upcomingMovies"
+            android:icon="@drawable/ic_upcoming"
+            android:title="@string/nav_menu_upcoming_movies" />
     </group>
 </menu>
