@@ -17,4 +17,6 @@
     <string name="movie_list_frag_read_less"><u>Read Less</u></string>
     <string name="nav_menu_search">Search..</string>
     <string name="nav_menu_most_rated_movies">Top Rated Movies</string>
+    <string name="nav_menu_upcoming_movies">Upcoming Movies</string>
+    <string name="nav_menu_popular_movies">Popular Movies</string>
 </resources>

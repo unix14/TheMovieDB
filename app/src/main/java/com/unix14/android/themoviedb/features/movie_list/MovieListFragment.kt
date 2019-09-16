@@ -53,6 +53,8 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     val viewModel by viewModel<AllMoviesViewModel>()
     val ratedViewModel by viewModel<RatedMoviesViewModel>()
     val mostRatedViewModel by viewModel<MostRatedMoviesViewModel>()
+    val upcomingViewModel by viewModel<UpComingMoviesViewModel>()
+    val popularViewModel by viewModel<PopularMoviesViewModel>()
 
     private var listType: Int = Constants.MOVIE_LIST_ALL_MOVIES_TYPE
     private lateinit var infiniteRecyclerViewScrollListener: InfiniteRecyclerViewScrollListener
@@ -113,6 +115,12 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
             Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE -> {
                 mostRatedViewModel.getRatedMoviesList()
             }
+            Constants.MOVIE_LIST_UPCOMING_MOVIES_TYPE -> {
+                upcomingViewModel.getUpcomingMoviesList()
+            }
+            Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE -> {
+                popularViewModel.getPopularMoviesList()
+            }
         }
     }
 
@@ -148,23 +156,44 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     }
 
     private fun setupViewModel() {
+        //Now in Cinema VM
         viewModel.progressData.observe(viewLifecycleOwner, Observer {
                 isLoading -> handleProgressBar(isLoading) })
         viewModel.movieListData.observe(viewLifecycleOwner, Observer {
                 movieList -> handleFeedList(movieList) })
         viewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
             infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
+
+        //Rated By You VM
         ratedViewModel.progressData.observe(viewLifecycleOwner, Observer {
                 isLoading -> handleProgressBar(isLoading) })
         ratedViewModel.movieListData.observe(viewLifecycleOwner, Observer {
                 movieList -> handleFeedList(movieList) })
         ratedViewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
             infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
+
+        //Top Rated VM
         mostRatedViewModel.progressData.observe(viewLifecycleOwner, Observer {
                 isLoading -> handleProgressBar(isLoading) })
         mostRatedViewModel.movieListData.observe(viewLifecycleOwner, Observer {
                 movieList -> handleFeedList(movieList) })
         mostRatedViewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
+            infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
+
+        //Up coming VM
+        upcomingViewModel.progressData.observe(viewLifecycleOwner, Observer {
+                isLoading -> handleProgressBar(isLoading) })
+        upcomingViewModel.movieListData.observe(viewLifecycleOwner, Observer {
+                movieList -> handleFeedList(movieList) })
+        upcomingViewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
+            infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
+
+        //Popular Movies VM
+        popularViewModel.progressData.observe(viewLifecycleOwner, Observer {
+                isLoading -> handleProgressBar(isLoading) })
+        popularViewModel.movieListData.observe(viewLifecycleOwner, Observer {
+                movieList -> handleFeedList(movieList) })
+        popularViewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
             infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
     }
 
@@ -220,6 +249,12 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
                     }
                     Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE -> {
                         mostRatedViewModel.getAdditionalMovies(page)
+                    }
+                    Constants.MOVIE_LIST_UPCOMING_MOVIES_TYPE -> {
+                        upcomingViewModel.getAdditionalMovies(page)
+                    }
+                    Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE ->{
+                        popularViewModel.getAdditionalMovies(page)
                     }
                 }
             }

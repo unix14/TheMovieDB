@@ -20,6 +20,8 @@ class Constants{
         const val MOVIE_LIST_ALL_MOVIES_TYPE = 1
         const val MOVIE_LIST_RATED_MOVIES_TYPE = 2
         const val MOVIE_LIST_MOST_RATED_MOVIES_TYPE = 3
+        const val MOVIE_LIST_UPCOMING_MOVIES_TYPE = 4
+        const val MOVIE_LIST_POPULAR_MOVIES_TYPE = 5
 
         const val DEFAULT_ALPHA_DURATION_IN_MS = 1500L
         const val FASTER_ALPHA_DURATION_IN_MS = 800L

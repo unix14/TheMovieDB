@@ -118,6 +118,12 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
                 R.id.ratedMovies -> {
                     onRatedMoviesClick()
                 }
+                R.id.upcomingMovies -> {
+                    onUpcomingMoviesClick()
+                }
+                R.id.popularMovies -> {
+                    onPopularMoviesClick()
+                }
             }
             mainActDrawerLayout.closeDrawers()
             false
@@ -126,6 +132,26 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
 
     override fun onHeaderMenuClick() {
         mainActDrawerLayout.openDrawer(mainActDrawer,true)
+    }
+
+    private fun onPopularMoviesClick() {
+        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
+        if (movieListFrag != null) {
+            movieListFrag.setListType(Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE)
+            mainActListHeaderView.setTitle(getString(R.string.nav_menu_popular_movies))
+        } else {
+            showMovieList(Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE)
+        }
+    }
+
+    private fun onUpcomingMoviesClick() {
+        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
+        if (movieListFrag != null) {
+            movieListFrag.setListType(Constants.MOVIE_LIST_UPCOMING_MOVIES_TYPE)
+            mainActListHeaderView.setTitle(getString(R.string.nav_menu_upcoming_movies))
+        } else {
+            showMovieList(Constants.MOVIE_LIST_UPCOMING_MOVIES_TYPE)
+        }
     }
 
     private fun onMostRatedMoviesClick() {
@@ -231,5 +257,14 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
 
     override fun searchMovieInGoogle(movieName: String) {
         openWebBrowser(Constants.GOOGLE_SEARCH_URL + movieName)
+    }
+
+    override fun onBackPressed() {
+        if(mainActDrawerLayout.isDrawerOpen(mainActDrawer)){
+            mainActDrawerLayout.closeDrawers()
+        }else{
+            //TODO:: add exit dialog
+            super.onBackPressed()
+        }
     }
 }
