@@ -38,6 +38,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         fun addRatedMovieToLocalList(movie: Movie)
         fun searchMovieInNetflix(movieName: String)
         fun searchMovieInGoogle(movieName: String)
+        fun shareMovie(movie: Movie)
     }
 
     private var listener: MovieDetailsFragmentListener? = null
@@ -246,6 +247,10 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
                 .load(Constants.BIG_POSTER_BASE_URL + it.image)
                 .apply(RequestOptions().transform(RoundedCorners(Constants.POSTER_ROUNDED_CORNERS_RADIUS)))
                 .into(movieDetailsFragImage)
+
+            movieDetailsFragShareBtn.setOnClickListener {
+                listener?.shareMovie(movieDetails)
+            }
         }
     }
 

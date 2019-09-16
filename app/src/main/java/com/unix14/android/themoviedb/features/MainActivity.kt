@@ -142,6 +142,15 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
 
+    override fun shareMovie(movie: Movie) {
+        val sharingIntent = Intent(Intent.ACTION_SEND)
+        sharingIntent.type = "text/plain"
+        val shareBody = getString(R.string.movie_details_frag_share_movie_text) + Constants.IMDB_BASE_URL + movie.imdbId
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, movie.name)
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+        startActivity(Intent.createChooser(sharingIntent, "Share via"))
+    }
+
     override fun onHeaderMenuClick() {
         mainActDrawerLayout.openDrawer(mainActDrawer,true)
     }
