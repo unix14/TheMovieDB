@@ -40,4 +40,14 @@
             android:icon="@drawable/ic_upcoming"
             android:title="@string/nav_menu_popular_movies" />
     </group>
+
+    <group
+        android:id="@+id/menu_bottom"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/shareApp"
+            android:icon="@drawable/ic_share"
+            android:title="@string/nav_menu_share_this_app" />
+
+    </group>
 </menu>

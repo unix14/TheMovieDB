@@ -31,5 +31,7 @@ class Constants{
         const val TOTAL_RATING_STARS = 5
         const val MINIMUM_DESCRIPTION_LINES = 4
 
+        const val GOOGLE_STORE_BASE_URL = "https://play.google.com/store/apps/details?id="
+
     }
 }
