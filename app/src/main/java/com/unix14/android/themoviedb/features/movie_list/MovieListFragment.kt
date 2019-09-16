@@ -54,6 +54,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     val ratedViewModel by viewModel<RatedMoviesViewModel>()
     val mostRatedViewModel by viewModel<MostRatedMoviesViewModel>()
     val upcomingViewModel by viewModel<UpComingMoviesViewModel>()
+    val popularViewModel by viewModel<PopularMoviesViewModel>()
 
     private var listType: Int = Constants.MOVIE_LIST_ALL_MOVIES_TYPE
     private lateinit var infiniteRecyclerViewScrollListener: InfiniteRecyclerViewScrollListener
@@ -116,6 +117,9 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
             }
             Constants.MOVIE_LIST_UPCOMING_MOVIES_TYPE -> {
                 upcomingViewModel.getUpcomingMoviesList()
+            }
+            Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE -> {
+                popularViewModel.getPopularMoviesList()
             }
         }
     }
@@ -183,6 +187,14 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
                 movieList -> handleFeedList(movieList) })
         upcomingViewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
             infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
+
+        //Popular Movies VM
+        popularViewModel.progressData.observe(viewLifecycleOwner, Observer {
+                isLoading -> handleProgressBar(isLoading) })
+        popularViewModel.movieListData.observe(viewLifecycleOwner, Observer {
+                movieList -> handleFeedList(movieList) })
+        popularViewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
+            infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
     }
 
     private fun handleProgressBar(isLoading: Boolean?) {
@@ -240,6 +252,9 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
                     }
                     Constants.MOVIE_LIST_UPCOMING_MOVIES_TYPE -> {
                         upcomingViewModel.getAdditionalMovies(page)
+                    }
+                    Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE ->{
+                        popularViewModel.getAdditionalMovies(page)
                     }
                 }
             }

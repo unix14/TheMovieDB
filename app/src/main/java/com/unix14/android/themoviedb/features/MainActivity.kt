@@ -121,6 +121,9 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
                 R.id.upcomingMovies -> {
                     onUpcomingMoviesClick()
                 }
+                R.id.popularMovies -> {
+                    onPopularMoviesClick()
+                }
             }
             mainActDrawerLayout.closeDrawers()
             false
@@ -129,6 +132,16 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
 
     override fun onHeaderMenuClick() {
         mainActDrawerLayout.openDrawer(mainActDrawer,true)
+    }
+
+    private fun onPopularMoviesClick() {
+        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
+        if (movieListFrag != null) {
+            movieListFrag.setListType(Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE)
+            mainActListHeaderView.setTitle(getString(R.string.nav_menu_popular_movies))
+        } else {
+            showMovieList(Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE)
+        }
     }
 
     private fun onUpcomingMoviesClick() {

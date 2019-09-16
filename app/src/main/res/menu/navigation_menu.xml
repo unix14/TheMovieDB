@@ -32,7 +32,12 @@
 
         <item
             android:id="@+id/upcomingMovies"
-            android:icon="@drawable/ic_upcoming"
+            android:icon="@drawable/ic_new"
             android:title="@string/nav_menu_upcoming_movies" />
+
+        <item
+            android:id="@+id/popularMovies"
+            android:icon="@drawable/ic_upcoming"
+            android:title="@string/nav_menu_popular_movies" />
     </group>
 </menu>
