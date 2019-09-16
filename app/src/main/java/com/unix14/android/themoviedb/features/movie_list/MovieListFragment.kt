@@ -3,6 +3,7 @@ package com.unix14.android.themoviedb.features.movie_list
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -129,8 +130,11 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
             }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE)
-                    movieListFragScrollToTopButton.show()
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    Handler().postDelayed({
+                            movieListFragScrollToTopButton.show()
+                        },2000)
+                }
                 super.onScrollStateChanged(recyclerView, newState)
             }
         })
