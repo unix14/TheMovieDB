@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/menu_top"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/searchAMovie"
+            android:icon="@drawable/ic_search_black_24dp"
+            android:title="@string/nav_menu_search" />
+
+    </group>
+
+    <group
+        android:id="@+id/menu_actions"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/ratedMovies"
+            android:icon="@drawable/ic_favorite"
+            android:title="@string/header_view_rated_movies_title" />
+
+        <item
+            android:id="@+id/allMovies"
+            android:icon="@drawable/ic_movies"
+            android:title="@string/header_view_all_movies_title" />
+
+        <item
+            android:id="@+id/mostRatedMovies"
+            android:icon="@drawable/ic_stars"
+            android:title="@string/nav_menu_most_rated_movies" />
+
+    </group>
+</menu>

@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         setContentView(R.layout.activity_main)
 
         setupViewModel()
-        initHeaderView()
         initUi()
     }
 
@@ -99,7 +98,30 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     private fun initUi() {
+        initHeaderView()
+        initDrawerMenu()
         viewModel.startMainActivity()
+    }
+
+    private fun initDrawerMenu() {
+        mainActDrawer.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.searchAMovie -> {
+                    Toast.makeText(this, "Search", Toast.LENGTH_LONG).show()
+                }
+                R.id.allMovies -> {
+                    onHeaderAllMoviesClick()
+                }
+                R.id.mostRatedMovies -> {
+                    Toast.makeText(this, "mostRatedMovies", Toast.LENGTH_LONG).show()
+                }
+                R.id.ratedMovies -> {
+                    onHeaderRatedMoviesClick()
+                }
+            }
+            mainActDrawerLayout.closeDrawers()
+            false
+        }
     }
 
     private fun initHeaderView() {
