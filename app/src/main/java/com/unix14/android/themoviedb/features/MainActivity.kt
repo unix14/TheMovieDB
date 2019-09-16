@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     private fun initUi() {
-        initHeaderView()
+        mainActListHeaderView.listener = this
         initDrawerMenu()
         viewModel.startMainActivity()
     }
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         mainActDrawer.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.searchAMovie -> {
-                    Toast.makeText(this, "Search", Toast.LENGTH_LONG).show()
+                    onHeaderSearchClick()
                 }
                 R.id.allMovies -> {
                     onHeaderAllMoviesClick()
@@ -124,48 +124,43 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         }
     }
 
-    private fun initHeaderView() {
-        mainActListHeaderView.listener = this
-        setHeaderViewLayout(true)
+    override fun onHeaderMenuClick() {
+        mainActDrawerLayout.openDrawer(mainActDrawer,true)
     }
 
     override fun onHeaderAllMoviesClick() {
-        setHeaderViewLayout(true)
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
             movieListFrag.setListType(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
+            mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
         } else {
             showMovieList(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
         }
     }
 
     override fun onHeaderRatedMoviesClick() {
-        setHeaderViewLayout(false)
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
             movieListFrag.setListType(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
+            mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
         } else {
             showMovieList(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
         }
     }
 
-    private fun setHeaderViewLayout(isAllMoviesScreen: Boolean) {
-        if (isAllMoviesScreen) {
-            mainActListHeaderView.setRatedMoviesButtonClickable(true)
-            mainActListHeaderView.setAllMoviesButtonClickable(false)
-            mainActListHeaderView.setRatedMoviesButtonActivated(false)
-            mainActListHeaderView.setAllMoviesButtonActivated(true)
-            mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
-        } else {
-            mainActListHeaderView.setRatedMoviesButtonClickable(false)
-            mainActListHeaderView.setAllMoviesButtonClickable(true)
-            mainActListHeaderView.setRatedMoviesButtonActivated(true)
-            mainActListHeaderView.setAllMoviesButtonActivated(false)
-            mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
-        }
+    override fun onHeaderSearchClick() {
+        Toast.makeText(this, "Search", Toast.LENGTH_LONG).show()
     }
 
     private fun showMovieList(listType: Int) {
+        when(listType){
+            Constants.MOVIE_LIST_ALL_MOVIES_TYPE -> {
+                mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
+            }
+            Constants.MOVIE_LIST_RATED_MOVIES_TYPE -> {
+                mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
+            }
+        }
         showFragment(MovieListFragment.newInstance(listType), Constants.MOVIE_LIST_FRAGMENT)
     }
 

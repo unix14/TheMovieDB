@@ -5,6 +5,9 @@
         <attr name="showTitle" format="boolean"/>
         <attr name="showAllMoviesButton" format="boolean"/>
         <attr name="showRatedMoviesButton" format="boolean"/>
+        <attr name="showMenuButton" format="boolean"/>
+        <attr name="showSearchButton" format="boolean"/>
+
     </declare-styleable>
 
 

@@ -20,6 +20,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     interface HeaderViewListener {
         fun onHeaderRatedMoviesClick() {}
         fun onHeaderAllMoviesClick() {}
+        fun onHeaderMenuClick() {}
+        fun onHeaderSearchClick() {}
     }
 
     init {
@@ -45,13 +47,22 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val showTitle = attrArray.getBoolean(R.styleable.HeaderView_showTitle, true)
                 setTitleVisibility(showTitle)
             }
+            if (attrArray.hasValue(R.styleable.HeaderView_showMenuButton)) {
+                val showButton = attrArray.getBoolean(R.styleable.HeaderView_showMenuButton, true)
+                setMenuButtonVisibility(showButton)
+            }
+            if (attrArray.hasValue(R.styleable.HeaderView_showSearchButton)) {
+                val showButton = attrArray.getBoolean(R.styleable.HeaderView_showSearchButton, true)
+                setSearchButtonVisibility(showButton)
+            }
+
             attrArray.recycle()
         }
 
         initClicks()
     }
 
-    fun setAllMoviesButtonVisibility(showBtn: Boolean) {
+    private fun setAllMoviesButtonVisibility(showBtn: Boolean) {
         if (showBtn) {
             headerViewAllMoviesBtn.visibility = View.VISIBLE
         } else {
@@ -59,7 +70,23 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun setTitleVisibility(showTitle: Boolean) {
+    private fun setMenuButtonVisibility(showBtn: Boolean) {
+        if (showBtn) {
+            headerViewMenuBtn.visibility = View.VISIBLE
+        } else {
+            headerViewMenuBtn.visibility = View.GONE
+        }
+    }
+
+    private fun setSearchButtonVisibility(showBtn: Boolean) {
+        if (showBtn) {
+            headerViewSearchBtn.visibility = View.VISIBLE
+        } else {
+            headerViewSearchBtn.visibility = View.GONE
+        }
+    }
+
+    private fun setTitleVisibility(showTitle: Boolean) {
         if (showTitle) {
             headerViewTitle.visibility = View.VISIBLE
         } else {
@@ -67,28 +94,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun setRatedMoviesButtonVisibility(showBtn: Boolean) {
+    private fun setRatedMoviesButtonVisibility(showBtn: Boolean) {
         if (showBtn) {
             headerViewRatedMoviesBtn.visibility = View.VISIBLE
         } else {
             headerViewRatedMoviesBtn.visibility = View.GONE
         }
-    }
-
-    fun setRatedMoviesButtonActivated(activated: Boolean) {
-        headerViewRatedMoviesBtn.isActivated = activated
-    }
-
-    fun setAllMoviesButtonActivated(activated: Boolean) {
-        headerViewAllMoviesBtn.isActivated = activated
-    }
-
-    fun setRatedMoviesButtonClickable(clickable: Boolean) {
-        headerViewRatedMoviesBtn.isClickable = clickable
-    }
-
-    fun setAllMoviesButtonClickable(clickable: Boolean) {
-        headerViewAllMoviesBtn.isClickable = clickable
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -107,6 +118,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
         headerViewAllMoviesBtn.setOnClickListener {
             listener?.onHeaderAllMoviesClick()
+        }
+        headerViewMenuBtn.setOnClickListener {
+            listener?.onHeaderMenuClick()
+        }
+        headerViewSearchBtn.setOnClickListener {
+            listener?.onHeaderSearchClick()
         }
     }
 

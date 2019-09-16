@@ -17,8 +17,8 @@
         android:id="@+id/mainActListHeaderView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:showAllMoviesButton="true"
-        app:showRatedMoviesButton="true" />
+        app:showMenuButton="true"
+        app:showSearchButton="true" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/mainActDrawer"
