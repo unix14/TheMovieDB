@@ -4,6 +4,7 @@ class Constants{
     companion object{
         const val MOVIE_LIST_FRAGMENT = "movie_list_fragment"
         const val MOVIE_DETAILS_FRAGMENT = "movie_details_fragment"
+        const val SEARCH_DIALOG_FRAGMENT = "search_dialog_fragment"
 
         const val SMALL_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/"
         const val BIG_POSTER_BASE_URL = "http://image.tmdb.org/t/p/original"

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:background="@color/almost_transparent2"
+    android:fitsSystemWindows="true"
+    tools:context=".features.search.SearchDialogFragment">
+
+    <EditText
+        android:id="@+id/searchFragEditText"
+        style="@style/SearchQueryTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="-5dp"
+        android:paddingTop="15dp"
+        android:focusable="true"
+        android:drawableEnd="@drawable/ic_arrow_forward"
+        android:drawableTint="@color/dark_red"
+        android:layout_marginEnd="15dp"
+        android:hint="@string/nav_menu_search" />
+
+    <View
+        android:id="@+id/searchFragSearchBtn"
+        android:layout_gravity="end"
+        android:layout_width="75dp"
+        android:layout_height="45dp"/>
+
+</FrameLayout>

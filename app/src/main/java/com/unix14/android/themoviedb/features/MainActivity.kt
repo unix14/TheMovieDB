@@ -15,6 +15,7 @@ import com.unix14.android.themoviedb.custom_views.HeaderView
 import com.unix14.android.themoviedb.features.movie_details.MovieDetailsFragment
 import com.unix14.android.themoviedb.features.movie_details.trailers.VideoThumbnailFragment
 import com.unix14.android.themoviedb.features.movie_list.MovieListFragment
+import com.unix14.android.themoviedb.features.search.SearchDialogFragment
 import com.unix14.android.themoviedb.features.splash.SplashActivity
 import com.unix14.android.themoviedb.models.Movie
 import kotlinx.android.synthetic.main.activity_main.*
@@ -155,6 +156,10 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         mainActDrawerLayout.openDrawer(mainActDrawer,true)
     }
 
+    override fun onHeaderSearchClick() {
+        SearchDialogFragment.newInstance().show(supportFragmentManager, Constants.SEARCH_DIALOG_FRAGMENT)
+    }
+
     private fun onPopularMoviesClick() {
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
@@ -203,10 +208,6 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         } else {
             showMovieList(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
         }
-    }
-
-    override fun onHeaderSearchClick() {
-        Toast.makeText(this, "Search", Toast.LENGTH_LONG).show()
     }
 
     private fun showMovieList(listType: Int) {
