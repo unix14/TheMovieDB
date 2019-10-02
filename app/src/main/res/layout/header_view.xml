@@ -1,70 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-       xmlns:tools="http://schemas.android.com/tools"
-       tools:parentTag="android.widget.FrameLayout"
-       android:background="@color/transparent"
-       android:layout_width="match_parent"
-       tools:background="@drawable/background_gradient"
-       android:layout_height="50dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/transparent"
+    tools:background="@drawable/background_gradient"
+    tools:parentTag="android.widget.FrameLayout">
 
     <TextView
-            style="@style/HeaderViewTitleStyle"
-            tools:text="Title"
-            android:id="@+id/headerViewTitle"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        android:id="@+id/headerViewTitle"
+        style="@style/HeaderViewTitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        tools:text="Title" />
 
     <ImageView
         android:id="@+id/headerViewMenuBtn"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:src="@drawable/ic_menu"
-        android:tint="@drawable/tint_selector"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="left|center"
         android:background="@null"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:src="@drawable/ic_menu"
+        android:tint="@drawable/tint_selector"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 
     <ImageView
-            android:id="@+id/headerViewAllMoviesBtn"
-            android:visibility="gone"
-            android:src="@drawable/ic_movies"
-            android:tint="@drawable/tint_selector"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            android:layout_gravity="left|center"
-            android:background="@null"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+        android:id="@+id/headerViewAllMoviesBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|center"
+        android:background="@null"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:src="@drawable/ic_movies"
+        android:tint="@drawable/tint_selector"
+        android:visibility="gone" />
 
     <ImageButton
-            android:id="@+id/headerViewRatedMoviesBtn"
-            android:visibility="gone"
-            android:src="@drawable/ic_rated_movies"
-            android:tint="@drawable/tint_selector"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            android:layout_gravity="right|center"
-            android:background="@null"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
-
+        android:id="@+id/headerViewRatedMoviesBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="right|center"
+        android:background="@null"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:src="@drawable/ic_rated_movies"
+        android:tint="@drawable/tint_selector"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/headerViewSearchBtn"
-        android:visibility="gone"
-        android:src="@drawable/ic_search_black_24dp"
-        tools:visibility="visible"
-        android:tint="@drawable/tint_selector"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="right|center"
         android:background="@null"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:src="@drawable/ic_search_black_24dp"
+        android:tint="@drawable/tint_selector"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <com.ferfalk.simplesearchview.SimpleSearchView
+        android:id="@+id/headerViewSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right|center"
+        app:backIconTint="@color/dark_blue"
+        app:cursorColor="@color/dark_red"
+        app:hintColor="@color/dark_red"
+        app:iconsTint="@color/dark_red"
+        app:type="card"
+        app:voiceSearch="true"
+        app:voiceSearchPrompt="Please try" />
 
 </merge>

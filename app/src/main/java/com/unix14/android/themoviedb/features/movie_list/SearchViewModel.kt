@@ -1,4 +1,4 @@
-package com.unix14.android.themoviedb.features.search
+package com.unix14.android.themoviedb.features.movie_list
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SearchDialogViewModel(var apiService: ApiService) : ViewModel() {
+class SearchViewModel(var apiService: ApiService) : ViewModel() {
 
     enum class ErrorEvent{
         NO_ERROR,
@@ -26,7 +26,7 @@ class SearchDialogViewModel(var apiService: ApiService) : ViewModel() {
     private var lastMovieListResponse : MovieListResponse? = null
 
 
-    fun searchMovie(query: String) {
+    fun searchMovie(query: String?) {
         progressData.startProgress()
 
         apiService.searchMovie(query).enqueue(object : Callback<MovieListResponse>{
@@ -55,7 +55,7 @@ class SearchDialogViewModel(var apiService: ApiService) : ViewModel() {
         })
     }
 
-    fun getMoreResults(query: String, page: Int) {
+    fun getMoreResults(query: String?, page: Int) {
         if (page <= 1 || page > lastMovieListResponse!!.totalPages) {
             //we check to see if we still in the first page
             // or we asking for a page that don't exist

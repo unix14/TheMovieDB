@@ -23,11 +23,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 const val LIST_TYPE_KEY = "list_type_key"
+const val SEARCH_QUERY = "search_query"
 
 class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener {
 
     interface MovieListFragmentListener {
         fun onMovieClick(movie: Movie)
+        fun onSearchFailed()
     }
 
     companion object {
@@ -38,10 +40,11 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
          * @return A new instance of fragment MovieDetailsFragment.
          */
         @JvmStatic
-        fun newInstance(listType: Int) =
+        fun newInstance(listType: Int, query: String?) =
             MovieListFragment().apply {
                 arguments = Bundle().apply {
                     putInt(LIST_TYPE_KEY, listType)
+                    putString(SEARCH_QUERY, query)
                 }
             }
     }
@@ -55,14 +58,17 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     val mostRatedViewModel by viewModel<MostRatedMoviesViewModel>()
     val upcomingViewModel by viewModel<UpComingMoviesViewModel>()
     val popularViewModel by viewModel<PopularMoviesViewModel>()
+    val searchViewModel by viewModel<SearchViewModel>()
 
     private var listType: Int = Constants.MOVIE_LIST_ALL_MOVIES_TYPE
+    private var query: String? = null
     private lateinit var infiniteRecyclerViewScrollListener: InfiniteRecyclerViewScrollListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             listType = it.getInt(LIST_TYPE_KEY)
+            query = it.getString(SEARCH_QUERY)
         }
     }
 
@@ -120,6 +126,9 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
             }
             Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE -> {
                 popularViewModel.getPopularMoviesList()
+            }
+            Constants.SEARCH_MOVIES_TYPE -> {
+                searchViewModel.searchMovie(query)
             }
         }
     }
@@ -195,6 +204,14 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
                 movieList -> handleFeedList(movieList) })
         popularViewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
             infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
+
+        //Search ViewModel
+        searchViewModel.progressData.observe(viewLifecycleOwner, Observer {
+                isLoading -> handleProgressBar(isLoading) })
+        searchViewModel.movieListData.observe(viewLifecycleOwner, Observer {
+                movieList -> handleFeedList(movieList) })
+        searchViewModel.paginationStatus.observe(viewLifecycleOwner, Observer {
+            infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
     }
 
     private fun handleProgressBar(isLoading: Boolean?) {
@@ -210,6 +227,12 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
 
             if (it.isEmpty()) {
                 movieListFragNoMoviesText.visibility = View.VISIBLE
+                if (query == null) {
+                    movieListFragNoMoviesText.text = getString(R.string.movie_list_frag_no_rated_movies_yet)
+                } else {
+                    movieListFragNoMoviesText.text = getString(R.string.search_frag_no_results) + " " + query
+                    listener?.onSearchFailed()
+                }
             } else {
                 movieListFragNoMoviesText.visibility = View.GONE
             }
@@ -256,6 +279,9 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
                     Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE ->{
                         popularViewModel.getAdditionalMovies(page)
                     }
+                    Constants.SEARCH_MOVIES_TYPE -> {
+                        searchViewModel.getMoreResults(query,page)
+                    }
                 }
             }
         }
@@ -264,5 +290,9 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     fun setListType(listType: Int) {
         this.listType = listType
         initListByType(listType)
+    }
+
+    fun setQuery(query: String?) {
+        this.query = query
     }
 }

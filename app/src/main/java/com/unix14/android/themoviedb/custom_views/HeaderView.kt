@@ -5,6 +5,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import com.ferfalk.simplesearchview.SimpleSearchView
 import com.unix14.android.themoviedb.R
 import kotlinx.android.synthetic.main.header_view.view.*
 
@@ -16,12 +19,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private fun Int.toPx(): Int = (this * resources.displayMetrics.density).toInt()
 
     var listener: HeaderViewListener? = null
-
     interface HeaderViewListener {
         fun onHeaderRatedMoviesClick() {}
         fun onHeaderAllMoviesClick() {}
         fun onHeaderMenuClick() {}
-        fun onHeaderSearchClick() {}
+        fun onHeaderSearchSubmit(query: String?) {}
     }
 
     init {
@@ -60,6 +62,36 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
 
         initClicks()
+        initSearchBtn()
+    }
+
+    private fun initSearchBtn() {
+        headerViewSearchView.setOnQueryTextListener(object : SimpleSearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                search(query)
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                search(query)
+                return true
+            }
+
+            override fun onQueryTextCleared(): Boolean {
+                headerViewSearchView.closeSearch(true)
+                headerViewTitle.text = "Search..."
+
+                return true
+            }
+        })
+    }
+
+    private fun search(query: String?) {
+        listener?.onHeaderSearchSubmit(query)
+
+        if(!query.isNullOrBlank()){
+            headerViewTitle.text = "Searching '$query'"
+        }
     }
 
     private fun setAllMoviesButtonVisibility(showBtn: Boolean) {
@@ -123,7 +155,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             listener?.onHeaderMenuClick()
         }
         headerViewSearchBtn.setOnClickListener {
-            listener?.onHeaderSearchClick()
+            if(!headerViewSearchView.isSearchOpen){
+                headerViewSearchView.showSearch(true)
+            }else{
+                val query = headerViewSearchView.searchEditText.text.toString()
+                search(query)
+            }
         }
     }
 
@@ -131,5 +168,22 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         headerViewTitle.visibility = View.GONE
         headerViewAllMoviesBtn.visibility = View.GONE
         headerViewRatedMoviesBtn.visibility = View.GONE
+        headerViewSearchBtn.visibility = View.GONE
+    }
+
+    fun openSearchField() {
+        if(!headerViewSearchView.isSearchOpen){
+            headerViewSearchView.showSearch(true)
+        }else{
+            headerViewSearchView.closeSearch(true)
+        }
+    }
+
+    fun onBackPress(): Boolean{
+        return headerViewSearchView.onBackPressed()
+    }
+
+    fun closeSearchField() {
+        headerViewSearchView.closeSearch(true)
     }
 }

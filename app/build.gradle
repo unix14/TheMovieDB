@@ -73,4 +73,7 @@ dependencies {
     //indicator for Trailers ViewPager
     implementation 'me.relex:circleindicator:1.2.2'
 
+
+    //Animation for search Dialog
+    implementation 'com.github.Ferfalk:SimpleSearchView:0.1.4'
 }
