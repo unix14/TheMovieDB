@@ -115,6 +115,10 @@ class SearchDialogFragment : DialogFragment(), TextView.OnEditorActionListener, 
         searchFragEditText.setOnEditorActionListener(this)
         searchFragEditText.addTextChangedListener(this)
 
+        searchFragCloseBtn.setOnClickListener {
+            dismiss()
+        }
+
         //ShowKeyboard
         val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
