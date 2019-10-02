@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
+import com.unix14.android.themoviedb.common.UiUtils
 import com.unix14.android.themoviedb.custom_views.HeaderView
 import com.unix14.android.themoviedb.features.movie_details.MovieDetailsFragment
 import com.unix14.android.themoviedb.features.movie_details.trailers.VideoThumbnailFragment
@@ -23,7 +24,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentListener,
     MovieDetailsFragment.MovieDetailsFragmentListener,
-    HeaderView.HeaderViewListener, VideoThumbnailFragment.VideoThumbnailFragmentListener {
+    HeaderView.HeaderViewListener, VideoThumbnailFragment.VideoThumbnailFragmentListener,
+    SearchDialogFragment.SearchFragmentListener {
 
     private val viewModel by viewModel<MainViewModel>()
 

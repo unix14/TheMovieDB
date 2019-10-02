@@ -1,11 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="140dp"
+    android:layout_height="wrap_content"
     android:background="@color/almost_transparent2"
     android:fitsSystemWindows="true"
     tools:context=".features.search.SearchDialogFragment">
+
+    <View
+        android:id="@+id/searchFragSearchBtn"
+        android:layout_width="75dp"
+        android:layout_height="45dp"
+        android:layout_gravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchFragRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/background_gradient"
+        android:backgroundTint="@color/almost_transparent"
+        android:fadeScrollbars="true"
+        android:fadingEdge="vertical"
+        android:fadingEdgeLength="35dp"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:paddingBottom="45dp"
+        android:requiresFadingEdge="vertical"
+        android:scrollbarSize="9dp"
+        android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
+        android:scrollbars="vertical"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="beforeDescendants"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchFragEditText" />
+
+    <TextView
+        android:id="@+id/searchFragNoMoviesText"
+        style="@style/MovieTitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:gravity="center"
+        android:text="@string/search_frag_no_results"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchFragEditText"
+        tools:visibility="visible" />
+
 
     <EditText
         android:id="@+id/searchFragEditText"
@@ -14,17 +63,26 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
         android:layout_marginTop="-5dp"
-        android:paddingTop="15dp"
-        android:focusable="true"
+        android:layout_marginEnd="15dp"
         android:drawableEnd="@drawable/ic_arrow_forward"
         android:drawableTint="@color/dark_red"
-        android:layout_marginEnd="15dp"
-        android:hint="@string/nav_menu_search" />
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="beforeDescendants"
+        android:focusedByDefault="true"
+        android:hint="@string/nav_menu_search"
+        android:paddingTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/searchFragSearchBtn"
-        android:layout_gravity="end"
-        android:layout_width="75dp"
-        android:layout_height="45dp"/>
+    <ProgressBar
+        android:id="@+id/searchFragPb"
+        style="@style/ProgressBarStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

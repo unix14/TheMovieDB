@@ -34,7 +34,6 @@ class SearchDialogViewModel(var apiService: ApiService) : ViewModel() {
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()
 
-
                 if(response.isSuccessful){
                     lastMovieListResponse = response.body()
 
@@ -56,40 +55,37 @@ class SearchDialogViewModel(var apiService: ApiService) : ViewModel() {
         })
     }
 
-    fun getAdditionalMovies(page: Int) {
-//        if (page <= 1 || page > lastMovieListResponse!!.totalPages) {
-//            //we check to see if we still in the first page
-//            // or we asking for a page that don't exist
-//            // and this way we don't need to make another call
-//            return
-//        }
-//        progressData.startProgress()
-//        apiService.getPopularMovies(page).enqueue(object : Callback<MovieListResponse> {
-//            override fun onResponse(
-//                call: Call<MovieListResponse>,
-//                response: Response<MovieListResponse>
-//            ) {
-//                progressData.endProgress()
-//
-//                if (response.isSuccessful) {
-//                    lastMovieListResponse = response.body()
-//
-//                    lastMovieListResponse?.let {
-//                        val paginatedList =
-//                            movieListData.value!!.plus(it.results) as ArrayList<Movie>
-//                        movieListData.postValue(paginatedList)
-//                        paginationStatus.postValue(it.page < it.totalPages)
-//                        errorEvent.postValue(ErrorEvent.NO_ERROR)
-//                    }
-//                } else {
-//                    errorEvent.postValue(ErrorEvent.FETCH_DATA_ERROR)
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
-//                progressData.endProgress()
-//                errorEvent.postValue(ErrorEvent.CONNECTION_FAILED_ERROR)
-//            }
-//        })
+    fun getMoreResults(query: String, page: Int) {
+        if (page <= 1 || page > lastMovieListResponse!!.totalPages) {
+            //we check to see if we still in the first page
+            // or we asking for a page that don't exist
+            // and this way we don't need to make another call
+            return
+        }
+        progressData.startProgress()
+        apiService.searchMovie(query,page).enqueue(object : Callback<MovieListResponse> {
+            override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
+                progressData.endProgress()
+
+                if (response.isSuccessful) {
+                    lastMovieListResponse = response.body()
+
+                    lastMovieListResponse?.let {
+                        val paginatedList =
+                            movieListData.value!!.plus(it.results) as ArrayList<Movie>
+                        movieListData.postValue(paginatedList)
+                        paginationStatus.postValue(it.page < it.totalPages)
+                        errorEvent.postValue(ErrorEvent.NO_ERROR)
+                    }
+                } else {
+                    errorEvent.postValue(ErrorEvent.FETCH_DATA_ERROR)
+                }
+            }
+
+            override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
+                progressData.endProgress()
+                errorEvent.postValue(ErrorEvent.CONNECTION_FAILED_ERROR)
+            }
+        })
     }
 }
