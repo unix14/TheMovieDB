@@ -23,6 +23,7 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) :
     ListAdapter<Movie, MovieListAdapter.MovieItemViewHolder>(MovieListDiffCallback()) {
 
     private var expandedMovieId: Int = -1
+    private var lastExpandedPosition: Int = -1
 
     interface MovieListAdapterListener {
         fun onMovieClick(movie: Movie)
@@ -88,6 +89,8 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) :
                 movie.id
             }
             notifyItemChanged(position)
+            notifyItemChanged(lastExpandedPosition)
+            lastExpandedPosition = position
         }
     }
 

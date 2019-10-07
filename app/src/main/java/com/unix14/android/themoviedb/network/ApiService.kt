@@ -41,10 +41,19 @@ interface ApiService {
     @POST("movie/{movie_id}/rating")
     fun rateMovieAsGuest(@Path("movie_id") movieId: String, @Query("guest_session_id") guestSessionId: String, @Body rating: MovieRate): Call<MovieRatingResponse>
 
+    //============== get Server config ===========
 
     @GET("configuration/languages")
     fun getLanguagesList(): Call<ArrayList<Language>>
 
     @GET("genre/movie/list")
     fun getGenresList(): Call<GenreRequest>
+
+    //==============Search===========
+
+
+    @GET("search/movie")
+    fun searchMovie(@Query("query") query: String? = "", @Query("page") page: Int? = 1): Call<MovieListResponse>
+
+
 }

@@ -22,7 +22,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentListener,
     MovieDetailsFragment.MovieDetailsFragmentListener,
-    HeaderView.HeaderViewListener, VideoThumbnailFragment.VideoThumbnailFragmentListener {
+    HeaderView.HeaderViewListener, VideoThumbnailFragment.VideoThumbnailFragmentListener{
 
     private val viewModel by viewModel<MainViewModel>()
 
@@ -155,9 +155,29 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         mainActDrawerLayout.openDrawer(mainActDrawer,true)
     }
 
+    private fun onHeaderSearchClick() {
+        mainActListHeaderView.openSearchField()
+    }
+
+    override fun onHeaderSearchSubmit(query: String?) {
+        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
+        if (movieListFrag != null) {
+            movieListFrag.setQuery(query)
+            movieListFrag.setListType(Constants.SEARCH_MOVIES_TYPE)
+            mainActListHeaderView.setTitle(getString(R.string.nav_menu_search))
+        } else {
+            showMovieList(Constants.SEARCH_MOVIES_TYPE,query)
+        }
+    }
+
+    override fun onSearchFailed() {
+        mainActListHeaderView.closeSearchField()
+    }
+
     private fun onPopularMoviesClick() {
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
+            movieListFrag.setQuery(null)
             movieListFrag.setListType(Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE)
             mainActListHeaderView.setTitle(getString(R.string.nav_menu_popular_movies))
         } else {
@@ -168,6 +188,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     private fun onUpcomingMoviesClick() {
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
+            movieListFrag.setQuery(null)
             movieListFrag.setListType(Constants.MOVIE_LIST_UPCOMING_MOVIES_TYPE)
             mainActListHeaderView.setTitle(getString(R.string.nav_menu_upcoming_movies))
         } else {
@@ -178,6 +199,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     private fun onMostRatedMoviesClick() {
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
+            movieListFrag.setQuery(null)
             movieListFrag.setListType(Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE)
             mainActListHeaderView.setTitle(getString(R.string.nav_menu_most_rated_movies))
         } else {
@@ -188,6 +210,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     private fun onAllMoviesClick() {
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
+            movieListFrag.setQuery(null)
             movieListFrag.setListType(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
             mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
         } else {
@@ -198,6 +221,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     private fun onRatedMoviesClick() {
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
+            movieListFrag.setQuery(null)
             movieListFrag.setListType(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
             mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
         } else {
@@ -205,11 +229,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         }
     }
 
-    override fun onHeaderSearchClick() {
-        Toast.makeText(this, "Search", Toast.LENGTH_LONG).show()
-    }
-
-    private fun showMovieList(listType: Int) {
+    private fun showMovieList(listType: Int,query: String? = null) {
         when(listType){
             Constants.MOVIE_LIST_ALL_MOVIES_TYPE -> {
                 mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
@@ -218,7 +238,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
                 mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
             }
         }
-        showFragment(MovieListFragment.newInstance(listType), Constants.MOVIE_LIST_FRAGMENT)
+        showFragment(MovieListFragment.newInstance(listType,query), Constants.MOVIE_LIST_FRAGMENT)
     }
 
     private fun showMovieDetails(movie: Movie) {
@@ -283,6 +303,8 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     override fun onBackPressed() {
         if(mainActDrawerLayout.isDrawerOpen(mainActDrawer)){
             mainActDrawerLayout.closeDrawers()
+        }else if(mainActListHeaderView.onBackPress()){
+            mainActListHeaderView.closeSearchField()
         }else{
             //TODO:: add exit dialog
             super.onBackPressed()

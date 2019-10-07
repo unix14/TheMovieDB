@@ -4,6 +4,7 @@ class Constants{
     companion object{
         const val MOVIE_LIST_FRAGMENT = "movie_list_fragment"
         const val MOVIE_DETAILS_FRAGMENT = "movie_details_fragment"
+        const val SEARCH_DIALOG_FRAGMENT = "search_dialog_fragment"
 
         const val SMALL_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/"
         const val BIG_POSTER_BASE_URL = "http://image.tmdb.org/t/p/original"
@@ -22,6 +23,7 @@ class Constants{
         const val MOVIE_LIST_MOST_RATED_MOVIES_TYPE = 3
         const val MOVIE_LIST_UPCOMING_MOVIES_TYPE = 4
         const val MOVIE_LIST_POPULAR_MOVIES_TYPE = 5
+        const val SEARCH_MOVIES_TYPE = 6
 
         const val DEFAULT_ALPHA_DURATION_IN_MS = 1500L
         const val FASTER_ALPHA_DURATION_IN_MS = 800L
