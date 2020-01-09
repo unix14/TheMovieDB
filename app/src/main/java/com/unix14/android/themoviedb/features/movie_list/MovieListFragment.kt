@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.common.InfiniteRecyclerViewScrollListener
+import com.unix14.android.themoviedb.common.KeyboardUtil
 import com.unix14.android.themoviedb.models.Movie
 import kotlinx.android.synthetic.main.movie_list_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -137,6 +138,10 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
         movieListFragScrollToTopButton.setOnClickListener {
             movieListFragRecycler.smoothScrollToPosition(0)
         }
+
+        Handler().postDelayed({
+            movieListFragScrollToTopButton.hide()
+        },150)
 
         movieListFragRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -280,7 +285,11 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
                         popularViewModel.getAdditionalMovies(page)
                     }
                     Constants.SEARCH_MOVIES_TYPE -> {
-                        searchViewModel.getMoreResults(query,page)
+                        query?.let{
+                            if(it.isNotEmpty()){
+                                searchViewModel.getMoreResults(query,page)
+                            }
+                        }
                     }
                 }
             }

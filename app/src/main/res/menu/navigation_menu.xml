@@ -8,8 +8,8 @@
             android:id="@+id/searchAMovie"
             android:icon="@drawable/ic_search_black_24dp"
             android:title="@string/nav_menu_search" />
-
     </group>
+
 
     <group
         android:id="@+id/menu_actions"

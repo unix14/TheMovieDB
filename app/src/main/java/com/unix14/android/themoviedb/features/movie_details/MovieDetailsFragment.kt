@@ -223,30 +223,32 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
     }
 
     private fun handleMovieDetails(movieDetails: Movie?) {
-        movieDetails?.let {
+        movieDetails?.let {movieDetailsItem ->
             //Set Movie Details
-            movieDetailsFragName.text = it.name
-            movieDetailsFragDescription.text = it.overview
-            movieDetailsFragYear.text = DateUtils.getYear(it.realeseDate)
-            movieDetailsFragVotes.text = it.voteCount.toString()
-            movieDetailsFragPopularity.text = ceil(it.popularity.toDouble()).roundToInt().toString() + "%"
-            movieDetailsFragPublicRatingBar.rating = it.voteAvg % 5
+            movieDetailsFragName.text = movieDetailsItem.name
+            movieDetailsFragDescription.text = movieDetailsItem.overview
+            movieDetailsFragYear.text = DateUtils.getYear(movieDetailsItem.realeseDate)
+            movieDetailsFragVotes.text = movieDetailsItem.voteCount.toString()
+            movieDetailsFragPopularity.text = ceil(movieDetailsItem.popularity.toDouble()).roundToInt().toString() + "%"
+            movieDetailsFragPublicRatingBar.rating = movieDetailsItem.voteAvg % 5
 
             //setClicks
             movieDetailsFragWebsiteLink.setOnClickListener {
                 listener?.openIMDBWebsite(movieDetails.imdbId)
             }
 
-            if (it.adult) {
+            if (movieDetailsItem.adult) {
                 movieDetailsFragAdultFilm.visibility = View.VISIBLE
             } else {
                 movieDetailsFragAdultFilm.visibility = View.GONE
             }
 
-            Glide.with(context)
-                .load(Constants.BIG_POSTER_BASE_URL + it.image)
-                .apply(RequestOptions().transform(RoundedCorners(Constants.POSTER_ROUNDED_CORNERS_RADIUS)))
-                .into(movieDetailsFragImage)
+            context?.let{
+                Glide.with(it)
+                    .load(Constants.BIG_POSTER_BASE_URL + movieDetailsItem.image)
+                    .apply(RequestOptions().transform(RoundedCorners(Constants.POSTER_ROUNDED_CORNERS_RADIUS)))
+                    .into(movieDetailsFragImage)
+            }
 
             movieDetailsFragShareBtn.setOnClickListener {
                 listener?.shareMovie(movieDetails)

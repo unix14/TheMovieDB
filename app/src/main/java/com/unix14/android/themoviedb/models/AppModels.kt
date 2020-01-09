@@ -33,7 +33,7 @@ class Movie : Serializable {
     @SerializedName("vote_average")
     var voteAvg: Float = 0.0f
     @SerializedName("adult")
-    val adult: Boolean = false
+    var adult: Boolean = false
     @SerializedName("rating")
     var rating: Float = 0.0f
 

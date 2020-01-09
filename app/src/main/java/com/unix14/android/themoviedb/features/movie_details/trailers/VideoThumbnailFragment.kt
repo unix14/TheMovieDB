@@ -46,7 +46,9 @@ class VideoThumbnailFragment : Fragment() {
     private fun initThumbnail() {
         video?.let { vid ->
             val videoThumbnailUrl = Constants.YOUTUBE_IMAGE_BASE_URL + vid.key + Constants.YOUTUBE_IMAGE_BASE_URL_SUFFIX
-            Glide.with(context).load(videoThumbnailUrl).into(videoItemThumbnail)
+            context?.let{
+                Glide.with(it).load(videoThumbnailUrl).into(videoItemThumbnail)
+            }
 
             videoItemType.visibility = View.VISIBLE
             videoItemType.text = vid.type
@@ -55,8 +57,10 @@ class VideoThumbnailFragment : Fragment() {
                 listener?.onVideoIdClick(vid.key)
             }
         }
-        thumbnail?.let {
-            Glide.with(context).load(it).into(videoItemThumbnail)
+        thumbnail?.let { thumbStr ->
+            context?.let{
+                Glide.with(it).load(thumbStr).into(videoItemThumbnail)
+            }
             videoItemType.visibility = View.GONE
         }
     }

@@ -24,6 +24,7 @@
             style="@style/SplashTitleStyle"
             android:layout_margin="15dp"
             android:layout_gravity="center"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -31,7 +32,7 @@
             android:id="@+id/splashActPb"
             tools:visibility="visible"
             android:layout_marginBottom="15dp"
-            style="@style/ProgressBarStyle" />
+            style="@style/SplashProgressBarStyle" />
 
     </LinearLayout>
 

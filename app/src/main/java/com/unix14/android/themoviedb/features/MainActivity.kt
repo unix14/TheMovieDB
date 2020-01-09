@@ -9,8 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.emmanuelkehinde.shutdown.Shutdown
 import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
+import com.unix14.android.themoviedb.common.KeyboardUtil
 import com.unix14.android.themoviedb.custom_views.HeaderView
 import com.unix14.android.themoviedb.features.movie_details.MovieDetailsFragment
 import com.unix14.android.themoviedb.features.movie_details.trailers.VideoThumbnailFragment
@@ -265,6 +267,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
 
     override fun onMovieClick(movie: Movie) {
         val movieWithData = viewModel.getMovieAdditionalData(movie)
+        KeyboardUtil.hideKeyboard(this)
         showMovieDetails(movieWithData)
     }
 
@@ -301,13 +304,10 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     override fun onBackPressed() {
-        if(mainActDrawerLayout.isDrawerOpen(mainActDrawer)){
-            mainActDrawerLayout.closeDrawers()
-        }else if(mainActListHeaderView.onBackPress()){
-            mainActListHeaderView.closeSearchField()
-        }else{
-            //TODO:: add exit dialog
-            super.onBackPressed()
+        when {
+            mainActDrawerLayout.isDrawerOpen(mainActDrawer) -> mainActDrawerLayout.closeDrawers()
+            mainActListHeaderView.onBackPress() -> mainActListHeaderView.closeSearchField()
+            else -> Shutdown.now(this)
         }
     }
 }
