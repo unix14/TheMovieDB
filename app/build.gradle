@@ -1,25 +1,21 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.unix14.android.themoviedb"
         minSdkVersion 24
-        targetSdkVersion 28
-        versionCode 3
-        versionName "2.0.1a"
+        targetSdkVersion 29
+        versionCode 4
+        versionName "2.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -73,7 +69,6 @@ dependencies {
 
     //indicator for Trailers ViewPager
     implementation 'me.relex:circleindicator:1.2.2'
-
 
     //Animation for search Dialog
     implementation 'com.github.Ferfalk:SimpleSearchView:0.1.4'
