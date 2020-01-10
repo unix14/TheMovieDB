@@ -33,7 +33,7 @@ class AutoScrollableTextView : TextView {
         setHorizontallyScrolling(true)
     }
 
-    override fun onFocusChanged(focused: Boolean, direction: Int, previouslyFocusedRect: Rect) {
+    override fun onFocusChanged(focused: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
         if (focused)
             super.onFocusChanged(focused, direction, previouslyFocusedRect)
     }

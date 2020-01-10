@@ -24,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentListener,
     MovieDetailsFragment.MovieDetailsFragmentListener,
-    HeaderView.HeaderViewListener, VideoThumbnailFragment.VideoThumbnailFragmentListener{
+    HeaderView.HeaderViewListener, VideoThumbnailFragment.VideoThumbnailFragmentListener {
 
     private val viewModel by viewModel<MainViewModel>()
 
@@ -37,12 +37,11 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     private fun setupViewModel() {
-        viewModel.navigationEvent.observe(this, Observer {
-                navigationEvent -> handleNavigationEvent(navigationEvent) })
-        viewModel.errorEvent.observe(this, Observer {
-                errorEvent -> handleErrorEvent(errorEvent) })
-        viewModel.progressData.observe(this, Observer {
-                isLoading -> handleProgressBar(isLoading) })
+        viewModel.navigationEvent.observe(
+            this,
+            Observer { navigationEvent -> handleNavigationEvent(navigationEvent) })
+        viewModel.errorEvent.observe(this, Observer { errorEvent -> handleErrorEvent(errorEvent) })
+        viewModel.progressData.observe(this, Observer { isLoading -> handleProgressBar(isLoading) })
     }
 
     private fun handleProgressBar(isLoading: Boolean?) {
@@ -59,15 +58,28 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         errorEvent?.let {
             when (it) {
                 MainViewModel.ErrorEvent.AUTH_FAILED_ERROR -> {
-                    Toast.makeText(this, "Authentication with server failed, Please try again", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Authentication with server failed, Please try again",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 MainViewModel.ErrorEvent.CONNECTION_FAILED_ERROR -> {
-                    Toast.makeText(this, "Connection with server failed, Please try again", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Connection with server failed, Please try again",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 MainViewModel.ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR -> {
-                    Toast.makeText(this,"Fetching rated movies list from server has failed, Please try again",Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Fetching rated movies list from server has failed, Please try again",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-                MainViewModel.ErrorEvent.NO_ERROR -> { }
+                MainViewModel.ErrorEvent.NO_ERROR -> {
+                }
             }
         }
     }
@@ -138,7 +150,8 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     private fun shareThisApp() {
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain"
-        val shareBody = getString(R.string.nav_menu_share_this_app_text) + Constants.GOOGLE_STORE_BASE_URL + applicationContext.packageName
+        val shareBody =
+            getString(R.string.nav_menu_share_this_app_text) + Constants.GOOGLE_STORE_BASE_URL + applicationContext.packageName
         sharingIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
         sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
         startActivity(Intent.createChooser(sharingIntent, "Share via"))
@@ -147,14 +160,15 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     override fun shareMovie(movie: Movie) {
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain"
-        val shareBody = getString(R.string.movie_details_frag_share_movie_text) + Constants.IMDB_BASE_URL + movie.imdbId
+        val shareBody =
+            getString(R.string.movie_details_frag_share_movie_text) + Constants.IMDB_BASE_URL + movie.imdbId
         sharingIntent.putExtra(Intent.EXTRA_SUBJECT, movie.name)
         sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
         startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
 
     override fun onHeaderMenuClick() {
-        mainActDrawerLayout.openDrawer(mainActDrawer,true)
+        mainActDrawerLayout.openDrawer(mainActDrawer, true)
     }
 
     private fun onHeaderSearchClick() {
@@ -162,89 +176,84 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     override fun onHeaderSearchSubmit(query: String?) {
-        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
-        if (movieListFrag != null) {
-            movieListFrag.setQuery(query)
-            movieListFrag.setListType(Constants.SEARCH_MOVIES_TYPE)
-            mainActListHeaderView.setTitle(getString(R.string.nav_menu_search))
-        } else {
-            showMovieList(Constants.SEARCH_MOVIES_TYPE,query)
+        if(!query.isNullOrEmpty()){
+            showMovieListByType(Constants.SEARCH_MOVIES_TYPE)
+            val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
+            movieListFrag?.setQuery(query)
         }
+    }
+
+    override fun onOpenKeyboard() {
+        KeyboardUtil.openKeyboard(this)
     }
 
     override fun onSearchFailed() {
         mainActListHeaderView.closeSearchField()
+        KeyboardUtil.hideKeyboard(this)
     }
 
     private fun onPopularMoviesClick() {
-        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
-        if (movieListFrag != null) {
-            movieListFrag.setQuery(null)
-            movieListFrag.setListType(Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE)
-            mainActListHeaderView.setTitle(getString(R.string.nav_menu_popular_movies))
-        } else {
-            showMovieList(Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE)
-        }
+        showMovieListByType(Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE)
     }
 
     private fun onUpcomingMoviesClick() {
-        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
-        if (movieListFrag != null) {
-            movieListFrag.setQuery(null)
-            movieListFrag.setListType(Constants.MOVIE_LIST_UPCOMING_MOVIES_TYPE)
-            mainActListHeaderView.setTitle(getString(R.string.nav_menu_upcoming_movies))
-        } else {
-            showMovieList(Constants.MOVIE_LIST_UPCOMING_MOVIES_TYPE)
-        }
+        showMovieListByType(Constants.MOVIE_LIST_UPCOMING_MOVIES_TYPE)
     }
 
     private fun onMostRatedMoviesClick() {
-        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
-        if (movieListFrag != null) {
-            movieListFrag.setQuery(null)
-            movieListFrag.setListType(Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE)
-            mainActListHeaderView.setTitle(getString(R.string.nav_menu_most_rated_movies))
-        } else {
-            showMovieList(Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE)
-        }
+        showMovieListByType(Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE)
     }
 
     private fun onAllMoviesClick() {
-        val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
-        if (movieListFrag != null) {
-            movieListFrag.setQuery(null)
-            movieListFrag.setListType(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
-            mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
-        } else {
-            showMovieList(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
-        }
+        showMovieListByType(Constants.MOVIE_LIST_ALL_MOVIES_TYPE)
     }
 
     private fun onRatedMoviesClick() {
+        showMovieListByType(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
+    }
+
+    private fun showMovieListByType(listType: Int) {
         val movieListFrag = getFragmentByTag(Constants.MOVIE_LIST_FRAGMENT) as MovieListFragment?
         if (movieListFrag != null) {
-            movieListFrag.setQuery(null)
-            movieListFrag.setListType(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
-            mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
+//            movieListFrag.setQuery(null)
+            movieListFrag.setListType(listType)
+            setHeaderViewTitle(listType)
         } else {
-            showMovieList(Constants.MOVIE_LIST_RATED_MOVIES_TYPE)
+            showMovieList(listType)
         }
     }
 
-    private fun showMovieList(listType: Int,query: String? = null) {
-        when(listType){
+    private fun showMovieList(listType: Int, query: String? = null) {
+        setHeaderViewTitle(listType)
+        showFragment(MovieListFragment.newInstance(listType, query), Constants.MOVIE_LIST_FRAGMENT)
+    }
+
+    private fun setHeaderViewTitle(listType: Int){
+        when (listType) {
             Constants.MOVIE_LIST_ALL_MOVIES_TYPE -> {
                 mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
             }
             Constants.MOVIE_LIST_RATED_MOVIES_TYPE -> {
                 mainActListHeaderView.setTitle(getString(R.string.header_view_rated_movies_title))
             }
+            Constants.MOVIE_LIST_MOST_RATED_MOVIES_TYPE -> {
+                mainActListHeaderView.setTitle(getString(R.string.nav_menu_most_rated_movies))
+            }
+            Constants.MOVIE_LIST_UPCOMING_MOVIES_TYPE -> {
+                mainActListHeaderView.setTitle(getString(R.string.nav_menu_upcoming_movies))
+            }
+            Constants.MOVIE_LIST_POPULAR_MOVIES_TYPE -> {
+                mainActListHeaderView.setTitle(getString(R.string.nav_menu_popular_movies))
+            }
+            Constants.SEARCH_MOVIES_TYPE -> {
+                mainActListHeaderView.setTitle(getString(R.string.nav_menu_search))
+            }
         }
-        showFragment(MovieListFragment.newInstance(listType,query), Constants.MOVIE_LIST_FRAGMENT)
     }
 
     private fun showMovieDetails(movie: Movie) {
-        MovieDetailsFragment.newInstance(movie).show(supportFragmentManager, Constants.MOVIE_DETAILS_FRAGMENT)
+        MovieDetailsFragment.newInstance(movie)
+            .show(supportFragmentManager, Constants.MOVIE_DETAILS_FRAGMENT)
     }
 
     private fun showFragment(fragment: Fragment, tag: String) {
@@ -263,6 +272,11 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
                 return fragment
         }
         return null
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        mainActListHeaderView.setVoiceQueryData(requestCode, resultCode, data)
     }
 
     override fun onMovieClick(movie: Movie) {

@@ -1,6 +1,7 @@
 package com.unix14.android.themoviedb.features.movie_list
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -129,7 +130,9 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
                 popularViewModel.getPopularMoviesList()
             }
             Constants.SEARCH_MOVIES_TYPE -> {
-                searchViewModel.searchMovie(query)
+                if(!query.isNullOrEmpty()){
+                    searchViewModel.searchMovie(query)
+                }
             }
         }
     }
@@ -152,12 +155,14 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
             }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    Handler().postDelayed({
+                if(movieListFragScrollToTopButton != null){
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        Handler().postDelayed({
                             movieListFragScrollToTopButton.show()
                         },2000)
+                    }
+                    super.onScrollStateChanged(recyclerView, newState)
                 }
-                super.onScrollStateChanged(recyclerView, newState)
             }
         })
     }

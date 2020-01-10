@@ -1,6 +1,7 @@
 package com.unix14.android.themoviedb.custom_views
 
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -8,24 +9,27 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.ferfalk.simplesearchview.SimpleSearchView
 import com.unix14.android.themoviedb.R
+import com.unix14.android.themoviedb.common.KeyboardUtil
 import kotlinx.android.synthetic.main.header_view.view.*
 
 private const val LAYOUT_HEIGHT_SIZE_IN_DP = 50
+
 class HeaderView @JvmOverloads
-constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr), TextView.OnEditorActionListener {
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    FrameLayout(context, attrs, defStyleAttr), TextView.OnEditorActionListener {
 
     private fun Int.toPx(): Int = (this * resources.displayMetrics.density).toInt()
 
     var listener: HeaderViewListener? = null
+
     interface HeaderViewListener {
         fun onHeaderRatedMoviesClick() {}
         fun onHeaderAllMoviesClick() {}
         fun onHeaderMenuClick() {}
         fun onHeaderSearchSubmit(query: String?) {}
+        fun onOpenKeyboard()
     }
 
     init {
@@ -59,18 +63,17 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val showButton = attrArray.getBoolean(R.styleable.HeaderView_showSearchButton, true)
                 setSearchButtonVisibility(showButton)
             }
-
             attrArray.recycle()
         }
-
         initClicks()
         initSearchBtn()
     }
 
     private fun initSearchBtn() {
+        headerViewSearchView.setKeepQuery(true)
         headerViewSearchView.searchEditText.setOnEditorActionListener(this)
         headerViewSearchView.searchEditText.imeOptions = EditorInfo.IME_ACTION_SEARCH
-        headerViewSearchView.setOnQueryTextListener(object : SimpleSearchView.OnQueryTextListener{
+        headerViewSearchView.setOnQueryTextListener(object : SimpleSearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 search(query)
                 return true
@@ -78,11 +81,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
             override fun onQueryTextChange(query: String?): Boolean {
                 search(query)
+//                headerViewSearchView.searchEditText.setSelection(headerViewSearchView.searchEditText.length())
                 return true
             }
 
             override fun onQueryTextCleared(): Boolean {
-                headerViewSearchView.closeSearch(true)
+//                headerViewSearchView.closeSearch(true)
+                listener?.onOpenKeyboard()
                 headerViewTitle.text = "Search..."
 
                 return true
@@ -91,8 +96,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     override fun onEditorAction(tv: TextView?, actionId: Int, keyEvent: KeyEvent?): Boolean {
-        if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
-            tv?.let{
+        if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_SEND) {
+            tv?.let {
                 search(it.text.toString())
             }
             headerViewSearchView.closeSearch(true)
@@ -104,7 +109,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private fun search(query: String?) {
         listener?.onHeaderSearchSubmit(query)
 
-        if(!query.isNullOrBlank()){
+        if (!query.isNullOrBlank()) {
             headerViewTitle.text = "Searching '$query'"
         }
     }
@@ -170,9 +175,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             listener?.onHeaderMenuClick()
         }
         headerViewSearchBtn.setOnClickListener {
-            if(!headerViewSearchView.isSearchOpen){
+            if (!headerViewSearchView.isSearchOpen) {
                 headerViewSearchView.showSearch(true)
-            }else{
+            } else {
                 val query = headerViewSearchView.searchEditText.text.toString()
                 search(query)
             }
@@ -187,18 +192,22 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun openSearchField() {
-        if(!headerViewSearchView.isSearchOpen){
+        if (!headerViewSearchView.isSearchOpen) {
             headerViewSearchView.showSearch(true)
-        }else{
+        } else {
             headerViewSearchView.closeSearch(true)
         }
     }
 
-    fun onBackPress(): Boolean{
+    fun onBackPress(): Boolean {
         return headerViewSearchView.onBackPressed()
     }
 
     fun closeSearchField() {
         headerViewSearchView.closeSearch(true)
+    }
+
+    fun setVoiceQueryData(requestCode: Int, resultCode: Int, data: Intent?) {
+        headerViewSearchView.onActivityResult(requestCode, resultCode, data)
     }
 }

@@ -53,7 +53,7 @@ interface ApiService {
 
 
     @GET("search/movie")
-    fun searchMovie(@Query("query") query: String? = "", @Query("page") page: Int? = 1): Call<MovieListResponse>
+    fun searchMovie(@Query("query") query: String? = "", @Query("page") page: Int? = 1, @Query("include_adult") boolean: Boolean = true): Call<MovieListResponse>
 
 
 }

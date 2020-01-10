@@ -168,7 +168,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:visibility="gone"
-                            tools:text="@string/movie_details_frag_adult_film" />
+                            tools:visibility="visible"
+                            android:text="@string/movie_details_frag_adult_film" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -318,7 +319,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/movieDetailsFragWebsiteLink"
+                    android:id="@+id/movieListItemReadMore"
                     style="@style/HyperLinkStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

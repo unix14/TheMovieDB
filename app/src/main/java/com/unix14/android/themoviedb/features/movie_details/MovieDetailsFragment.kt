@@ -233,7 +233,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
             movieDetailsFragPublicRatingBar.rating = movieDetailsItem.voteAvg % 5
 
             //setClicks
-            movieDetailsFragWebsiteLink.setOnClickListener {
+            movieListItemReadMore.setOnClickListener {
                 listener?.openIMDBWebsite(movieDetails.imdbId)
             }
 

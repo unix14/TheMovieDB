@@ -34,7 +34,7 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) :
         var name: TextView = view.movieListItemName
         var description: TextView = view.movieListItemDescription
         var stars: RatingBar = view.movieListItemRatingBar
-        var readMore: TextView = view.movieDetailsFragWebsiteLink
+        var readMore: TextView = view.movieListItemReadMore
 
         fun bind(movie: Movie, isExpanded : Boolean) {
             Glide.with(itemView.context)
@@ -67,6 +67,8 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) :
                     readMore.visibility = if(description.layout.text.toString() != movie.overview) View.VISIBLE else View.GONE
                 }
                 description.post(toggleMoreButton)
+            } else {
+                readMore.visibility = View.VISIBLE
             }
         }
     }
@@ -82,16 +84,24 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) :
         holder.itemView.setOnClickListener {
             listener.onMovieClick(movie)
         }
-        holder.itemView.movieDetailsFragWebsiteLink.setOnClickListener {
-            expandedMovieId = if(expandedMovieId == movie.id){
-                -1
-            }else{
-                movie.id
-            }
-            notifyItemChanged(position)
-            notifyItemChanged(lastExpandedPosition)
-            lastExpandedPosition = position
+        holder.itemView.setOnLongClickListener {
+            onReadMoreButtonClicked(movie,position)
+            true
         }
+        holder.itemView.movieListItemReadMore.setOnClickListener {
+            onReadMoreButtonClicked(movie,position)
+        }
+    }
+
+    private fun onReadMoreButtonClicked(movie: Movie, position: Int){
+        expandedMovieId = if(expandedMovieId == movie.id){
+            -1
+        }else{
+            movie.id
+        }
+        notifyItemChanged(position)
+        notifyItemChanged(lastExpandedPosition)
+        lastExpandedPosition = position
     }
 
     class MovieListDiffCallback : DiffUtil.ItemCallback<Movie>() {
