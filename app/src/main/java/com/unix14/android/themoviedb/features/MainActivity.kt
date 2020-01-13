@@ -37,11 +37,12 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     private fun setupViewModel() {
-        viewModel.navigationEvent.observe(
-            this,
-            Observer { navigationEvent -> handleNavigationEvent(navigationEvent) })
-        viewModel.errorEvent.observe(this, Observer { errorEvent -> handleErrorEvent(errorEvent) })
-        viewModel.progressData.observe(this, Observer { isLoading -> handleProgressBar(isLoading) })
+        viewModel.navigationEvent.observe(this,Observer {
+                navigationEvent -> handleNavigationEvent(navigationEvent) })
+        viewModel.errorEvent.observe(this, Observer {
+                errorEvent -> handleErrorEvent(errorEvent) })
+        viewModel.progressData.observe(this, Observer {
+                isLoading -> handleProgressBar(isLoading) })
     }
 
     private fun handleProgressBar(isLoading: Boolean?) {
@@ -78,8 +79,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
                         Toast.LENGTH_LONG
                     ).show()
                 }
-                MainViewModel.ErrorEvent.NO_ERROR -> {
-                }
+                MainViewModel.ErrorEvent.NO_ERROR -> { }
             }
         }
     }
@@ -150,8 +150,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     private fun shareThisApp() {
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain"
-        val shareBody =
-            getString(R.string.nav_menu_share_this_app_text) + Constants.GOOGLE_STORE_BASE_URL + applicationContext.packageName
+        val shareBody = getString(R.string.nav_menu_share_this_app_text) + Constants.GOOGLE_STORE_BASE_URL + applicationContext.packageName
         sharingIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
         sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
         startActivity(Intent.createChooser(sharingIntent, "Share via"))
@@ -160,8 +159,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     override fun shareMovie(movie: Movie) {
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain"
-        val shareBody =
-            getString(R.string.movie_details_frag_share_movie_text) + Constants.IMDB_BASE_URL + movie.imdbId
+        val shareBody = getString(R.string.movie_details_frag_share_movie_text) + Constants.IMDB_BASE_URL + movie.imdbId
         sharingIntent.putExtra(Intent.EXTRA_SUBJECT, movie.name)
         sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
         startActivity(Intent.createChooser(sharingIntent, "Share via"))

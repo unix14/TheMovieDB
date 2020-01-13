@@ -50,7 +50,10 @@ class ApiSettings(private val sharedPreferences: SharedPreferences) {
         val movieList: ArrayList<Movie> = ArrayList()
 
         val type = object : TypeToken<List<Movie>>() {}.type
-        movieList.addAll(gson.fromJson<List<Movie>>(jsonPreferences, type))
+        val json = gson.fromJson<List<Movie>>(jsonPreferences, type)
+        if(json != null && json.isNotEmpty()){
+            movieList.addAll(json)
+        }
 
         return movieList
     }
@@ -65,8 +68,10 @@ class ApiSettings(private val sharedPreferences: SharedPreferences) {
         val langList: ArrayList<Language> = ArrayList()
 
         val type = object : TypeToken<List<Language>>() {}.type
-        langList.addAll(gson.fromJson<List<Language>>(jsonPreferences, type))
-
+        val json = gson.fromJson<List<Language>>(jsonPreferences, type)
+        if(json != null && json.isNotEmpty()) {
+            langList.addAll(json)
+        }
         return langList
     }
 

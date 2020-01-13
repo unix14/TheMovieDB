@@ -30,10 +30,10 @@ class DateUtils {
             if(date == null){
                 return ""
             }
-            val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault())
-            val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z", Locale.getDefault())
+            val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US)
+            val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z", Locale.US)
 
-            val fromGmt = getConvertedUtcDate(date)     //TODO :: Remove??
+            val fromGmt = getConvertedUtcDate(date)
 
             var formattedTime = ""
             val expirationDate: Date
@@ -44,7 +44,6 @@ class DateUtils {
             } catch (e: ParseException) {
                 e.printStackTrace()
             }
-
             return formattedTime
         }
 
