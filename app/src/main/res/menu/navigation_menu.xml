@@ -49,5 +49,20 @@
             android:icon="@drawable/ic_share"
             android:title="@string/nav_menu_share_this_app" />
 
+        <item
+            android:id="@+id/rateBtn"
+            android:icon="@drawable/ic_rate"
+            android:title="@string/rate_this_app" />
+
+        <item
+            android:id="@+id/moreCoolAppsBtn"
+            android:icon="@drawable/ic_apps"
+            android:title="@string/more_cool_apps" />
+
+        <item
+            android:id="@+id/tripyCupsBtn"
+            android:icon="@drawable/ic_web"
+            android:title="3P Cups" />
+
     </group>
 </menu>

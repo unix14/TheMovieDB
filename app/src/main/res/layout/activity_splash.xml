@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,50 +8,58 @@
 
     <LinearLayout
         android:id="@+id/splashActLoadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="50dp"
+        android:alpha="0"
         android:background="@drawable/rounded_white_alpha_background"
         android:orientation="vertical"
-        android:layout_gravity="center"
-        android:alpha="0"
-        tools:alpha="1"
-        android:layout_margin="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        tools:alpha="1">
 
 
         <TextView
-            android:text="@string/app_name"
             style="@style/SplashTitleStyle"
-            android:layout_margin="15dp"
-            android:layout_gravity="center"
-            android:gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="15dp"
+            android:gravity="center"
+            android:text="@string/app_name" />
 
         <ProgressBar
             android:id="@+id/splashActPb"
-            tools:visibility="visible"
+            style="@style/SplashProgressBarStyle"
             android:layout_marginBottom="15dp"
-            style="@style/SplashProgressBarStyle" />
+            android:progressTint="@color/dark_red"
+            android:visibility="visible" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:background="@drawable/rounded_white_alpha_background"
-        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="center"
-        android:alpha="0.58"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="25dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:alpha="0.85"
+        android:background="@drawable/rounded_white_alpha_background"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             style="@style/MovieDetailsSubTitleStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Created by Unix14"/>
+            android:text="Created by " />
+
+        <ImageView
+            android:layout_width="86dp"
+            android:layout_height="86dp"
+            android:layout_marginTop="-15dp"
+            android:layout_marginBottom="-15dp"
+            android:src="@drawable/tripcupslogo" />
     </LinearLayout>
 
 </FrameLayout>

@@ -55,6 +55,19 @@
         <item name="android:navigationBarColor">@color/black</item>
     </style>
 
+
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/dark_red</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+
+
+
     <style name="ProgressBarStyle" parent="AppTheme">
         <item name="android:progressTint">@color/dark_red</item>
         <item name="android:visibility">gone</item>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainActDrawerLayout"
@@ -9,20 +10,46 @@
     tools:context=".features.MainActivity">
 
     <FrameLayout
-        android:id="@+id/mainActContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content">
 
-    <com.unix14.android.themoviedb.custom_views.HeaderView
-        android:id="@+id/mainActListHeaderView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:showMenuButton="true"
-        app:showSearchButton="true" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/mainActPb"
-        style="@style/ProgressBarStyle" />
+
+            <com.triPcups.android.themoviedb.custom_views.HeaderView
+                android:id="@+id/mainActListHeaderView"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:showMenuButton="true"
+                app:showSearchButton="true" />
+
+            <FrameLayout
+                android:id="@+id/mainActContainer"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/mainActAdView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                ads:adSize="BANNER"
+                ads:adUnitId="ca-app-pub-7481638286003806/8322965150" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/mainActPb"
+            style="@style/ProgressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:visibility="visible" />
+    </FrameLayout>
+
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/mainActDrawer"

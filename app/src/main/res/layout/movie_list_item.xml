@@ -34,7 +34,7 @@
         android:paddingEnd="10dp"
         android:paddingTop="10dp">
 
-        <com.unix14.android.themoviedb.common.AutoScrollableTextView
+        <com.triPcups.android.themoviedb.common.AutoScrollableTextView
             android:id="@+id/movieListItemName"
             style="@style/MovieTitleStyle"
             android:layout_width="wrap_content"
