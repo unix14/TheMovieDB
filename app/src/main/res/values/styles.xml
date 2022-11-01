@@ -9,9 +9,9 @@
 
 
     <style name="MovieTitleStyle">
-        <item name="android:textSize">19sp</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/dark_red</item>
-        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:fontFamily">sans-serif-condensed-medium</item>
     </style>
 
     <style name="MovieSubTitleStyle">
@@ -21,14 +21,14 @@
     </style>
 
     <style name="MovieDescriptionStyle">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
     <style name="MovieDetailsCategoryStyle">
         <item name="android:textSize">17sp</item>
-        <item name="android:textColor">@color/dark_red</item>
+        <item name="android:textColor">@color/colorAccent</item>
         <item name="android:fontFamily">sans-serif-condensed-medium</item>
     </style>
 
@@ -120,8 +120,7 @@
     <style name="SplashTitleStyle">
         <item name="android:textSize">42sp</item>
         <item name="android:textColor">@color/dark_blue</item>
-        <item name="android:fontFamily">sans-serif-condensed</item>
-        <item name="android:fontStyle">italic</item>
+        <item name="android:fontFamily">sans-serif-condensed-light</item>
     </style>
 
 
@@ -138,16 +137,16 @@
     </style>
 
     <style name="MovieDetailsSubTitleStyle">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/light_blue</item>
         <item name="android:fontFamily">sans-serif-black</item>
         <item name="android:lines">1</item>
     </style>
 
     <style name="MovieShareStyle">
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:fontFamily">sans-serif-condensed-light</item>
     </style>
 
 

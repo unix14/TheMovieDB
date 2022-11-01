@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/theatre_image"
+    android:animateLayoutChanges="true"
     tools:context=".features.splash.SplashActivity">
 
     <LinearLayout
@@ -25,6 +26,7 @@
             android:layout_gravity="center"
             android:layout_margin="15dp"
             android:gravity="center"
+            android:textStyle="bold"
             android:text="@string/app_name" />
 
         <ProgressBar

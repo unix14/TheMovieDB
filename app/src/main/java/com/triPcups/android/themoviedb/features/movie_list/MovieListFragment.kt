@@ -173,6 +173,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     }
 
     private fun setupViewModel() {
+        //todo refactor this stupid shit and feel ashamed of me writing this
         //Now in Cinema VM
         viewModel.progressData.observe(viewLifecycleOwner, Observer {
                 isLoading -> handleProgressBar(isLoading) })

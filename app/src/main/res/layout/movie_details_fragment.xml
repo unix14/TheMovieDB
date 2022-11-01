@@ -51,11 +51,11 @@
                 style="@style/MovieDescriptionStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|top"
+                android:layout_gravity="right|top"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/rounded_white_alpha_background"
-                android:drawableEnd="@drawable/ic_arrow_forward"
+                android:drawableRight="@drawable/ic_arrow_forward"
                 android:drawablePadding="5dp"
                 android:drawableTint="@color/dark_red"
                 android:gravity="center"
@@ -176,18 +176,21 @@
                 <TextView
                     android:id="@+id/movieDetailsFragDescription"
                     style="@style/MovieDescriptionStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:textDirection="firstStrong"
                     android:breakStrategy="high_quality"
-                    tools:text="44444" />
+                    tools:text="לכלכ5410גכע62ג0כ ע2ג0כ3 ע2גד02כ" />
 
-                <TextView
+                <Button
                     android:id="@+id/movieDetailsFragShareBtn"
                     style="@style/MovieShareStyle"
                     android:layout_width="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="8dp"
                     android:drawableStart="@drawable/ic_share"
                     android:drawablePadding="10dp"
                     android:gravity="center"
@@ -216,7 +219,7 @@
                         android:layout_marginEnd="5dp"
                         android:drawableStart="@drawable/ic_language"
                         android:drawablePadding="7dp"
-                        android:drawableTint="@color/dark_blue"
+                        android:drawableTint="@color/light_blue"
                         android:text="@string/movie_details_frag_language" />
 
                     <TextView
@@ -288,6 +291,7 @@
                     style="@style/MovieDetailsCategoryStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
                     android:text="@string/movie_details_frag_rate_this_movie" />
 
@@ -317,6 +321,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
+                <TextView
+                    style="@style/MovieDetailsCategoryStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/links" />
 
                 <TextView
                     android:id="@+id/movieListItemReadMore"

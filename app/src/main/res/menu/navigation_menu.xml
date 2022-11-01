@@ -10,15 +10,11 @@
             android:title="@string/nav_menu_search" />
     </group>
 
+    <item android:title="" />
 
     <group
         android:id="@+id/menu_actions"
         android:checkableBehavior="single">
-
-        <item
-            android:id="@+id/ratedMovies"
-            android:icon="@drawable/ic_favorite"
-            android:title="@string/header_view_rated_movies_title" />
 
         <item
             android:id="@+id/allMovies"
@@ -40,6 +36,15 @@
             android:icon="@drawable/ic_upcoming"
             android:title="@string/nav_menu_popular_movies" />
     </group>
+
+    <item android:title="" />
+
+    <item
+        android:id="@+id/ratedMovies"
+        android:icon="@drawable/ic_favorite"
+        android:title="@string/header_view_rated_movies_title" />
+    <item android:title="" />
+    <item android:title="" />
 
     <group
         android:id="@+id/menu_bottom"
@@ -65,4 +70,7 @@
             android:title="3P Cups" />
 
     </group>
+
+    <item android:title="" />
+
 </menu>

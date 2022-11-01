@@ -17,7 +17,6 @@ import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.gms.ads.MobileAds
 import com.triPcups.android.themoviedb.R
 import com.triPcups.android.themoviedb.common.Constants
 import com.triPcups.android.themoviedb.common.DateUtils
@@ -118,6 +117,9 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
     }
 
     private fun initClicks() {
+        movieDetailsFragNextPage.setOnClickListener {
+            movieDetailsFragViewPager.arrowScroll(View.FOCUS_RIGHT)
+        }
         movieDetailsFragRateBtn.setOnClickListener {
             val enteredRating = movieDetailsFragRatingBar.rating
             if (enteredRating > 0) {

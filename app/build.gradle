@@ -4,14 +4,15 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.truiPcups.android.themoviedb"
         minSdkVersion 24
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 8
         versionName "2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -88,5 +89,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:19.5.0'
     implementation 'com.google.android.play:core:1.8.2'
     implementation 'com.google.android.play:core-ktx:1.8.1'
+
+
+
+    //youtube player
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.23'
 
 }

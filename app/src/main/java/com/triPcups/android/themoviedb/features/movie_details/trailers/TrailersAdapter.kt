@@ -7,7 +7,7 @@ import androidx.viewpager.widget.PagerAdapter
 import com.triPcups.android.themoviedb.models.Video
 
 class TrailersAdapter(fm: FragmentManager, private val thumbnail: String) :
-    FragmentPagerAdapter(fm) {
+    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private var videos: ArrayList<Video> = arrayListOf()
 

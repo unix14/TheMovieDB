@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">חוקר הסרטים</string>
-    <string name="movie_details_frag_search_in"><u>חפשו ב</u></string>
+    <string name="app_name">בואו לסרט</string>
+    <string name="movie_details_frag_search_in"> <u>חפשו ב</u>-</string>
     <string name="movie_details_frag_rate">דירוג!</string>
     <string name="movie_details_frag_rate_this_movie">דרגו את הסרט</string>
     <string name="movie_details_frag_you_rated_movie">דירגת את הסרט הזה</string>
@@ -9,21 +9,27 @@
     <string name="movie_details_frag_language">שפה:</string>
     <string name="header_view_all_movies_title">עכשיו בקולנוע</string>
     <string name="header_view_rated_movies_title">סרטים שדירגתי</string>
-    <string name="movie_details_frag_public_rating">דירוג פומבי:</string>
+    <string name="movie_details_frag_public_rating">דירוג:</string>
     <string name="movie_details_frag_adult_film">סרט למבוגרים</string>
-    <string name="video_item_swipe_for_more">עוד תמונות</string>
-    <string name="movie_list_frag_no_rated_movies_yet">לא דירגתם שום סרט עדיין\nנא דרגו סרטים\nוחזרו מאוחר יותר!</string>
-    <string name="movie_list_frag_read_more"><u>Read More</u></string>
-    <string name="movie_list_frag_read_less"><u>Read Less</u></string>
-    <string name="nav_menu_search">Search..</string>
-    <string name="nav_menu_most_rated_movies">הסרטים הכי מדורגים</string>
-    <string name="nav_menu_upcoming_movies">סרטים שעוד לא יצאו</string>
-    <string name="nav_menu_popular_movies">סרטים פופולאריים</string>
+    <string name="video_item_swipe_for_more">החליקו לעוד</string>
+    <string name="movie_list_frag_no_rated_movies_yet">כאן אנחנו נשמור את\nהסרטים שדירגתם!</string>
+    <string name="movie_list_frag_read_more"><u>עוד</u></string>
+    <string name="movie_list_frag_read_less"><u>פחות</u></string>
+    <string name="nav_menu_search">חיפוש</string>
+    <string name="nav_menu_most_rated_movies">הכי מדורגים</string>
+    <string name="nav_menu_upcoming_movies">סרטים עתידיים</string>
+    <string name="nav_menu_popular_movies">הפופולאריים</string>
     <string name="nav_menu_share_this_app">שתפו את האפליקציה</string>
-    <string name="nav_menu_share_this_app_text">אתה חייב לנסות את האפליקציה המגניבה הזאת\n</string>
+    <string name="nav_menu_share_this_app_text">חובה עלייך לנסות את האפליקציה המגניבה הזאת\n</string>
     <string name="movie_details_frag_share_movie">שתפו את הסרט עם חבר</string>
     <string name="movie_details_frag_share_movie_text">בואו נלך לראות את הסרט הזה\n</string>
     <string name="search_frag_no_results">אין תוצאות עבור</string>
     <string name="rate_this_app">דרגו את האפליקציה</string>
-    <string name="more_cool_apps">עוד אפליקציות מגניבות</string>
+    <string name="more_cool_apps">אפליקציות נוספות</string>
+    <string name="error_connection_failed">שגיאת בהתחברות לשרת</string>
+    <string name="error_auth_fail">שגיאה בהזדהות בשרת</string>
+    <string name="error_fetch_langs_fail">לא יכול לטעון שפות מהשרת</string>
+    <string name="error_fetch_genres_fail">לא יכול לטעון נתונים מהרת</string>
+    <string name="error_fetching_movies_fail">שגיאה במשיכת נתונים</string>
+    <string name="links">קישורים</string>
 </resources>

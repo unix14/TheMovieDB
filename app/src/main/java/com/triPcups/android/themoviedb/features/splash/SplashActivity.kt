@@ -51,17 +51,17 @@ class SplashActivity : AppCompatActivity() {
         errorEvent?.let {
             when (it) {
                 SplashViewModel.ErrorEvent.CONNECTION_FAILED_ERROR -> {
-                    Toast.makeText(this, "Connection to server failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.error_connection_failed), Toast.LENGTH_LONG).show()
                 }
-                SplashViewModel.ErrorEvent.AUTH_FAILED_ERROR -> {
-                    Toast.makeText(this, "Authentication with server failed", Toast.LENGTH_LONG).show()
-                }
-                SplashViewModel.ErrorEvent.FETCH_LANGUAGES_ERROR ->{
-                    Toast.makeText(this, "Couldn't load languages from server", Toast.LENGTH_LONG).show()
-                }
-                SplashViewModel.ErrorEvent.FETCH_GENRES_ERROR -> {
-                    Toast.makeText(this, "Couldn't load genres from server", Toast.LENGTH_LONG).show()
-                }
+//                SplashViewModel.ErrorEvent.AUTH_FAILED_ERROR -> {
+//                    Toast.makeText(this, getString(R.string.error_auth_fail), Toast.LENGTH_LONG).show()
+//                }
+//                SplashViewModel.ErrorEvent.FETCH_LANGUAGES_ERROR ->{
+//                    Toast.makeText(this, getString(R.string.error_fetch_langs_fail), Toast.LENGTH_LONG).show()
+//                }
+//                SplashViewModel.ErrorEvent.FETCH_GENRES_ERROR -> {
+//                    Toast.makeText(this, getString(R.string.error_fetch_genres_fail), Toast.LENGTH_LONG).show()
+//                }
                 SplashViewModel.ErrorEvent.NO_ERROR -> {}
             }
         }

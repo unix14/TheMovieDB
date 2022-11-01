@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:padding="10dp"
-            android:drawableStart="@drawable/ic_arrow_forward_small"
+            android:drawableEnd="@drawable/ic_arrow_forward_small"
             android:drawableTint="@color/dark_red"
             android:gravity="center"
             android:drawablePadding="4dp"

@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="@dimen/view_pager_height"
-             tools:background="@drawable/background_gradient">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/view_pager_height"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:background="@drawable/background_gradient">
+
+
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/youTubePlayerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:layoutDirection="ltr"
+        android:theme="@style/AppTheme"
+        app:autoPlay="false"
+        app:enableAutomaticInitialization="true"
+        app:enableLiveVideoUi="false"
+        app:handleNetworkEvents="true"
+        app:showFullScreenButton="false"
+        app:showSeekBar="false"
+        app:showVideoCurrentTime="false"
+        app:showVideoDuration="false"
+        app:showYouTubeButton="false"
+        app:useWebUi="false" />
+
 
     <ImageView
         android:id="@+id/videoItemThumbnail"

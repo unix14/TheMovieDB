@@ -96,27 +96,27 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     private fun handleErrorEvent(errorEvent: MainViewModel.ErrorEvent?) {
         errorEvent?.let {
             when (it) {
-                MainViewModel.ErrorEvent.AUTH_FAILED_ERROR -> {
-                    Toast.makeText(
-                        this,
-                        "Authentication with server failed, Please try again",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+//                MainViewModel.ErrorEvent.AUTH_FAILED_ERROR -> {
+//                    Toast.makeText(
+//                        this,
+//                        getString(R.string.error_auth_fail),
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                }
                 MainViewModel.ErrorEvent.CONNECTION_FAILED_ERROR -> {
                     Toast.makeText(
                         this,
-                        "Connection with server failed, Please try again",
+                        getString(R.string.error_connection_failed),
                         Toast.LENGTH_LONG
                     ).show()
                 }
-                MainViewModel.ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR -> {
-                    Toast.makeText(
-                        this,
-                        "Fetching rated movies list from server has failed, Please try again",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+//                MainViewModel.ErrorEvent.FETCH_RATED_MOVIE_LIST_ERROR -> {
+//                    Toast.makeText(
+//                        this,
+//                        getString(R.string.error_fetching_movies_fail),
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                }
                 MainViewModel.ErrorEvent.NO_ERROR -> { }
             }
         }

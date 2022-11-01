@@ -20,33 +20,33 @@
         android:id="@+id/headerViewMenuBtn"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="left|center"
+        android:layout_gravity="start|center"
         android:background="@null"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
         android:src="@drawable/ic_menu"
-        android:tint="@drawable/tint_selector"
         android:visibility="gone"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        app:tint="@drawable/tint_selector" />
 
 
     <ImageView
         android:id="@+id/headerViewAllMoviesBtn"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="left|center"
+        android:layout_gravity="start|center"
         android:background="@null"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
         android:src="@drawable/ic_movies"
-        android:tint="@drawable/tint_selector"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:tint="@drawable/tint_selector" />
 
     <ImageButton
         android:id="@+id/headerViewRatedMoviesBtn"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="right|center"
+        android:layout_gravity="end|center"
         android:background="@null"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
@@ -58,7 +58,7 @@
         android:id="@+id/headerViewSearchBtn"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="right|center"
+        android:layout_gravity="end|center"
         android:background="@null"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
@@ -71,11 +71,12 @@
         android:id="@+id/headerViewSearchView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="right|center"
+        android:layout_gravity="end|center"
         app:backIconTint="@color/dark_blue"
         app:cursorColor="@color/dark_red"
         app:hintColor="@color/dark_red"
         app:iconsTint="@color/dark_red"
+        tools:visibility="gone"
         app:type="card"
         app:voiceSearch="true"
         app:voiceSearchPrompt="Please try" />
