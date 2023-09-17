@@ -21,8 +21,8 @@ ext {
     retrofit2_version = "2.5.0"
     retrofit2_converter_gson = "2.5.0"
     retrofit2_kotlin_coroutines_adapter = "0.9.2"
-    okhttp3_version = "3.13.1"
-    okhttp3_logging_interceptor = "3.13.1"
+    okhttp3_version = "4.10.0"
+    okhttp3_logging_interceptor = "4.10.0"
 
 
 }
