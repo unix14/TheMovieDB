@@ -75,7 +75,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         binding = MovieDetailsFragmentBinding.inflate(layoutInflater, container, false)
         dialog?.window?.let {
-            it.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!,R.color.dark_43)))
+            it.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(),R.color.dark_43)))
             it.attributes?.windowAnimations = R.style.FullScreenDialogStyle
         }
         return binding.root
@@ -296,7 +296,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         //if swiped first element
         if (position > 0) {
-            binding.movieDetailsFragNextPage?.let {
+            binding.movieDetailsFragNextPage.let {
                 it.alpha = 1f
                 //Animate fade out
                 it.animate()

@@ -1,5 +1,6 @@
 package com.triPcups.android.themoviedb.features.movie_details.trailers
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -30,6 +31,7 @@ class TrailersAdapter(fm: FragmentManager, private val thumbnail: String) :
     override fun getItemPosition(`object`: Any): Int = PagerAdapter.POSITION_NONE
 
     fun updateList(videos: ArrayList<Video>) {
+        Log.d("wow", "updateList: ${videos.size}")
         this.videos = videos
         notifyDataSetChanged()
     }
