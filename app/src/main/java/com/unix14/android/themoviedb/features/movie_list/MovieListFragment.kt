@@ -1,7 +1,6 @@
 package com.unix14.android.themoviedb.features.movie_list
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -18,9 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.common.InfiniteRecyclerViewScrollListener
-import com.unix14.android.themoviedb.common.KeyboardUtil
+import com.unix14.android.themoviedb.databinding.MovieListFragmentBinding
 import com.unix14.android.themoviedb.models.Movie
-import kotlinx.android.synthetic.main.movie_list_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -52,6 +50,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     }
 
 
+    private lateinit var binding: MovieListFragmentBinding
     private var listener: MovieListFragmentListener? = null
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: MovieListAdapter
@@ -75,7 +74,8 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.movie_list_fragment, container, false)
+        binding = MovieListFragmentBinding.inflate(inflater,  container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -85,11 +85,11 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
         initUi()
     }
 
-    private fun initRecycler() {
+    private fun initRecycler()= with(binding) {
         layoutManager = LinearLayoutManager(context)
         movieListFragRecycler.layoutManager = layoutManager
 
-        adapter = MovieListAdapter(this)
+        adapter = MovieListAdapter(this@MovieListFragment)
 
         infiniteRecyclerViewScrollListener = getInfiniteScrollListener()
         movieListFragRecycler.addOnScrollListener(infiniteRecyclerViewScrollListener)
@@ -137,7 +137,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
         }
     }
 
-    private fun initFloatingActionButton() {
+    private fun initFloatingActionButton()= with(binding) {
         movieListFragScrollToTopButton.setOnClickListener {
             movieListFragRecycler.smoothScrollToPosition(0)
         }
@@ -167,7 +167,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
         })
     }
 
-    private fun initSwipeLayout() {
+    private fun initSwipeLayout() = with(binding){
         movieListFragPullToRefresh.setColorSchemeColors(Color.BLUE, Color.RED, Color.BLACK)
         movieListFragPullToRefresh.setOnRefreshListener {
             initListByType(listType)
@@ -224,13 +224,13 @@ class MovieListFragment : Fragment(), MovieListAdapter.MovieListAdapterListener 
             infiniteRecyclerViewScrollListener.setHaveMoreData(it) })
     }
 
-    private fun handleProgressBar(isLoading: Boolean?) {
+    private fun handleProgressBar(isLoading: Boolean?)= with(binding) {
         isLoading?.let {
             movieListFragPullToRefresh.isRefreshing = it
         }
     }
 
-    private fun handleFeedList(movieList: ArrayList<Movie>?) {
+    private fun handleFeedList(movieList: ArrayList<Movie>?)= with(binding) {
         movieList?.let {
             adapter.submitList(it)
             infiniteRecyclerViewScrollListener.notifyDataLoaded()

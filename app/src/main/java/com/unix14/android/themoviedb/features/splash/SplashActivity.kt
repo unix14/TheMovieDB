@@ -2,32 +2,37 @@ package com.unix14.android.themoviedb.features.splash
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
+import com.unix14.android.themoviedb.databinding.ActivitySplashBinding
 import com.unix14.android.themoviedb.features.MainActivity
-import kotlinx.android.synthetic.main.activity_splash.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivitySplashBinding
     private val viewModel by viewModel<SplashViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        binding = ActivitySplashBinding.inflate(LayoutInflater.from(this))
+        setContentView(binding.root)
 
         setupViewModel()
         initAnimation()
     }
 
-    private fun initAnimation() {
+    private fun initAnimation()= with(binding) {
         splashActLoadingLayout.animate()
             .alpha(1f)
             .setDuration(Constants.DEFAULT_ALPHA_DURATION_IN_MS)
@@ -67,7 +72,7 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleLoading(isLoading: Boolean?) {
+    private fun handleLoading(isLoading: Boolean?) = with(binding){
         isLoading?.let {
             if (it) {
                 splashActPb.visibility = View.VISIBLE

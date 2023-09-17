@@ -14,23 +14,25 @@ import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.common.KeyboardUtil
 import com.unix14.android.themoviedb.custom_views.HeaderView
+import com.unix14.android.themoviedb.databinding.ActivityMainBinding
 import com.unix14.android.themoviedb.features.movie_details.MovieDetailsFragment
 import com.unix14.android.themoviedb.features.movie_details.trailers.VideoThumbnailFragment
 import com.unix14.android.themoviedb.features.movie_list.MovieListFragment
 import com.unix14.android.themoviedb.features.splash.SplashActivity
 import com.unix14.android.themoviedb.models.Movie
-import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentListener,
     MovieDetailsFragment.MovieDetailsFragmentListener,
     HeaderView.HeaderViewListener, VideoThumbnailFragment.VideoThumbnailFragmentListener {
 
+    private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModel<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupViewModel()
         initUi()
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
                 isLoading -> handleProgressBar(isLoading) })
     }
 
-    private fun handleProgressBar(isLoading: Boolean?) {
+    private fun handleProgressBar(isLoading: Boolean?) = with(binding) {
         isLoading?.let {
             if (it) {
                 mainActPb.visibility = View.VISIBLE
@@ -111,13 +113,13 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         }
     }
 
-    private fun initUi() {
-        mainActListHeaderView.listener = this
+    private fun initUi()= with(binding) {
+        mainActListHeaderView.listener = this@MainActivity
         initDrawerMenu()
         viewModel.startMainActivity()
     }
 
-    private fun initDrawerMenu() {
+    private fun initDrawerMenu()= with(binding) {
         mainActDrawer.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.searchAMovie -> {
@@ -166,10 +168,12 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     override fun onHeaderMenuClick() {
-        mainActDrawerLayout.openDrawer(mainActDrawer, true)
+        binding.apply {
+            mainActDrawerLayout.openDrawer(mainActDrawer, true)
+        }
     }
 
-    private fun onHeaderSearchClick() {
+    private fun onHeaderSearchClick() = with(binding){
         mainActListHeaderView.openSearchField()
     }
 
@@ -186,7 +190,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     override fun onSearchFailed() {
-        mainActListHeaderView.closeSearchField()
+        binding.mainActListHeaderView.closeSearchField()
         KeyboardUtil.hideKeyboard(this)
     }
 
@@ -226,7 +230,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         showFragment(MovieListFragment.newInstance(listType, query), Constants.MOVIE_LIST_FRAGMENT)
     }
 
-    private fun setHeaderViewTitle(listType: Int){
+    private fun setHeaderViewTitle(listType: Int)= with(binding){
         when (listType) {
             Constants.MOVIE_LIST_ALL_MOVIES_TYPE -> {
                 mainActListHeaderView.setTitle(getString(R.string.header_view_all_movies_title))
@@ -274,7 +278,7 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        mainActListHeaderView.setVoiceQueryData(requestCode, resultCode, data)
+        binding.mainActListHeaderView.setVoiceQueryData(requestCode, resultCode, data)
     }
 
     override fun onMovieClick(movie: Movie) {
@@ -316,10 +320,12 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     override fun onBackPressed() {
-        when {
-            mainActDrawerLayout.isDrawerOpen(mainActDrawer) -> mainActDrawerLayout.closeDrawers()
-            mainActListHeaderView.onBackPress() -> mainActListHeaderView.closeSearchField()
-            else -> Shutdown.now(this)
+        binding.apply {
+            when {
+                mainActDrawerLayout.isDrawerOpen(mainActDrawer) -> mainActDrawerLayout.closeDrawers()
+                mainActListHeaderView.onBackPress() -> mainActListHeaderView.closeSearchField()
+                else -> Shutdown.now(this@MainActivity)
+            }
         }
     }
 }

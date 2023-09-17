@@ -20,10 +20,10 @@ import com.bumptech.glide.request.RequestOptions
 import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
 import com.unix14.android.themoviedb.common.DateUtils
+import com.unix14.android.themoviedb.databinding.MovieDetailsFragmentBinding
 import com.unix14.android.themoviedb.features.movie_details.trailers.TrailersAdapter
 import com.unix14.android.themoviedb.models.Movie
 import com.unix14.android.themoviedb.models.Video
-import kotlinx.android.synthetic.main.movie_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.ceil
 import kotlin.math.roundToInt
@@ -41,6 +41,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         fun shareMovie(movie: Movie)
     }
 
+    private lateinit var binding: MovieDetailsFragmentBinding
     private var listener: MovieDetailsFragmentListener? = null
     private lateinit var adapter: TrailersAdapter
 
@@ -72,12 +73,12 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
     private val viewModel by viewModel<MovieDetailsViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.movie_details_fragment, container, false)
+        binding = MovieDetailsFragmentBinding.inflate(layoutInflater, container, false)
         dialog?.window?.let {
             it.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!,R.color.dark_43)))
             it.attributes?.windowAnimations = R.style.FullScreenDialogStyle
         }
-        return view
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -89,7 +90,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         initUi()
     }
 
-    private fun initUi() {
+    private fun initUi() = with(binding){
         val movieId = movie.id.toString()
         viewModel.getMovieDetails(movieId)
         viewModel.getVideosForMovie(movieId)
@@ -109,14 +110,14 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         }
     }
 
-    private fun initTrailersList() {
+    private fun initTrailersList() = with(binding){
         val backdropThumbnail = Constants.BIG_POSTER_BASE_URL + movie.backdropPath
         adapter = TrailersAdapter(childFragmentManager, backdropThumbnail)
         movieDetailsFragViewPager.adapter = adapter
-        movieDetailsFragViewPager.addOnPageChangeListener(this)
+        movieDetailsFragViewPager.addOnPageChangeListener(this@MovieDetailsFragment)
     }
 
-    private fun initClicks() {
+    private fun initClicks() = with(binding){
         movieDetailsFragRateBtn.setOnClickListener {
             val enteredRating = movieDetailsFragRatingBar.rating
             if (enteredRating > 0) {
@@ -160,7 +161,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
                 trailerVideos -> handleTrailers(trailerVideos) })
     }
 
-    private fun handleTrailers(trailerVideos: ArrayList<Video>?) {
+    private fun handleTrailers(trailerVideos: ArrayList<Video>?)= with(binding) {
         trailerVideos?.let {
             adapter.updateList(it)
             movieDetailsFragIndicator.setViewPager(movieDetailsFragViewPager)
@@ -181,7 +182,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         }
     }
 
-    private fun handleRatingEvent(ratingEvent: MovieDetailsViewModel.RatingEvent?) {
+    private fun handleRatingEvent(ratingEvent: MovieDetailsViewModel.RatingEvent?)= with(binding) {
         ratingEvent?.let {
             when (it) {
                 MovieDetailsViewModel.RatingEvent.RATING_ERROR -> {
@@ -212,7 +213,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         }
     }
 
-    private fun handleProgressBar(isLoading: Boolean?) {
+    private fun handleProgressBar(isLoading: Boolean?)= with(binding) {
         isLoading?.let {
             if (it) {
                 movieDetailsFragPb.visibility = View.VISIBLE
@@ -222,7 +223,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         }
     }
 
-    private fun handleMovieDetails(movieDetails: Movie?) {
+    private fun handleMovieDetails(movieDetails: Movie?) = with(binding){
         movieDetails?.let {movieDetailsItem ->
             //Set Movie Details
             movieDetailsFragName.text = movieDetailsItem.name
@@ -270,7 +271,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
         listener = null
     }
 
-    private fun setIsRatedLayout(rated: Boolean) {
+    private fun setIsRatedLayout(rated: Boolean) = with(binding){
         if (rated) {
             //disable rating bar clicks and send button
             movieDetailsFragRateBtn.visibility = View.GONE
@@ -292,7 +293,7 @@ class MovieDetailsFragment : DialogFragment(), ViewPager.OnPageChangeListener {
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         //if swiped first element
         if (position > 0) {
-            movieDetailsFragNextPage?.let {
+            binding.movieDetailsFragNextPage?.let {
                 it.alpha = 1f
                 //Animate fade out
                 it.animate()

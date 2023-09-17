@@ -11,8 +11,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.ferfalk.simplesearchview.SimpleSearchView
 import com.unix14.android.themoviedb.R
-import com.unix14.android.themoviedb.common.KeyboardUtil
-import kotlinx.android.synthetic.main.header_view.view.*
+import com.unix14.android.themoviedb.databinding.HeaderViewBinding
 
 private const val LAYOUT_HEIGHT_SIZE_IN_DP = 50
 
@@ -22,6 +21,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun Int.toPx(): Int = (this * resources.displayMetrics.density).toInt()
 
+    private lateinit var binding: HeaderViewBinding
     var listener: HeaderViewListener? = null
 
     interface HeaderViewListener {
@@ -33,14 +33,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.header_view, this, true)
+        binding = HeaderViewBinding.inflate(LayoutInflater.from(context), this)
         hideAll()
 
         attrs?.let {
             val attrArray = context.obtainStyledAttributes(attrs, R.styleable.HeaderView)
             if (attrArray.hasValue(R.styleable.HeaderView_title)) {
                 val title = attrArray.getString(R.styleable.HeaderView_title)
-                headerViewTitle.text = title
+                binding.headerViewTitle.text = title
                 setTitleVisibility(true)
             }
             if (attrArray.hasValue(R.styleable.HeaderView_showAllMoviesButton)) {
@@ -69,9 +69,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         initSearchBtn()
     }
 
-    private fun initSearchBtn() {
+    private fun initSearchBtn() = with(binding) {
         headerViewSearchView.setKeepQuery(true)
-        headerViewSearchView.searchEditText.setOnEditorActionListener(this)
+        headerViewSearchView.searchEditText.setOnEditorActionListener(this@HeaderView)
         headerViewSearchView.searchEditText.imeOptions = EditorInfo.IME_ACTION_SEARCH
         headerViewSearchView.setOnQueryTextListener(object : SimpleSearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -100,13 +100,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             tv?.let {
                 search(it.text.toString())
             }
-            headerViewSearchView.closeSearch(true)
+            binding.headerViewSearchView.closeSearch(true)
             return true
         }
         return false
     }
 
-    private fun search(query: String?) {
+    private fun search(query: String?) = with(binding){
         listener?.onHeaderSearchSubmit(query)
 
         if (!query.isNullOrBlank()) {
@@ -114,7 +114,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    private fun setAllMoviesButtonVisibility(showBtn: Boolean) {
+    private fun setAllMoviesButtonVisibility(showBtn: Boolean) = with(binding){
         if (showBtn) {
             headerViewAllMoviesBtn.visibility = View.VISIBLE
         } else {
@@ -122,7 +122,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    private fun setMenuButtonVisibility(showBtn: Boolean) {
+    private fun setMenuButtonVisibility(showBtn: Boolean)= with(binding) {
         if (showBtn) {
             headerViewMenuBtn.visibility = View.VISIBLE
         } else {
@@ -130,7 +130,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    private fun setSearchButtonVisibility(showBtn: Boolean) {
+    private fun setSearchButtonVisibility(showBtn: Boolean) = with(binding){
         if (showBtn) {
             headerViewSearchBtn.visibility = View.VISIBLE
         } else {
@@ -138,7 +138,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    private fun setTitleVisibility(showTitle: Boolean) {
+    private fun setTitleVisibility(showTitle: Boolean) = with(binding){
         if (showTitle) {
             headerViewTitle.visibility = View.VISIBLE
         } else {
@@ -146,7 +146,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    private fun setRatedMoviesButtonVisibility(showBtn: Boolean) {
+    private fun setRatedMoviesButtonVisibility(showBtn: Boolean)= with(binding) {
         if (showBtn) {
             headerViewRatedMoviesBtn.visibility = View.VISIBLE
         } else {
@@ -159,12 +159,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         setMeasuredDimension(measuredWidth, LAYOUT_HEIGHT_SIZE_IN_DP.toPx())
     }
 
-    fun setTitle(title: String?) {
+    fun setTitle(title: String?) = with(binding){
         setTitleVisibility(true)
         headerViewTitle.text = title
     }
 
-    private fun initClicks() {
+    private fun initClicks() = with(binding){
         headerViewRatedMoviesBtn.setOnClickListener {
             listener?.onHeaderRatedMoviesClick()
         }
@@ -184,14 +184,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    private fun hideAll() {
+    private fun hideAll() = with(binding){
         headerViewTitle.visibility = View.GONE
         headerViewAllMoviesBtn.visibility = View.GONE
         headerViewRatedMoviesBtn.visibility = View.GONE
         headerViewSearchBtn.visibility = View.GONE
     }
 
-    fun openSearchField() {
+    fun openSearchField() = with(binding){
         if (!headerViewSearchView.isSearchOpen) {
             headerViewSearchView.showSearch(true)
         } else {
@@ -199,15 +199,15 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun onBackPress(): Boolean {
+    fun onBackPress(): Boolean= with(binding) {
         return headerViewSearchView.onBackPressed()
     }
 
-    fun closeSearchField() {
+    fun closeSearchField()= with(binding) {
         headerViewSearchView.closeSearch(true)
     }
 
-    fun setVoiceQueryData(requestCode: Int, resultCode: Int, data: Intent?) {
+    fun setVoiceQueryData(requestCode: Int, resultCode: Int, data: Intent?)= with(binding) {
         headerViewSearchView.onActivityResult(requestCode, resultCode, data)
     }
 }

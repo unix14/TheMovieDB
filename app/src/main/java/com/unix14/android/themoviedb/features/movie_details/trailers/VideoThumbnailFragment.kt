@@ -7,10 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.unix14.android.themoviedb.R
 import com.unix14.android.themoviedb.common.Constants
+import com.unix14.android.themoviedb.databinding.VideoItemBinding
 import com.unix14.android.themoviedb.models.Video
-import kotlinx.android.synthetic.main.video_item.*
 
 private const val VIDEO_KEY = "video_key"
 private const val THUMBNAIL_KEY = "thumbnail_key"
@@ -21,6 +20,7 @@ class VideoThumbnailFragment : Fragment() {
         fun onVideoIdClick(videoId: String)
     }
 
+    private lateinit var binding: VideoItemBinding
     private var thumbnail: String? = null
     private var video: Video? = null
     private var listener: VideoThumbnailFragmentListener? = null
@@ -34,7 +34,8 @@ class VideoThumbnailFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.video_item, container, false)
+        binding = VideoItemBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,7 +44,7 @@ class VideoThumbnailFragment : Fragment() {
         initThumbnail()
     }
 
-    private fun initThumbnail() {
+    private fun initThumbnail()= with(binding) {
         video?.let { vid ->
             val videoThumbnailUrl = Constants.YOUTUBE_IMAGE_BASE_URL + vid.key + Constants.YOUTUBE_IMAGE_BASE_URL_SUFFIX
             context?.let{
