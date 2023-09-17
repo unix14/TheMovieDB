@@ -32,6 +32,14 @@
         android:layout_height="match_parent"
         android:scaleType="center"/>
 
+    <ImageView
+        android:id="@+id/videoItemPlayBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_play"
+        android:layout_gravity="center"
+        android:scaleType="center"/>
+
     <TextView
         android:id="@+id/videoItemType"
         style="@style/MovieTitleStyle"

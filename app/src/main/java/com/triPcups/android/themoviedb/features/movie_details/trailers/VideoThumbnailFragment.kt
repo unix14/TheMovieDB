@@ -85,7 +85,7 @@ class VideoThumbnailFragment : Fragment() {
 
 //            if(video == null) return@with
             videoItemThumbnail.setOnClickListener {
-                videoItemThumbnail.visibility = View.INVISIBLE
+                showVideoLayout(true)
                 //                youTubePlayer?.loadVideo(key, 0f)
                 Log.d("wow", "initThumbnail: $key")
                 //                youTubePlayer?.play()
@@ -120,6 +120,7 @@ class VideoThumbnailFragment : Fragment() {
                 Glide.with(it).load(thumbStr).into(videoItemThumbnail)
             }
             videoItemType.visibility = View.GONE
+            videoItemPlayBtn.visibility = View.GONE
         }
     }
 
@@ -151,7 +152,7 @@ class VideoThumbnailFragment : Fragment() {
                 PlayerConstants.PlayerError.VIDEO_NOT_PLAYABLE_IN_EMBEDDED_PLAYER -> {
                     youTubePlayer.pause()
                     listener?.onVideoIdClick(video?.key ?: "")
-                    binding.videoItemThumbnail.visibility = View.VISIBLE
+                    showVideoLayout(false)
                 }
 
                 else -> {}
@@ -160,7 +161,7 @@ class VideoThumbnailFragment : Fragment() {
 
         override fun onReady(youTubePlayer: YouTubePlayer) {
             Log.d("wow", "onReady: ")
-            binding.videoItemThumbnail.visibility = View.INVISIBLE
+            showVideoLayout()
             this@VideoThumbnailFragment.youTubePlayer = youTubePlayer
             youTubePlayer.loadVideo(video?.key ?: "", 0f)
         }
@@ -173,14 +174,13 @@ class VideoThumbnailFragment : Fragment() {
             when(state) {
                 PlayerConstants.PlayerState.PAUSED,
                 PlayerConstants.PlayerState.ENDED -> {
-                    binding.videoItemThumbnail.visibility = View.VISIBLE
+                    showVideoLayout(false)
                 }
                 PlayerConstants.PlayerState.UNSTARTED,
                 PlayerConstants.PlayerState.PLAYING,
                 PlayerConstants.PlayerState.BUFFERING
                 -> {
-                    binding.videoItemThumbnail.visibility = View.INVISIBLE
-
+                    showVideoLayout()
                 }
                 else -> {}
 //                            PlayerConstants.PlayerState.VIDEO_CUED,
@@ -192,10 +192,23 @@ class VideoThumbnailFragment : Fragment() {
         }
     }
 
+    private fun showVideoLayout(isVideo: Boolean = true) {
+        if(isVideo) {
+            binding.videoItemThumbnail.visibility = View.INVISIBLE
+            binding.videoItemPlayBtn.visibility = View.INVISIBLE
+            binding.videoItemType.visibility = View.INVISIBLE
+        } else {
+            binding.videoItemThumbnail.visibility = View.VISIBLE
+            binding.videoItemPlayBtn.visibility = View.VISIBLE
+            binding.videoItemType.visibility = View.VISIBLE
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         binding.videoItemThumbnail.visibility = View.VISIBLE
         youTubePlayer?.pause()
+        showVideoLayout(false)
     }
 
     override fun onStop() {
