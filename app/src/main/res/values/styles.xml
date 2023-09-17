@@ -10,7 +10,7 @@
 
     <style name="MovieTitleStyle">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/dark_red</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">sans-serif-condensed-medium</item>
     </style>
 
@@ -28,20 +28,20 @@
 
     <style name="MovieDetailsCategoryStyle">
         <item name="android:textSize">17sp</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/light_yellow</item>
         <item name="android:fontFamily">sans-serif-condensed-medium</item>
     </style>
 
     <style name="HyperLinkStyle">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">sans-serif-black</item>
     </style>
 
 
     <style name="SmallHyperLinkStyle">
         <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">sans-serif-black</item>
     </style>
 
@@ -138,14 +138,14 @@
 
     <style name="MovieDetailsSubTitleStyle">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/light_blue</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:fontFamily">sans-serif-black</item>
         <item name="android:lines">1</item>
     </style>
 
     <style name="MovieShareStyle">
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:textColor">@color/light_yellow</item>
         <item name="android:fontFamily">sans-serif-condensed-light</item>
     </style>
 

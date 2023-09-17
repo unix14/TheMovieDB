@@ -69,7 +69,7 @@
             android:layout_gravity="end"
             android:padding="10dp"
             android:drawableEnd="@drawable/ic_arrow_forward_small"
-            android:drawableTint="@color/dark_red"
+            android:drawableTint="@color/light_yellow"
             android:gravity="center"
             android:drawablePadding="4dp"
             android:text="@string/movie_list_frag_read_more" />

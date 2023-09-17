@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/dark_red"
+            app:contentScrim="@color/light_yellow"
             app:expandedTitleMarginEnd="85dp"
             app:expandedTitleMarginStart="45dp"
             app:layout_scrollFlags="scroll|snap">
@@ -197,6 +197,7 @@
                     android:gravity="center"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
+                    android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:text="@string/movie_details_frag_share_movie" />
 
@@ -310,7 +311,7 @@
                     android:layout_marginBottom="20dp"
                     android:padding="15dp"
                     android:text="@string/movie_details_frag_rate"
-                    android:textColor="@color/dark_red"
+                    android:textColor="@color/white"
                     android:visibility="gone" />
 
                 <View

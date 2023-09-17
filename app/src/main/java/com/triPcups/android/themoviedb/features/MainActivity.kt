@@ -378,8 +378,8 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     override fun onSearchFailed() {
-        binding.mainActListHeaderView.closeSearchField()
-        KeyboardUtil.hideKeyboard(this)
+//        binding.mainActListHeaderView.closeSearchField()
+//        KeyboardUtil.hideKeyboard(this)
     }
 
     private fun onPopularMoviesClick() {
