@@ -197,6 +197,7 @@
                     android:gravity="center"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
+                    android:textColor="@color/white"
                     android:text="@string/movie_details_frag_share_movie" />
 
 

@@ -1,5 +1,6 @@
 package com.triPcups.android.themoviedb.features
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
@@ -14,6 +15,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.emmanuelkehinde.shutdown.Shutdown
 import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.review.testing.FakeReviewManager
 import com.thefinestartist.finestwebview.FinestWebView
@@ -22,12 +25,12 @@ import com.triPcups.android.themoviedb.R
 import com.triPcups.android.themoviedb.common.Constants
 import com.triPcups.android.themoviedb.common.KeyboardUtil
 import com.triPcups.android.themoviedb.custom_views.HeaderView
+import com.triPcups.android.themoviedb.databinding.ActivityMainBinding
 import com.triPcups.android.themoviedb.features.movie_details.MovieDetailsFragment
 import com.triPcups.android.themoviedb.features.movie_details.trailers.VideoThumbnailFragment
 import com.triPcups.android.themoviedb.features.movie_list.MovieListFragment
 import com.triPcups.android.themoviedb.features.splash.SplashActivity
 import com.triPcups.android.themoviedb.models.Movie
-import com.triPcups.android.themoviedb.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.random.Random
 
@@ -36,6 +39,8 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     MovieDetailsFragment.MovieDetailsFragmentListener,
     HeaderView.HeaderViewListener, VideoThumbnailFragment.VideoThumbnailFragmentListener {
 
+    private var movieWithData: Movie? = null
+    private var adRequest: AdRequest? = null
     private lateinit var binding: ActivityMainBinding
     private var movieClicks: Int = 0
     private val viewModel by viewModel<MainViewModel>()
@@ -52,9 +57,10 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         initAds()
     }
 
+    @SuppressLint("VisibleForTests")
     private fun initAds() = with(binding) {
         //bottom banner
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             mainActAdView.visibility = View.GONE
         } else {
             MobileAds.initialize(this@MainActivity)
@@ -63,17 +69,54 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
         }
 
         //interstitial
-        mInterstitialAd = InterstitialAd(this@MainActivity)
-        mInterstitialAd?.adUnitId = if (BuildConfig.DEBUG) {
+        adRequest = AdRequest.Builder().build()
+        initInterstitialAd()
+    }
+
+    private fun initInterstitialAd() {
+        InterstitialAd.load(this@MainActivity, if (BuildConfig.DEBUG) {
             "ca-app-pub-3940256099942544/1033173712"
         } else {
             "ca-app-pub-7481638286003806/9040934858"
-        }
-        loadInterstitial()
-    }
+        }, AdRequest.Builder().build(), object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    // The mInterstitialAd reference will be null until
+                    // an ad is loaded.
+                    mInterstitialAd = interstitialAd
+                    mInterstitialAd!!.fullScreenContentCallback =
+                        object : FullScreenContentCallback() {
+                            override fun onAdDismissedFullScreenContent() {
+                                super.onAdDismissedFullScreenContent()
+                                mInterstitialAd = null
 
-    private fun loadInterstitial() {
-        mInterstitialAd?.loadAd(AdRequest.Builder().build())
+                                //// perform your code that you wants todo after ad dismissed or closed
+                                handleProgressBar(false)
+                                movieWithData?.let { showMovieDetails(it) }
+                                initInterstitialAd()
+                            }
+
+                            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                                super.onAdFailedToShowFullScreenContent(adError)
+                                mInterstitialAd = null
+
+                                /// perform your action here when ad will not load
+                                handleProgressBar(false)
+                                movieWithData?.let { showMovieDetails(it) }
+                                initInterstitialAd()
+                            }
+
+                            override fun onAdShowedFullScreenContent() {
+                                super.onAdShowedFullScreenContent()
+                                mInterstitialAd = null
+                            }
+                        }
+                }
+
+                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    // Handle the error
+                    mInterstitialAd = null
+                }
+            })
     }
 
     private fun setupViewModel() {
@@ -427,35 +470,19 @@ class MainActivity : AppCompatActivity(), MovieListFragment.MovieListFragmentLis
     }
 
     override fun onMovieClick(movie: Movie) {
-        val movieWithData = viewModel.getMovieAdditionalData(movie)
+        movieWithData = viewModel.getMovieAdditionalData(movie)
         KeyboardUtil.hideKeyboard(this)
         movieClicks++
 
         handleProgressBar(true)
         mInterstitialAd?.let{
-            val shouldLoad = it.isLoaded && movieClicks + Random.nextInt(-3, 4) % 7 == 0
+            val shouldLoad = mInterstitialAd != null && movieClicks + Random.nextInt(-3, 4) % 7 == 0
             if (shouldLoad) {
-                it.show()
-
-                it.adListener = object : AdListener() {
-                    override fun onAdFailedToLoad(p0: Int) {
-                        super.onAdFailedToLoad(p0)
-                        handleProgressBar(false)
-                        showMovieDetails(movieWithData)
-                    }
-
-                    override fun onAdClosed() {
-                        super.onAdClosed()
-                        handleProgressBar(false)
-                        showMovieDetails(movieWithData)
-                        loadInterstitial()
-                    }
-
-                }
+                mInterstitialAd?.show(this)
             } else {
                 handleProgressBar(false)
-                showMovieDetails(movieWithData)
-                loadInterstitial()
+                showMovieDetails(movieWithData!!)
+                initInterstitialAd()
             }
         }
     }
