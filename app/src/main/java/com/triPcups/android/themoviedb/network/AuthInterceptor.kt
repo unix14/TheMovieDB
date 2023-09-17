@@ -23,7 +23,7 @@ class AuthInterceptor : Interceptor {
         val apiKey = AppSettings.API_KEY
         Log.d(TAG, "add api Key to Request: $apiKey")
 
-        val originalHttpUrl = req.url()
+        val originalHttpUrl = req.url
         val url = originalHttpUrl.newBuilder().addQueryParameter("api_key", apiKey).build()
 
         val requestBuilder = req.newBuilder().url(url)

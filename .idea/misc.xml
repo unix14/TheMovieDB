@@ -1,20 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/projects/TheMovieDB/app/src/main/res/drawable/ic_arrow_forward_small.xml" value="0.40208333333333335" />
-        <entry key="..\:/projects/TheMovieDB/app/src/main/res/drawable/ic_language.xml" value="0.40208333333333335" />
-        <entry key="..\:/projects/TheMovieDB/app/src/main/res/drawable/ic_web.xml" value="0.40208333333333335" />
-        <entry key="..\:/projects/TheMovieDB/app/src/main/res/drawable/ic_youtube_logo.xml" value="0.40208333333333335" />
-        <entry key="..\:/projects/TheMovieDB/app/src/main/res/layout/activity_splash.xml" value="0.3859375" />
-        <entry key="..\:/projects/TheMovieDB/app/src/main/res/layout/header_view.xml" value="0.3859375" />
-        <entry key="..\:/projects/TheMovieDB/app/src/main/res/layout/movie_details_fragment.xml" value="0.3859375" />
-        <entry key="..\:/projects/TheMovieDB/app/src/main/res/layout/movie_list_item.xml" value="0.3859375" />
-        <entry key="..\:/projects/TheMovieDB/app/src/main/res/layout/video_item.xml" value="0.21770833333333334" />
-        <entry key="..\:/projects/TheMovieDB/app/src/main/res/menu/navigation_menu.xml" value="0.3859375" />
+        <entry key="..\:/Projects/TheMovieDB/app/src/main/res/layout/movie_details_fragment.xml" value="0.36666666666666664" />
       </map>
     </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
 </project>

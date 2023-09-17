@@ -11,6 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+//todo:: get rid of this horrible code duplication -> fast!!!
 class UpComingMoviesViewModel(private val apiService: ApiService) : ViewModel() {
 
     enum class ErrorEvent{
@@ -27,6 +28,7 @@ class UpComingMoviesViewModel(private val apiService: ApiService) : ViewModel() 
 
     fun getUpcomingMoviesList() {
         progressData.startProgress()
+        //todo use coroutines instead
         apiService.getUpComingMovies().enqueue(object :Callback<MovieListResponse>{
             override fun onResponse(call: Call<MovieListResponse>,response: Response<MovieListResponse>) {
                 progressData.endProgress()

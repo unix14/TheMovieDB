@@ -15,13 +15,14 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.triPcups.android.themoviedb.R
 import com.triPcups.android.themoviedb.common.Constants
+import com.triPcups.android.themoviedb.databinding.MovieListItemBinding
 import com.triPcups.android.themoviedb.models.Movie
-import kotlinx.android.synthetic.main.movie_list_item.view.*
 
 
 class MovieListAdapter(private val listener: MovieListAdapterListener) :
     ListAdapter<Movie, MovieListAdapter.MovieItemViewHolder>(MovieListDiffCallback()) {
 
+    private lateinit var binding: MovieListItemBinding
     private var expandedMovieId: Int = -1
     private var lastExpandedPosition: Int = -1
 
@@ -29,12 +30,12 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) :
         fun onMovieClick(movie: Movie)
     }
 
-    class MovieItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var image: ImageView = view.movieListItemImage
-        var name: TextView = view.movieListItemName
-        var description: TextView = view.movieListItemDescription
-        var stars: RatingBar = view.movieListItemRatingBar
-        var readMore: TextView = view.movieListItemReadMore
+    class MovieItemViewHolder(binding: MovieListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        var image: ImageView = binding.movieListItemImage
+        var name: TextView = binding.movieListItemName
+        var description: TextView = binding.movieListItemDescription
+        var stars: RatingBar = binding.movieListItemRatingBar
+        var readMore: TextView = binding.movieListItemReadMore
 
         fun bind(movie: Movie, isExpanded : Boolean) {
             Glide.with(itemView.context)
@@ -74,7 +75,8 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieItemViewHolder {
-        return MovieItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.movie_list_item,parent,false))
+        binding = MovieListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return MovieItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MovieItemViewHolder, position: Int) {
@@ -88,7 +90,7 @@ class MovieListAdapter(private val listener: MovieListAdapterListener) :
             onReadMoreButtonClicked(movie,position)
             true
         }
-        holder.itemView.movieListItemReadMore.setOnClickListener {
+        binding.movieListItemReadMore.setOnClickListener {
             onReadMoreButtonClicked(movie,position)
         }
     }

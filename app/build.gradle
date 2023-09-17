@@ -1,14 +1,15 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
 
 android {
-    compileSdkVersion 32
+    compileSdk 33
     defaultConfig {
         applicationId "com.truiPcups.android.themoviedb"
         minSdkVersion 24
-        targetSdkVersion 32
+        targetSdk 33
         versionCode 9
         versionName "2.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -26,6 +27,9 @@ android {
     packagingOptions {
         exclude 'META-INF/proguard/androidx-annotations.pro'
         exclude 'META-INF/proguard/coroutines.pro'
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
